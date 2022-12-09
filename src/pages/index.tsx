@@ -177,6 +177,7 @@ const ProfilePhotoContainer = styled.div`
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 50%;
+  flex-shrink: 0;
 `
 
 const ProfilePhoto = styled.img`
