@@ -33,11 +33,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.11.10"],\
             ["@types/react", "npm:18.0.25"],\
             ["@types/react-dom", "npm:18.0.9"],\
+            ["csstype", "npm:3.1.1"],\
             ["eslint", "npm:8.28.0"],\
             ["eslint-config-next", "virtual:9d8bccb701526da09cf7db77ca3c328dc8fd1fc54fef69dff9e4aa52d73091b6ccccbc597c012daf10a4aec4651e6ecfa6c314f1a5d52f18ee89efb05e4d1cd7#npm:13.0.5"],\
             ["next", "virtual:9d8bccb701526da09cf7db77ca3c328dc8fd1fc54fef69dff9e4aa52d73091b6ccccbc597c012daf10a4aec4651e6ecfa6c314f1a5d52f18ee89efb05e4d1cd7#npm:13.0.5"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:9d8bccb701526da09cf7db77ca3c328dc8fd1fc54fef69dff9e4aa52d73091b6ccccbc597c012daf10a4aec4651e6ecfa6c314f1a5d52f18ee89efb05e4d1cd7#npm:18.2.0"],\
+            ["react-is", "npm:18.2.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"]\
           ],\
           "linkType": "SOFT"\
@@ -863,11 +865,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.11.10"],\
             ["@types/react", "npm:18.0.25"],\
             ["@types/react-dom", "npm:18.0.9"],\
+            ["csstype", "npm:3.1.1"],\
             ["eslint", "npm:8.28.0"],\
             ["eslint-config-next", "virtual:9d8bccb701526da09cf7db77ca3c328dc8fd1fc54fef69dff9e4aa52d73091b6ccccbc597c012daf10a4aec4651e6ecfa6c314f1a5d52f18ee89efb05e4d1cd7#npm:13.0.5"],\
             ["next", "virtual:9d8bccb701526da09cf7db77ca3c328dc8fd1fc54fef69dff9e4aa52d73091b6ccccbc597c012daf10a4aec4651e6ecfa6c314f1a5d52f18ee89efb05e4d1cd7#npm:13.0.5"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:9d8bccb701526da09cf7db77ca3c328dc8fd1fc54fef69dff9e4aa52d73091b6ccccbc597c012daf10a4aec4651e6ecfa6c314f1a5d52f18ee89efb05e4d1cd7#npm:18.2.0"],\
+            ["react-is", "npm:18.2.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"]\
           ],\
           "linkType": "SOFT"\
@@ -3052,6 +3056,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-f7a19ac349.zip/node_modules/react-is/",\
           "packageDependencies": [\
             ["react-is", "npm:16.13.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:18.2.0", {\
+          "packageLocation": "./.yarn/cache/react-is-npm-18.2.0-0cc5edb910-e72d0ba81b.zip/node_modules/react-is/",\
+          "packageDependencies": [\
+            ["react-is", "npm:18.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
