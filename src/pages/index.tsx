@@ -74,6 +74,15 @@ const Home: NextPage = () => {
             </Row>
           </MiddleContent>
         </MiddleArea>
+        <Spacer height={8}/>
+        <MiddleArea sub>
+          <MiddleContent narrow end>
+            <Code>
+              <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
+              <Green>&quot;/api/random&quot;</Green>, Fetchers.Get) {"}"}
+            </Code>
+          </MiddleContent>
+        </MiddleArea>
         <BelowArea>
           <BelowAreaContainer>
             <MaterialIcon i={"arrow_forward"}/>
@@ -152,20 +161,37 @@ const OverArea = styled(SurroundingArea)`
   
   font-size: 10px;
   opacity: .45;
-  
-  font-family: "JetBrains Mono Light", sans-serif;
 `
 
-const MiddleArea = styled(Column)`
+const MiddleArea = styled(Column)<{ sub?: boolean }>`
   width: 100%;
-  background-color: #00000080;
+  background-color: ${({ sub }) => sub ? "#00000060" : "#00000080"};
   align-items: center;
 `
 
-const MiddleContent = styled(SurroundingArea)`
+const MiddleContent = styled(SurroundingArea)<{ narrow?: boolean, end?: boolean }>`
   align-items: stretch;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: ${({ narrow }) => narrow ? 5 : 20}px;
+  padding-bottom: ${({ narrow }) => narrow ? 5 : 20}px;
+  ${({ narrow }) => narrow ? css`font-size: 12px;` : ""}
+  ${({ end }) => end ? css`align-items: flex-end;` : ""}
+`
+
+const Code = styled.div`
+  font-family: "JetBrains Mono Light", sans-serif;
+  font-size: 8px;
+`
+
+const Orange = styled.span`
+  color: #cc7832;
+`
+
+const Gold = styled.span`
+  color: #ffc66d;
+`
+
+const Green = styled.span`
+  color: #6A8759;
 `
 
 const BelowArea = styled(SurroundingArea)`
