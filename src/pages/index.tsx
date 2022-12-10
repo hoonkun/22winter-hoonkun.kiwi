@@ -76,9 +76,9 @@ const Home: NextPage = () => {
         </MiddleArea>
         <BelowArea>
           <BelowAreaContainer>
-            <MaterialIcon i={"casino"} onClick={() => paper.current.make()}/>
+            <MaterialIcon i={"arrow_forward"}/>
             <Spacer width={8}/>
-            <MaterialIcon i={"arrow_upward"}/>
+            <MaterialIcon i={"casino"} onClick={() => paper.current.make()}/>
           </BelowAreaContainer>
         </BelowArea>
       </Container>

@@ -78,12 +78,12 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender }) => {
   return (
     <Root style={rootStyles} state={RootStates[state]}>
       {backgroundRender}
-      <Content style={{ flexDirection: direction === "reversed" ? "row-reverse" : "row" }}>
+      <Content>
         {random &&
-          <>
+          <LimitedWidth style={{ flexDirection: direction === "reversed" ? "row-reverse" : "row" }}>
             <RandomImage src={`/resources/images/random/${random.image}`}/>
             <RandomText style={{ textAlign: direction === "reversed" ? "right" : "left" }}>{random.text}</RandomText>
-          </>
+          </LimitedWidth>
         }
       </Content>
     </Root>
@@ -107,14 +107,13 @@ const Root = styled.div<{ state: "in" | "out" }>`
 
 const Content = styled.div`
   position: relative;
-  left: 0;
-  top: 0;
   z-index: 1000;
   background-color: #00000090;
   padding: 10px 20px;
   
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  justify-content: center;
 `
 
 const RandomImage = styled.img`
@@ -128,6 +127,14 @@ const RandomText = styled.div`
   font-size: 13px;
   white-space: pre-wrap;
   margin: 0 15px;
+`
+
+const LimitedWidth = styled.div`
+  width: 100%;
+  max-width: 360px;
+
+  display: flex;
+  align-items: center;
 `
 
 export default RandomPaper
