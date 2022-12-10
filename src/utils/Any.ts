@@ -6,3 +6,5 @@ export const also = <T>(it: T, block: (it: T) => void): T => {
   block(it)
   return it
 }
+
+export const EmptyFunction: (...any: any[]) => any = () => {}

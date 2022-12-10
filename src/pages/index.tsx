@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
 import styled from "@emotion/styled";
@@ -9,6 +9,8 @@ import HighlightedLink from "../components/HighlightedLink";
 import SlashedList from "../components/SlashedList";
 import Spacer from "../components/Spacer";
 import MaterialIcon from "../components/MaterialIcon";
+import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
+import { css } from "@emotion/react";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
@@ -23,6 +25,8 @@ const Home: NextPage = () => {
   const backgroundFillMode
     = useMemo(() => windowRatio <= BackgroundRatio ? "height" : "width", [windowRatio])
 
+  const paper = useRef(createPaperController())
+
   const dp = useMemo(() => {
     const source = backgroundFillMode === "width" ? BackgroundResource.width : BackgroundResource.height
     const real = backgroundFillMode === "width" ? windowWidth : windowHeight
@@ -30,6 +34,7 @@ const Home: NextPage = () => {
   }, [backgroundFillMode, windowWidth, windowHeight])
 
   const filterCSS = useMemo(() => `blur(${Math.floor(dp * 30)}px) brightness(0.75)`, [dp])
+  const backdropStyle = useMemo<CSSProperties>(() => ({ backdropFilter: filterCSS, WebkitBackdropFilter: filterCSS }), [filterCSS])
 
   useEffect(() => {
     const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
@@ -43,8 +48,8 @@ const Home: NextPage = () => {
         <meta name="viewport" content="width=device-width, user-scalable=no"/>
         <title>극지대의 키위새</title>
       </Head>
-      <BackgroundContainer fillMode={backgroundFillMode} src={BackgroundResource.src}/>
-      <BackdropFilterer style={{ backdropFilter: filterCSS, WebkitBackdropFilter: filterCSS }}/>
+      <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
+      <BackdropFilterer style={backdropStyle}/>
       <Container>
         <OverArea>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverArea>
         <MiddleArea>
@@ -71,12 +76,16 @@ const Home: NextPage = () => {
         </MiddleArea>
         <BelowArea>
           <BelowAreaContainer>
-            <MaterialIcon i={"casino"}/>
+            <MaterialIcon i={"casino"} onClick={() => paper.current.make()}/>
             <Spacer width={8}/>
             <MaterialIcon i={"arrow_upward"}/>
           </BelowAreaContainer>
         </BelowArea>
       </Container>
+      <RandomPaper
+        controller={paper}
+        backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
+      />
     </Root>
   )
 }
@@ -108,10 +117,11 @@ const BackdropFilterer = styled.div`
   height: 100%;
 `
 
-const BackgroundContainer = styled.img<{ fillMode: "width" | "height" }>`
-  position: absolute;
-  z-index: 0;
+const Background = styled.img<{ fillMode: "width" | "height", fixed?: boolean, overlay?: boolean }>`
+  position: ${({ fixed }) => fixed ? "fixed" : "absolute"};
+  z-index: ${({ overlay }) => overlay ? 1 : 0};
   ${({ fillMode }) => fillMode}: 100%;
+  ${({ overlay }) => overlay ? css`filter: blur(3px);` : ""}
   top: 50%;
   left: 50%;
   transform-origin: 50% 50%;

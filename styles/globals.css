@@ -41,7 +41,7 @@ a {
 
 @font-face {
   font-family: "JetBrains Mono Light";
-  src: url('/resources/fonts/JetbrainsMono-Light.woff2') format('woff2');
+  src: url('/resources/fonts/JetBrainsMono-Light.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
