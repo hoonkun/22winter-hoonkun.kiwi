@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
 import styled from "@emotion/styled";
@@ -25,6 +25,16 @@ const Home: NextPage = () => {
   const backgroundFillMode
     = useMemo(() => windowRatio <= BackgroundRatio ? "height" : "width", [windowRatio])
 
+  const setGlobalScale = useCallback(() => {
+    const value = window.innerWidth <= 840 ? 1 : 2
+    document.querySelector("html")!.style.fontSize = `${value}px`
+    return value
+  }, [])
+
+  const scale = useMemo(() => {
+    return setGlobalScale()
+  }, [setGlobalScale])
+
   const paper = useRef(createPaperController())
 
   const dp = useMemo(() => {
@@ -37,10 +47,13 @@ const Home: NextPage = () => {
   const backdropStyle = useMemo<CSSProperties>(() => ({ backdropFilter: filterCSS, WebkitBackdropFilter: filterCSS }), [filterCSS])
 
   useEffect(() => {
-    const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
+    const handler = () => {
+      setWindowDimension([window.innerWidth, window.innerHeight])
+      setGlobalScale()
+    }
     window.addEventListener("resize", handler)
     return () => window.removeEventListener("resize", handler)
-  }, [])
+  }, [setGlobalScale])
 
   return (
     <Root>
@@ -65,16 +78,16 @@ const Home: NextPage = () => {
                 </ProfileIdentifiers>
                 <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
                 <ProfileLinks>
-                  <HighlightedLink size={10} color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
-                  <HighlightedLink size={10} color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
-                  <HighlightedLink size={10} color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
-                  <HighlightedLink size={10} color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
+                  <HighlightedLink size={10 * scale} color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
+                  <HighlightedLink size={10 * scale} color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
+                  <HighlightedLink size={10 * scale} color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
+                  <HighlightedLink size={10 * scale} color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
                 </ProfileLinks>
               </ProfileInfo>
             </Row>
           </MiddleContent>
         </MiddleArea>
-        <Spacer height={8}/>
+        <Spacer height={8 * scale}/>
         <MiddleArea sub>
           <MiddleContent narrow end>
             <Code>
@@ -85,9 +98,9 @@ const Home: NextPage = () => {
         </MiddleArea>
         <BelowArea>
           <BelowAreaContainer>
-            <MaterialIcon i={"arrow_forward"}/>
-            <Spacer width={8}/>
-            <MaterialIcon i={"casino"} onClick={() => paper.current.make()}/>
+            <RandomButton i={"arrow_forward"}/>
+            <Spacer width={8 * scale}/>
+            <RandomButton i={"casino"} onClick={() => paper.current.make()}/>
           </BelowAreaContainer>
         </BelowArea>
       </Container>
@@ -148,18 +161,18 @@ const Container = styled(Column)`
 
 const SurroundingArea = styled(Column)`
   width: 100%;
-  padding-left: 20px;
-  padding-right: 20px;
-  max-width: 400px;
+  padding-left: 20rem;
+  padding-right: 20rem;
+  max-width: 400rem;
 
   color: var(--text-color-primary);
 `
 
 const OverArea = styled(SurroundingArea)`
   align-items: flex-start;
-  margin-bottom: 10px;
+  margin-bottom: 10rem;
   
-  font-size: 10px;
+  font-size: 10rem;
   opacity: .45;
 `
 
@@ -171,15 +184,18 @@ const MiddleArea = styled(Column)<{ sub?: boolean }>`
 
 const MiddleContent = styled(SurroundingArea)<{ narrow?: boolean, end?: boolean }>`
   align-items: stretch;
-  padding-top: ${({ narrow }) => narrow ? 5 : 20}px;
-  padding-bottom: ${({ narrow }) => narrow ? 5 : 20}px;
-  ${({ narrow }) => narrow ? css`font-size: 12px;` : ""}
+  padding-top: ${({ narrow }) => narrow ? 3 : 20}rem;
+  padding-bottom: ${({ narrow }) => narrow ? 3 : 20}rem;
+  ${({ narrow }) => narrow ? css`font-size: 12rem;` : ""}
   ${({ end }) => end ? css`align-items: flex-end;` : ""}
 `
 
 const Code = styled.div`
   font-family: "JetBrains Mono Light", sans-serif;
-  font-size: 8px;
+  font-size: 10rem;
+  white-space: nowrap;
+  transform: scale(0.8);
+  transform-origin: right center;
 `
 
 const Orange = styled.span`
@@ -196,20 +212,20 @@ const Green = styled.span`
 
 const BelowArea = styled(SurroundingArea)`
   align-items: flex-end;
-  margin-top: 10px;
+  margin-top: 10rem;
 `
 
 const BelowAreaContainer = styled(Row)`
-  height: 40px;
-  border-radius: 20px;
+  height: 40rem;
+  border-radius: 20rem;
   background-color: #00000060;
   align-items: center;
-  padding: 0 10px;
-  margin-right: -5px;
+  padding: 0 10rem;
+  margin-right: -5rem;
 `
 
 const ProfilePhotoContainer = styled.div`
-  width: 60px;
+  width: 60rem;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 50%;
@@ -223,7 +239,7 @@ const ProfilePhoto = styled.img`
 `
 
 const ProfileInfo = styled(Column)`
-  margin-left: 20px;
+  margin-left: 20rem;
   flex-grow: 1;
 `
 
@@ -232,33 +248,37 @@ const ProfileIdentifiers = styled(Row)`
 `
 
 const ProfileName = styled.div`
-  font-size: 13px;
-  margin-left: 8px;
-  line-height: 18px;
+  font-size: 13rem;
+  margin-left: 8rem;
+  line-height: 18rem;
   opacity: .75;
 `
 
 const ProfileNickname = styled.div`
   font-weight: bold;
-  font-size: 20px;
-  line-height: 23px;
+  font-size: 20rem;
+  line-height: 23rem;
 `
 
 const ProfileMail = styled(HighlightedLink)`
-  font-size: 12px;
+  font-size: 12rem;
   align-self: center;
 `
 
 const ProfileMessage = styled.div`
-  font-size: 13px;
-  line-height: 15px;
-  margin-top: 4px;
+  font-size: 13rem;
+  line-height: 15rem;
+  margin-top: 4rem;
   opacity: .75;
 `
 
 const ProfileLinks = styled(SlashedList)`
-  margin-top: 5px;
-  font-size: 10px;
+  margin-top: 5rem;
+  font-size: 10rem;
+`
+
+const RandomButton = styled(MaterialIcon)`
+  font-size: 24rem;
 `
 
 export default Home;

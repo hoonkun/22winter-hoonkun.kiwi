@@ -49,7 +49,7 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender }) => {
 
     const position = Math.random() * 18;
     setDirection(Math.random() > 0.5 ? "normal" : "reversed")
-    setPosition(2 + (Math.random() > 0.5 ? position : 62 + position))
+    setPosition(2 + (Math.random() > 0.5 ? position : 65 + position))
     setRandom(data)
     setState("transition-in")
     await times.current.sleep(TransitionInDuration)
@@ -92,7 +92,6 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender }) => {
 
 const Root = styled.div<{ state: "in" | "out" }>`
   position: fixed;
-  top: 100px;
   z-index: 1000;
   
   width: 100vw;
@@ -109,7 +108,7 @@ const Content = styled.div`
   position: relative;
   z-index: 1000;
   background-color: #00000090;
-  padding: 10px 20px;
+  padding: 10rem 20rem;
   
   display: flex;
   flex-direction: row;
@@ -117,21 +116,21 @@ const Content = styled.div`
 `
 
 const RandomImage = styled.img`
-  width: 65px;
-  height: 65px;
-  border: 3px solid var(--text-color-primary);
+  width: 65rem;
+  height: 65rem;
+  border: 3rem solid var(--text-color-primary);
 `
 
 const RandomText = styled.div`
   color: var(--text-color-primary);
-  font-size: 13px;
+  font-size: 13rem;
   white-space: pre-wrap;
-  margin: 0 15px;
+  margin: 0 15rem;
 `
 
 const LimitedWidth = styled.div`
   width: 100%;
-  max-width: 360px;
+  max-width: 360rem;
 
   display: flex;
   align-items: center;
