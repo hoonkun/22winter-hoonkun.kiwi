@@ -1,6 +1,5 @@
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
-import Head from "next/head";
 import styled from "@emotion/styled";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
@@ -11,6 +10,7 @@ import Spacer from "../components/Spacer";
 import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import { css } from "@emotion/react";
+import dynamic from "next/dynamic";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
@@ -57,10 +57,6 @@ const Home: NextPage = () => {
 
   return (
     <Root>
-      <Head>
-        <meta name="viewport" content="width=device-width, user-scalable=no"/>
-        <title>극지대의 키위새</title>
-      </Head>
       <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
       <BackdropFilterer style={backdropStyle}/>
       <Container>
@@ -281,4 +277,4 @@ const RandomButton = styled(MaterialIcon)`
   font-size: 24rem;
 `
 
-export default Home;
+export default dynamic(Promise.resolve(Home), { ssr: false });
