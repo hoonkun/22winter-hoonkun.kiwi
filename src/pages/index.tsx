@@ -85,10 +85,10 @@ const Home: NextPage = () => {
         </MiddleArea>
         <Spacer height={8 * scale}/>
         <MiddleArea sub>
-          <MiddleContent narrow end>
+          <MiddleContent narrow align2end>
             <Code>
               <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
-              <Green>&quot;/api/random&quot;</Green>, Fetchers.Get) {"}"}
+              <Green>&quot;/api/random&quot;</Green>, Fetchers.<Purple>Get</Purple>) {"}"}
             </Code>
           </MiddleContent>
         </MiddleArea>
@@ -96,7 +96,7 @@ const Home: NextPage = () => {
           <BelowAreaContainer>
             <RandomButton i={"arrow_forward"}/>
             <Spacer width={8 * scale}/>
-            <RandomButton i={"casino"} onClick={() => paper.current.make()}/>
+            <RandomButton i={"casino"} clickable onClick={() => paper.current.make()}/>
           </BelowAreaContainer>
         </BelowArea>
       </Container>
@@ -178,12 +178,12 @@ const MiddleArea = styled(Column)<{ sub?: boolean }>`
   align-items: center;
 `
 
-const MiddleContent = styled(SurroundingArea)<{ narrow?: boolean, end?: boolean }>`
+const MiddleContent = styled(SurroundingArea)<{ narrow?: boolean, align2end?: boolean }>`
   align-items: stretch;
   padding-top: ${({ narrow }) => narrow ? 3 : 20}rem;
   padding-bottom: ${({ narrow }) => narrow ? 3 : 20}rem;
   ${({ narrow }) => narrow ? css`font-size: 12rem;` : ""}
-  ${({ end }) => end ? css`align-items: flex-end;` : ""}
+  ${({ align2end }) => align2end ? css`align-items: flex-end;` : ""}
 `
 
 const Code = styled.div`
@@ -204,6 +204,10 @@ const Gold = styled.span`
 
 const Green = styled.span`
   color: #6A8759;
+`
+
+const Purple = styled.span`
+  color: #9876AA;
 `
 
 const BelowArea = styled(SurroundingArea)`
@@ -273,8 +277,10 @@ const ProfileLinks = styled(SlashedList)`
   font-size: 10rem;
 `
 
-const RandomButton = styled(MaterialIcon)`
+const RandomButton = styled(MaterialIcon)<{ clickable?: boolean }>`
   font-size: 24rem;
+  
+  ${({ clickable }) => clickable ? css`cursor: pointer;` : ""}
 `
 
 export default dynamic(Promise.resolve(Home), { ssr: false });
