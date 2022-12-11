@@ -226,7 +226,7 @@ const BelowAreaContainer = styled(Row)`
 
 const ProfilePhotoContainer = styled.div`
   width: 60rem;
-  aspect-ratio: 1 / 1;
+  height: 60rem;
   overflow: hidden;
   border-radius: 50%;
   flex-shrink: 0;
