@@ -6,8 +6,7 @@ import SlashedList from "../components/SlashedList";
 import Spacer from "../components/Spacer";
 import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
-import { css } from "@emotion/react";
-import dynamic from "next/dynamic";
+import { css, keyframes } from "@emotion/react";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
@@ -17,7 +16,7 @@ const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 const Home: NextPage = () => {
 
   const [[windowWidth, windowHeight], setWindowDimension]
-    = useState<[number, number]>([window.innerWidth, window.innerHeight])
+    = useState<[number, number]>([-1, -1])
 
   const windowRatio
     = useMemo(() => windowWidth / windowHeight, [windowWidth, windowHeight])
@@ -25,7 +24,10 @@ const Home: NextPage = () => {
   const backgroundFillMode
     = useMemo(() => windowRatio <= BackgroundRatio ? "height" : "width", [windowRatio])
 
+  const [renderSplash, setRenderSplash] = useState(true)
+
   const setGlobalScale = useCallback(() => {
+    if (typeof window === "undefined") return 1
     const value = window.innerWidth <= 840 ? 1 : 2
     document.querySelector("html")!.style.fontSize = `${value}px`
     return value
@@ -51,62 +53,140 @@ const Home: NextPage = () => {
       setWindowDimension([window.innerWidth, window.innerHeight])
       setGlobalScale()
     }
+    handler()
+
     window.addEventListener("resize", handler)
     return () => window.removeEventListener("resize", handler)
   }, [setGlobalScale])
 
+  useEffect(() => {
+    if (windowWidth < 0 || windowHeight < 0) return
+    const timeout = setTimeout(() => setRenderSplash(false), 1000)
+    return () => clearTimeout(timeout)
+  }, [windowWidth, windowHeight])
+
   return (
-    <Root>
-      <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
-      <BackdropFilterer style={backdropStyle}/>
-      <Container>
-        <OverArea>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverArea>
-        <MiddleArea>
-          <MiddleContent>
-            <Row>
-              <ProfilePhotoContainer><ProfilePhoto src={ProfilePhotoResource.src}/></ProfilePhotoContainer>
-              <ProfileInfo>
-                <ProfileIdentifiers>
-                  <ProfileNickname>극지대 키위새</ProfileNickname>
-                  <ProfileName>한고훈</ProfileName>
-                  <Spacer grow/>
-                  <ProfileMail href="mailto:herokun.user@gmail.com">@</ProfileMail>
-                </ProfileIdentifiers>
-                <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
-                <ProfileLinks>
-                  <HighlightedLink size={10 * scale} color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
-                  <HighlightedLink size={10 * scale} color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
-                  <HighlightedLink size={10 * scale} color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
-                  <HighlightedLink size={10 * scale} color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
-                </ProfileLinks>
-              </ProfileInfo>
-            </Row>
-          </MiddleContent>
-        </MiddleArea>
-        <Spacer height={8 * scale}/>
-        <MiddleArea sub>
-          <MiddleContent narrow align2end>
-            <Code>
-              <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
-              <Green>&quot;/api/random&quot;</Green>, Fetchers.<Purple>Get</Purple>) {"}"}
-            </Code>
-          </MiddleContent>
-        </MiddleArea>
-        <BelowArea>
-          <BelowAreaContainer>
-            <RandomButton i={"arrow_forward"}/>
-            <Spacer width={8 * scale}/>
-            <RandomButton i={"casino"} clickable onClick={() => paper.current.make()}/>
-          </BelowAreaContainer>
-        </BelowArea>
-      </Container>
-      <RandomPaper
-        controller={paper}
-        backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
-      />
-    </Root>
+    <>
+      <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
+        <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
+        <BackdropFilterer style={backdropStyle}/>
+        <Container>
+          <OverArea>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverArea>
+          <MiddleArea>
+            <MiddleContent>
+              <Row>
+                <ProfilePhotoContainer><ProfilePhoto src={ProfilePhotoResource.src}/></ProfilePhotoContainer>
+                <ProfileInfo>
+                  <ProfileIdentifiers>
+                    <ProfileNickname>극지대 키위새</ProfileNickname>
+                    <ProfileName>한고훈</ProfileName>
+                    <Spacer grow/>
+                    <ProfileMail href="mailto:herokun.user@gmail.com">@</ProfileMail>
+                  </ProfileIdentifiers>
+                  <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
+                  <ProfileLinks>
+                    <HighlightedLink size={10 * scale} color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
+                    <HighlightedLink size={10 * scale} color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
+                    <HighlightedLink size={10 * scale} color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
+                    <HighlightedLink size={10 * scale} color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
+                  </ProfileLinks>
+                </ProfileInfo>
+              </Row>
+            </MiddleContent>
+          </MiddleArea>
+          <Spacer height={8 * scale}/>
+          <MiddleArea sub>
+            <MiddleContent narrow align2end>
+              <Code>
+                <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
+                <Green>&quot;/api/random&quot;</Green>, Fetchers.<Purple>Get</Purple>) {"}"}
+              </Code>
+            </MiddleContent>
+          </MiddleArea>
+          <BelowArea>
+            <BelowAreaContainer>
+              <RandomButton i={"arrow_forward"}/>
+              <Spacer width={8 * scale}/>
+              <RandomButton i={"casino"} clickable onClick={() => paper.current.make()}/>
+            </BelowAreaContainer>
+          </BelowArea>
+        </Container>
+        <RandomPaper
+          controller={paper}
+          backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
+        />
+      </Root>
+      {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
+    </>
   )
 }
+
+const Splash = styled.div<{ active: boolean }>`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  
+  transition: background-color 0.35s linear;
+  
+  ${({ active }) => active ? css`
+    background-color: black;
+    pointer-events: auto;
+    
+    & > div {
+      background-color: #ffffff40;
+      & > div {
+        background-color: white;
+      }
+    }
+  ` : css`
+    background-color: transparent;
+    pointer-events: none;
+
+    & > div {
+      background-color: transparent;
+      & > div {
+        background-color: transparent;
+      }
+    }
+  `}
+`
+
+const LoadingAnimation = keyframes`
+  0% {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  }
+  50% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+`
+
+const LoadingParent = styled.div`
+  width: 2px;
+  height: 100px;
+  background-color: #ffffff40;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  transition: background-color 0.6s linear;
+  
+  & > div {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+
+    transition: background-color 0.6s linear;
+    
+    animation: ${LoadingAnimation} 0.45s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+`
 
 const Root = styled.div`
   width: 100%;
@@ -283,4 +363,4 @@ const RandomButton = styled(MaterialIcon)<{ clickable?: boolean }>`
   ${({ clickable }) => clickable ? css`cursor: pointer;` : ""}
 `
 
-export default dynamic(Promise.resolve(Home), { ssr: false });
+export default Home
