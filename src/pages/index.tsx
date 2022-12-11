@@ -112,6 +112,7 @@ const Home: NextPage = () => {
           </BelowArea>
         </Container>
         <RandomPaper
+          scale={scale}
           controller={paper}
           backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
         />

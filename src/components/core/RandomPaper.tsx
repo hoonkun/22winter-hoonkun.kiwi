@@ -23,9 +23,10 @@ export const createPaperController: () => RandomPaperController = () => ({ make:
 type Props = {
   controller: MutableRefObject<RandomPaperController>
   backgroundRender: JSX.Element
+  scale: number
 }
 
-const RandomPaper: React.FC<Props> = ({ controller, backgroundRender }) => {
+const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale }) => {
 
   const [state, setState] = useState<RandomPaperState>("destroyed")
   const stateRef = useRef<RandomPaperState>("destroyed")
@@ -47,9 +48,9 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender }) => {
     const response = await fetch(`${location.origin}/api/random`, { method: 'GET' })
     const data = await response.json() as RandomResponse
 
-    const position = Math.random() * 18;
+    const position = Math.random() * (20 - scale * 2);
     setDirection(Math.random() > 0.5 ? "normal" : "reversed")
-    setPosition(2 + (Math.random() > 0.5 ? position : 65 + position))
+    setPosition(2 + (Math.random() > 0.5 ? position : 68 + position))
     setRandom(data)
     setState("transition-in")
     await times.current.sleep(TransitionInDuration)
@@ -59,8 +60,7 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender }) => {
     await times.current.sleep(TransitionOutDuration)
     setRandom(null)
     setState("destroyed")
-  }, [])
-
+  }, [scale])
 
   useEffect(() => {
     const instance = times.current
