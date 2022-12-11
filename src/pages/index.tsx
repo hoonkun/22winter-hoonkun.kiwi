@@ -1,9 +1,6 @@
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import styled from "@emotion/styled";
-
-import BackgroundResource from "../resources/images/background_original.jpg"
-import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
 import HighlightedLink from "../components/HighlightedLink";
 import SlashedList from "../components/SlashedList";
 import Spacer from "../components/Spacer";
@@ -11,6 +8,9 @@ import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import { css } from "@emotion/react";
 import dynamic from "next/dynamic";
+
+import BackgroundResource from "../resources/images/background_original.jpg"
+import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 

@@ -4,7 +4,8 @@ import { Arrays } from "../../utils/Array";
 
 
 const Randoms: Data[] = [
-  // { text: "", image: "", duration: 0 }
+  // { text: "", image: "", duration: 0 },
+  { text: "당신은 지금 배가 고픕니다...\n고기를 구워먹고싶어집니다...", image: "gogi.jpg", duration: 0 },
   { text: "스타벅스 죽돌이던 때가 있었습니다.\n거의 매일 스타벅스에 앉아있었죠.", image: "starbucks.jpg", duration: 4000 },
   { text: "쓸만한 신발이 하나 갖고싶습니다.", image: "shoes.jpg", duration: 3000 },
   { text: "트위터 인생에서 RT를 타본 적이 딱 한 번 있습니다.", image: "rt_star.jpg", duration: 3500 },
