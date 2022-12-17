@@ -1,7 +1,7 @@
 import React, { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Times } from "../../utils/Times";
 import styled from "@emotion/styled";
-import { EmptyFunction } from "../../utils/Any";
+import { EmptyFunction } from "../../utils/KTN";
 import { paper } from "../../random";
 
 type RandomResponse = { image: string, text: string, duration: number }

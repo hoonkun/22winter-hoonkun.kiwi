@@ -1,5 +1,3 @@
-import { Arrays } from "./utils/Array";
-
 type Random = {
   text: string
   image: string
@@ -39,4 +37,4 @@ const Randoms: Random[] = [
   { text: "영원히 고통받는 고훈 군입니다.", image: "suffering.png", duration: 3500 }
 ]
 
-export const paper = () => Arrays().random(Randoms);
+export const paper = () => Randoms.random();

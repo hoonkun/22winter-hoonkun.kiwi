@@ -1,3 +1,5 @@
+import "../utils/KTN";
+
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import styled from "@emotion/styled";
