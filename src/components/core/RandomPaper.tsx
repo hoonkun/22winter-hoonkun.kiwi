@@ -1,7 +1,8 @@
 import React, { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Times } from "../../utils/Times";
 import styled from "@emotion/styled";
-import { EmptyFunction } from "../../utils/Any";
+import { EmptyFunction } from "../../utils/KTN";
+import { paper } from "../../random";
 
 type RandomResponse = { image: string, text: string, duration: number }
 type RandomPaperController = { make: () => void }
@@ -45,8 +46,7 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale }) =
   const make = useCallback(async () => {
     if (stateRef.current !== "destroyed") return
 
-    const response = await fetch(`${location.origin}/api/random`, { method: 'GET' })
-    const data = await response.json() as RandomResponse
+    const data = paper();
 
     const position = Math.random() * (20 - scale * 2);
     setDirection(Math.random() > 0.5 ? "normal" : "reversed")

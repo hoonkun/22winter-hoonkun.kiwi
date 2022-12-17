@@ -1,9 +1,8 @@
 import React, { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { uuid4 } from "../../utils/UUID";
 import styled from "@emotion/styled";
-import { also } from "../../utils/Any";
 import { keyframes } from "@emotion/react";
-import { Arrays } from "../../utils/Array";
+import { ArrayK } from "../../utils/KTN";
 
 
 const EmptyLambda: (...args: any[]) => any = () => {}
@@ -50,7 +49,7 @@ const RandomSnacks: React.FC<Props> = ({ controller }) => {
       const newSnack = { uuid, text, image, controller, duration }
       setSnacks(prevState => [...prevState, newSnack])
       timeouts.current.push(setTimeout(() => {
-        setSnacks(prevState => also([...prevState], it => it.splice(it.indexOf(newSnack), 1)))
+        setSnacks(prevState => [...prevState].also(it => it.splice(it.indexOf(newSnack), 1)))
       }, duration))
     }
     async().then()
@@ -82,21 +81,19 @@ const RandomSnack: React.FC<{ instance: RandomSnackInstance }> = ({ instance }) 
 const RandomSnackEffects: React.FC = () => {
 
   const length = useMemo(() => Math.ceil(Math.random() * 2), [])
-  const directions = useMemo(() => Arrays().create(length, () => Math.random() > 0.5 ? 1 : -1), [length])
+  const directions = useMemo(() => ArrayK(length, () => Math.random() > 0.5 ? 1 : -1), [length])
   const rotations = useMemo(() =>
-    Arrays().create(length, () => (Math.random() - 0.5) * 15).sort().reverse(),
+    ArrayK(length, () => (Math.random() - 0.5) * 15).sort().reverse(),
     [length]
   )
   const offsets = useMemo(() =>
-    Arrays().create(length, index => directions[index] * rotations[index] * 8 + (Math.random() - 0.5) * 25).sort(),
+    ArrayK(length, index => directions[index] * rotations[index] * 8 + (Math.random() - 0.5) * 25).sort(),
     [length, rotations, directions]
   )
 
   return (
     <>
-      {Arrays().create(length, index =>
-        <RandomSnackEffect offset={offsets[index]} direction={directions[index]} rotation={rotations[index]} delayed={index > 0}/>
-      )}
+      {ArrayK(length, index => <RandomSnackEffect offset={offsets[index]} direction={directions[index]} rotation={rotations[index]} delayed={index > 0}/>)}
     </>
   )
 }

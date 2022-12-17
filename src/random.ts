@@ -1,9 +1,10 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Arrays } from "../../utils/Array";
+type Random = {
+  text: string
+  image: string
+  duration: number
+}
 
-
-const Randoms: Data[] = [
+const Randoms: Random[] = [
   // { text: "", image: "", duration: 0 },
   { text: "당신은 지금 배가 고픕니다...\n고기를 구워먹고싶어집니다...", image: "gogi.jpg", duration: 4500 },
   { text: "스타벅스 죽돌이던 때가 있었습니다.\n거의 매일 스타벅스에 앉아있었죠.", image: "starbucks.jpg", duration: 4000 },
@@ -36,15 +37,4 @@ const Randoms: Data[] = [
   { text: "영원히 고통받는 고훈 군입니다.", image: "suffering.png", duration: 3500 }
 ]
 
-type Data = {
-  text: string
-  image: string
-  duration: number
-}
-
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json(Arrays().random(Randoms))
-}
+export const paper = () => Randoms.random();
