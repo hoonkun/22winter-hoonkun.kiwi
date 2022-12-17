@@ -25,34 +25,39 @@ Array.prototype.also = function (block: (it: any) => unknown) {
   return this
 }
 
-Object.defineProperty(Array.prototype, "isEmpty", {
-  writable: true, configurable: false, enumerable: false,
+const safeDefineProperty = (obj: any, p:  PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => {
+  if (obj.hasOwnProperty(p)) return;
+  Object.defineProperty(obj, p, attributes);
+}
+
+safeDefineProperty(Array.prototype, "isEmpty", {
+  configurable: false, enumerable: false,
   get: function () { return this.length === 0 }
 })
 
-Object.defineProperty(Array.prototype, "lastIndex", {
-  writable: true, configurable: false, enumerable: false,
+safeDefineProperty(Array.prototype, "lastIndex", {
+  configurable: false, enumerable: false,
   get: function () { return this.length - 1 }
 })
 
-Object.defineProperty(Object.prototype, "let", {
+safeDefineProperty(Object.prototype, "let", {
   value: function <R>(block: (it: any) => R): R { return block(this) },
-  writable: true, configurable: false, enumerable: false
+  writable: false, configurable: false, enumerable: false
 });
 
-Object.defineProperty(Object.prototype, "also", {
+safeDefineProperty(Object.prototype, "also", {
   value: function(block: (it: any) => unknown) { block(this); return this; },
-  writable: true, configurable: false, enumerable: false
+  writable: false, configurable: false, enumerable: false
 })
 
-Object.defineProperty(Object.prototype, "takeIf", {
+safeDefineProperty(Object.prototype, "takeIf", {
   value: function(block: (it: any) => boolean) { return block(this) ? this : null; },
-  writable: true, configurable: false, enumerable: false
+  writable: false, configurable: false, enumerable: false
 })
 
-Object.defineProperty(Object.prototype, "takeUnless", {
+safeDefineProperty(Object.prototype, "takeUnless", {
   value: function(block: (it: any) => boolean) { return block(this) ? null : this; },
-  writable: true, configurable: false, enumerable: false
+  writable: false, configurable: false, enumerable: false
 })
 
 export const ArrayK = <T>(length: number, mapper: (index: number) => T): T[] => Array(length).fill(undefined).map((_, index) => mapper(index))
