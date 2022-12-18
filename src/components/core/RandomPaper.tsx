@@ -25,9 +25,11 @@ type Props = {
   controller: MutableRefObject<RandomPaperController>
   backgroundRender: JSX.Element
   scale: number
+  loading: boolean
+  onLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale }) => {
+const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onLoading, loading }) => {
 
   const [state, setState] = useState<RandomPaperState>("destroyed")
   const stateRef = useRef<RandomPaperState>("destroyed")
@@ -45,10 +47,19 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale }) =
 
   const make = useCallback(async () => {
     if (stateRef.current !== "destroyed") return
+    if (loading) return
 
-    const data = paper();
+    const data = paper()
 
-    const position = Math.random() * (20 - scale * 2);
+    onLoading(true)
+    const image = new Image()
+    const load = times.current.until(image, "load")
+    image.src = `/resources/images/random/${data.image}`
+    await load
+
+    onLoading(false)
+
+    const position = Math.random() * (20 - scale * 2)
     setDirection(Math.random() > 0.5 ? "normal" : "reversed")
     setPosition(2 + (Math.random() > 0.5 ? position : 68 + position))
     setRandom(data)
@@ -60,7 +71,7 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale }) =
     await times.current.sleep(TransitionOutDuration)
     setRandom(null)
     setState("destroyed")
-  }, [scale])
+  }, [scale, onLoading, loading])
 
   useEffect(() => {
     const instance = times.current

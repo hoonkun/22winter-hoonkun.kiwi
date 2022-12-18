@@ -1,4 +1,5 @@
 import { uuid4 } from "./UUID";
+import { EventTarget } from "next/dist/compiled/@edge-runtime/primitives/events";
 
 type TimesInstance = {
   timeout?: NodeJS.Timeout
@@ -41,6 +42,12 @@ export class TimesSkeleton {
       else it.resolver(false)
     })
     this._instances = { }
+  }
+
+  async until(eventTarget: EventTarget, eventName: string) {
+    return new Promise(resolve => {
+      eventTarget.addEventListener(eventName, resolve)
+    })
   }
 
 }
