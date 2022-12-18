@@ -27,9 +27,10 @@ type Props = {
   scale: number
   loading: boolean
   onLoading: React.Dispatch<React.SetStateAction<boolean>>
+  onPaperShow: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onLoading, loading }) => {
+const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onLoading, loading, onPaperShow }) => {
 
   const [state, setState] = useState<RandomPaperState>("destroyed")
   const stateRef = useRef<RandomPaperState>("destroyed")
@@ -60,6 +61,7 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onL
     onLoading(false)
 
     const position = Math.random() * (20 - scale * 2)
+    onPaperShow(true);
     setDirection(Math.random() > 0.5 ? "normal" : "reversed")
     setPosition(2 + (Math.random() > 0.5 ? position : 68 + position))
     setRandom(data)
@@ -71,7 +73,8 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onL
     await times.current.sleep(TransitionOutDuration)
     setRandom(null)
     setState("destroyed")
-  }, [scale, onLoading, loading])
+    onPaperShow(false);
+  }, [scale, onLoading, loading, onPaperShow])
 
   useEffect(() => {
     const instance = times.current
