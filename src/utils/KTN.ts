@@ -1,6 +1,10 @@
 declare global {
   interface Array<T> {
     random(): T
+    chucked(size: number): T[]
+    chunked<R>(size: number, transform: (it: T[]) => R): R[]
+    count(predicate: (it: T) => boolean): number
+    distinct(): T[]
     get isEmpty(): boolean
     get lastIndex(): number
   }
@@ -23,6 +27,26 @@ Array.prototype.let = function <R>(block: (it: any) => any) {
 Array.prototype.also = function (block: (it: any) => unknown) {
   block(this)
   return this
+}
+
+Array.prototype.chunked = function <R>(size: number, transform?: (it: any[]) => R) {
+  const result: (R | any)[] = []
+  const buffer: any[] = []
+  for (let i = 0; i < this.length; i++) {
+    buffer.push(this[i])
+    if (buffer.length !== size) continue
+    result.push(transform ? transform(buffer) : buffer)
+    buffer.splice(0, size)
+  }
+  return result
+}
+
+Array.prototype.count = function <T extends Array<T>>(this: T, predicate: (it: T) => boolean) {
+  return this.filter(predicate).length
+}
+
+Array.prototype.distinct = function () {
+  return Array.from(new Set(this));
 }
 
 const safeDefineProperty = (obj: any, p:  PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => {
