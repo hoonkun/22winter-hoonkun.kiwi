@@ -27,6 +27,7 @@ const Home: NextPage = () => {
     = useMemo(() => windowRatio <= BackgroundRatio ? "height" : "width", [windowRatio])
 
   const [renderSplash, setRenderSplash] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const setGlobalScale = useCallback(() => {
     if (typeof window === "undefined") return 1
@@ -117,6 +118,8 @@ const Home: NextPage = () => {
           scale={scale}
           controller={paper}
           backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
+          onLoading={setLoading}
+          loading={loading}
         />
       </Root>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
@@ -132,7 +135,7 @@ const Splash = styled.div<{ active: boolean }>`
   height: 100%;
   z-index: 50;
   
-  transition: background-color 0.35s linear;
+  transition: background-color 0.35s linear 0.05s;
   
   ${({ active }) => active ? css`
     background-color: black;
