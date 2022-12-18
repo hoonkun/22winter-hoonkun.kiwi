@@ -8,15 +8,18 @@ import SlashedList from "../components/SlashedList";
 import Spacer from "../components/Spacer";
 import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
+import CircularProgressBar from "../components/CircularProgressBar";
 import { css, keyframes } from "@emotion/react";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
-import CircularProgressBar from "../components/CircularProgressBar";
+import { FullFixed } from "../../styles/globals";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
 const Home: NextPage = () => {
+
+  const scrollable = useRef<HTMLDivElement>(null)
 
   const [[windowWidth, windowHeight], setWindowDimension]
     = useState<[number, number]>([-1, -1])
@@ -30,7 +33,7 @@ const Home: NextPage = () => {
   const [renderSplash, setRenderSplash] = useState(true)
 
   const [loading, setLoading] = useState(false)
-  const [paperShowing, setPaperShowing] = useState(false);
+  const [paperShowing, setPaperShowing] = useState(false)
 
   const scale = useMemo(() => windowWidth <= 840 ? 1 : 2, [windowWidth])
 
@@ -63,144 +66,116 @@ const Home: NextPage = () => {
     return () => clearTimeout(timeout)
   }, [windowWidth, windowHeight])
 
+  useEffect(() => {
+    if (!scrollable.current) return;
+    scrollable.current.scrollTop = window.innerHeight;
+  }, [])
+
   return (
     <>
-      <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
-        <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
-        <BackdropFilterer style={backdropStyle}/>
-        <Container>
-          <OverArea>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverArea>
-          <MiddleArea>
-            <MiddleContent>
-              <Row>
-                <ProfilePhotoContainer><ProfilePhoto src={ProfilePhotoResource.src}/></ProfilePhotoContainer>
-                <ProfileInfo>
-                  <ProfileIdentifiers>
-                    <ProfileNickname>극지대 키위새</ProfileNickname>
-                    <ProfileName>한고훈</ProfileName>
-                    <Spacer grow/>
-                    <ProfileMail href="mailto:herokun.user@gmail.com">@</ProfileMail>
-                  </ProfileIdentifiers>
-                  <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
-                  <ProfileLinks>
-                    <HighlightedLink size={10 * scale} color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
-                    <HighlightedLink size={10 * scale} color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
-                    <HighlightedLink size={10 * scale} color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
-                    <HighlightedLink size={10 * scale} color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
-                  </ProfileLinks>
-                </ProfileInfo>
-              </Row>
-            </MiddleContent>
-          </MiddleArea>
-          <Spacer height={8 * scale}/>
-          <MiddleArea sub>
-            <MiddleContent narrow align2end>
-              <Code>
-                <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
-                <Green>&quot;/api/random&quot;</Green>, Fetchers.<Purple>Get</Purple>) {"}"}
-              </Code>
-            </MiddleContent>
-          </MiddleArea>
-          <BelowArea>
-            <BelowAreaContainer>
-              <RandomButton i={"arrow_forward"}/>
-              <Spacer width={8 * scale}/>
-              {!loading ?
-                <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
-                <CircularProgressBar size={24}/>
-              }
-            </BelowAreaContainer>
-          </BelowArea>
-        </Container>
-        <RandomPaper
-          scale={scale}
-          controller={paper}
-          backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
-          onLoading={setLoading}
-          loading={loading}
-          onPaperShow={setPaperShowing}
-        />
-      </Root>
+      <SnappedScroll ref={scrollable}>
+        <About/>
+        <DummyOverlay>
+          <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
+            <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
+            <BackdropFilterer style={backdropStyle}/>
+            <Container>
+              <OverArea>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverArea>
+              <MiddleArea>
+                <MiddleContent>
+                  <Row>
+                    <ProfilePhotoContainer><ProfilePhoto src={ProfilePhotoResource.src}/></ProfilePhotoContainer>
+                    <ProfileInfo>
+                      <ProfileIdentifiers>
+                        <ProfileNickname>극지대 키위새</ProfileNickname>
+                        <ProfileName>한고훈</ProfileName>
+                        <Spacer grow/>
+                        <ProfileMail href="mailto:herokun.user@gmail.com">@</ProfileMail>
+                      </ProfileIdentifiers>
+                      <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
+                      <ProfileLinks>
+                        <HighlightedLink size={10 * scale} color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
+                        <HighlightedLink size={10 * scale} color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
+                        <HighlightedLink size={10 * scale} color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
+                        <HighlightedLink size={10 * scale} color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
+                      </ProfileLinks>
+                    </ProfileInfo>
+                  </Row>
+                </MiddleContent>
+              </MiddleArea>
+              <Spacer height={8 * scale}/>
+              <MiddleArea sub>
+                <MiddleContent narrow align2end>
+                  <Code>
+                    <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
+                    <Green>&quot;/api/random&quot;</Green>, Fetchers.<Purple>Get</Purple>) {"}"}
+                  </Code>
+                </MiddleContent>
+              </MiddleArea>
+              <BelowArea>
+                <BelowAreaContainer>
+                  <RandomButton i={"arrow_forward"}/>
+                  <Spacer width={8 * scale}/>
+                  {!loading ?
+                    <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
+                    <CircularProgressBar size={24}/>
+                  }
+                </BelowAreaContainer>
+              </BelowArea>
+            </Container>
+            <RandomPaper
+              scale={scale}
+              controller={paper}
+              backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
+              onLoading={setLoading}
+              loading={loading}
+              onPaperShow={setPaperShowing}
+            />
+          </Root>
+        </DummyOverlay>
+        <Posts/>
+      </SnappedScroll>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
     </>
   )
 }
 
-const Splash = styled.div<{ active: boolean }>`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 50;
-  
-  transition: background-color 0.35s linear 0.05s;
-  
-  ${({ active }) => active ? css`
-    background-color: black;
-    pointer-events: auto;
-    
-    & > div {
-      background-color: #ffffff40;
-      & > div {
-        background-color: white;
-      }
-    }
-  ` : css`
-    background-color: transparent;
-    pointer-events: none;
-
-    & > div {
-      background-color: transparent;
-      & > div {
-        background-color: transparent;
-      }
-    }
-  `}
-`
-
-const LoadingAnimation = keyframes`
-  0% {
-    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-  }
-  50% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-  100% {
-    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-  }
-`
-
-const LoadingParent = styled.div`
-  width: 2px;
-  height: 100px;
-  background-color: #ffffff40;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  
-  transition: background-color 0.6s linear;
-  
-  & > div {
-    background-color: white;
-    width: 100%;
-    height: 100%;
-
-    transition: background-color 0.6s linear;
-    
-    animation: ${LoadingAnimation} 0.45s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-  }
-`
-
 const Root = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
+  ${FullFixed};
+  top: 0;
+  left: 0;
   overflow: hidden;
+  pointer-events: none ;
   
   font-family: "IBM Plex Sans KR", sans-serif;
 `
+
+const SnappedScroll = styled.div`
+  ${FullFixed};
+  overflow: auto;
+  scroll-snap-type: y mandatory;
+`
+
+const DummyOverlay = styled.div`
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: auto;
+  position: relative;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+`
+
+const Posts = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 15;
+  scroll-snap-align: center;
+  background-color: black;
+`
+
+const About = Posts;
 
 const Row = styled.div`
   display: flex;
@@ -367,6 +342,73 @@ const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: bool
   
   ${({ clickable, disabled }) => !disabled && clickable ? css`cursor: pointer;` : ""}
   opacity: ${({ disabled }) => disabled ? 0.4 : 1};
+`
+
+const Splash = styled.div<{ active: boolean }>`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  
+  transition: background-color 0.35s linear 0.05s;
+  
+  ${({ active }) => active ? css`
+    background-color: black;
+    pointer-events: auto;
+    
+    & > div {
+      background-color: #ffffff40;
+      & > div {
+        background-color: white;
+      }
+    }
+  ` : css`
+    background-color: transparent;
+    pointer-events: none;
+
+    & > div {
+      background-color: transparent;
+      & > div {
+        background-color: transparent;
+      }
+    }
+  `}
+`
+
+const LoadingAnimation = keyframes`
+  0% {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  }
+  50% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+`
+
+const LoadingParent = styled.div`
+  width: 2px;
+  height: 100px;
+  background-color: #ffffff40;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  transition: background-color 0.6s linear;
+  
+  & > div {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+
+    transition: background-color 0.6s linear;
+    
+    animation: ${LoadingAnimation} 0.45s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
 `
 
 export default Home
