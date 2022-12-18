@@ -12,6 +12,7 @@ import { css, keyframes } from "@emotion/react";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
+import CircularProgressBar from "../components/CircularProgressBar";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
@@ -27,7 +28,9 @@ const Home: NextPage = () => {
     = useMemo(() => windowRatio <= BackgroundRatio ? "height" : "width", [windowRatio])
 
   const [renderSplash, setRenderSplash] = useState(true)
+
   const [loading, setLoading] = useState(false)
+  const [paperShowing, setPaperShowing] = useState(false);
 
   const setGlobalScale = useCallback(() => {
     if (typeof window === "undefined") return 1
@@ -110,7 +113,10 @@ const Home: NextPage = () => {
             <BelowAreaContainer>
               <RandomButton i={"arrow_forward"}/>
               <Spacer width={8 * scale}/>
-              <RandomButton i={"casino"} clickable onClick={() => paper.current.make()}/>
+              {!loading ?
+                <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
+                <CircularProgressBar size={24}/>
+              }
             </BelowAreaContainer>
           </BelowArea>
         </Container>
@@ -120,6 +126,7 @@ const Home: NextPage = () => {
           backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
           onLoading={setLoading}
           loading={loading}
+          onPaperShow={setPaperShowing}
         />
       </Root>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
@@ -363,10 +370,11 @@ const ProfileLinks = styled(SlashedList)`
   font-size: 10rem;
 `
 
-const RandomButton = styled(MaterialIcon)<{ clickable?: boolean }>`
+const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: boolean }>`
   font-size: 24rem;
   
-  ${({ clickable }) => clickable ? css`cursor: pointer;` : ""}
+  ${({ clickable, disabled }) => !disabled && clickable ? css`cursor: pointer;` : ""}
+  opacity: ${({ disabled }) => disabled ? 0.4 : 1};
 `
 
 export default Home
