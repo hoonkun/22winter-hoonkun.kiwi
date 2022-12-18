@@ -31,6 +31,7 @@ const AnchorStyled = styled.div`
   display: inline-flex;
   flex-direction: column;
   align-items: stretch;
+  pointer-events: auto;
 `
 
 const Text = styled.a`

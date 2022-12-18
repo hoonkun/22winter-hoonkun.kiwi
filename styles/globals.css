@@ -9,8 +9,9 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 
+  position: fixed;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 1px);
   overflow: hidden;
 }
 
@@ -25,8 +26,9 @@ body {
 }
 
 #__next {
+  position: fixed;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 1px);
   overflow: hidden;
 }
 
