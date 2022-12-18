@@ -1,6 +1,6 @@
 import "../utils/KTN";
 
-import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import styled from "@emotion/styled";
 import HighlightedLink from "../components/HighlightedLink";
@@ -32,16 +32,7 @@ const Home: NextPage = () => {
   const [loading, setLoading] = useState(false)
   const [paperShowing, setPaperShowing] = useState(false);
 
-  const setGlobalScale = useCallback(() => {
-    if (typeof window === "undefined") return 1
-    const value = window.innerWidth <= 840 ? 1 : 2
-    document.querySelector("html")!.style.fontSize = `${value}px`
-    return value
-  }, [])
-
-  const scale = useMemo(() => {
-    return setGlobalScale()
-  }, [setGlobalScale])
+  const scale = useMemo(() => windowWidth <= 840 ? 1 : 2, [windowWidth])
 
   const paper = useRef(createPaperController())
 
@@ -55,15 +46,16 @@ const Home: NextPage = () => {
   const backdropStyle = useMemo<CSSProperties>(() => ({ backdropFilter: filterCSS, WebkitBackdropFilter: filterCSS }), [filterCSS])
 
   useEffect(() => {
-    const handler = () => {
-      setWindowDimension([window.innerWidth, window.innerHeight])
-      setGlobalScale()
-    }
+    const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
     handler()
 
     window.addEventListener("resize", handler)
     return () => window.removeEventListener("resize", handler)
-  }, [setGlobalScale])
+  }, [])
+
+  useEffect(() => {
+    document.querySelector("html")!.style.fontSize = `${scale}px`
+  }, [scale])
 
   useEffect(() => {
     if (windowWidth < 0 || windowHeight < 0) return
