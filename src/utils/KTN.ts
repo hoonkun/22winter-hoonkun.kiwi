@@ -13,6 +13,7 @@ declare global {
     also<T>(this: T, block: (it: T) => unknown | void): T
     takeIf<T>(this: T, block: (it: T) => boolean): T | null
     takeUnless<T>(this: T, block: (it: T) => boolean): T | null
+    pick<T, P extends keyof T>(this: T, ...keys: P[]): Pick<T, P>
   }
 }
 
@@ -81,6 +82,15 @@ safeDefineProperty(Object.prototype, "takeIf", {
 
 safeDefineProperty(Object.prototype, "takeUnless", {
   value: function(block: (it: any) => boolean) { return block(this) ? null : this; },
+  writable: false, configurable: false, enumerable: false
+})
+
+safeDefineProperty(Object.prototype, "pick", {
+  value: function(...keys: any[]) {
+    const result: any = { };
+    keys.forEach(it => result[it] = this[it]);
+    return result;
+  },
   writable: false, configurable: false, enumerable: false
 })
 
