@@ -1,7 +1,7 @@
 import "../utils/KTN";
 
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import styled from "@emotion/styled";
 import HighlightedLink from "../components/HighlightedLink";
 import SlashedList from "../components/SlashedList";
@@ -10,14 +10,17 @@ import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import CircularProgressBar from "../components/CircularProgressBar";
 import { css, keyframes } from "@emotion/react";
+import { FullFixed } from "../../styles/globals";
+import PostsView from "../components/home/PostsView";
+import { Posts } from "../utils/Posts";
+import { HomeStaticProps } from "./[...paths]";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
-import { FullFixed } from "../../styles/globals";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
-const Home: NextPage = () => {
+const Home: NextPage<HomeStaticProps> = props => {
 
   const scrollable = useRef<HTMLDivElement>(null)
 
@@ -133,11 +136,15 @@ const Home: NextPage = () => {
             />
           </Root>
         </DummyOverlay>
-        <Posts/>
+        <PostsContainer><PostsView items={props.posts}/></PostsContainer>
       </SnappedScroll>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = () => {
+  return { props: { posts: Posts.list(1), page: 1 } }
 }
 
 const Root = styled.div`
@@ -166,16 +173,15 @@ const DummyOverlay = styled.div`
   scroll-snap-stop: always;
 `
 
-const Posts = styled.div`
+const PostsContainer = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
   z-index: 15;
   scroll-snap-align: center;
-  background-color: black;
 `
 
-const About = Posts;
+const About = PostsContainer;
 
 const Row = styled.div`
   display: flex;
