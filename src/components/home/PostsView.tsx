@@ -20,6 +20,7 @@ const PostsView: React.FC<Props> = ({ items, paginator }) => {
       <PostListContainer>
         {items.map(it => <PostItemView key={it.key} item={it}/>)}
       </PostListContainer>
+      <div onClick={paginator.previous}>이전페이지</div>
       <div onClick={paginator.next}>다음페이지</div>
     </PostsViewRoot>
   )
