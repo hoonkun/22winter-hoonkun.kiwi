@@ -1,6 +1,6 @@
 import "../utils/KTN";
 
-import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, UIEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GetStaticProps, NextPage } from "next";
 import styled from "@emotion/styled";
 import HighlightedLink from "../components/HighlightedLink";
@@ -23,6 +23,7 @@ const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 const Home: NextPage<HomeStaticProps> = props => {
 
   const scrollable = useRef<HTMLDivElement>(null)
+  const backdrop = useRef<HTMLDivElement>(null)
 
   const [[windowWidth, windowHeight], setWindowDimension]
     = useState<[number, number]>([-1, -1])
@@ -48,8 +49,22 @@ const Home: NextPage<HomeStaticProps> = props => {
     return real / source
   }, [backgroundFillMode, windowWidth, windowHeight])
 
-  const filterCSS = useMemo(() => `blur(${Math.floor(dp * 30)}px) brightness(0.75)`, [dp])
-  const backdropStyle = useMemo<CSSProperties>(() => ({ backdropFilter: filterCSS, WebkitBackdropFilter: filterCSS }), [filterCSS])
+  const backgroundFilter = useMemo<CSSProperties>(() =>
+    `blur(${Math.floor(dp * 30)}px) brightness(0.75)`.let(it => ({ backdropFilter: it, WebkitBackdropFilter: it })),
+    [dp]
+  );
+
+  const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
+    if (!backdrop.current) return
+    const height = window.innerHeight
+    const position = event.currentTarget.scrollTop
+    const ratio = Math.abs(height - position) / height
+
+    const style = backdrop.current.style as any
+    const filter = `blur(${ratio * 20}px) brightness(${(1 - ratio * 0.8)})`
+    style.backdropFilter = filter
+    style.webkitBackdropFilter = filter
+  }, []);
 
   useEffect(() => {
     const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
@@ -76,12 +91,12 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   return (
     <>
-      <SnappedScroll ref={scrollable}>
+      <SnappedScroll ref={scrollable} onScroll={onScroll}>
         <About/>
         <DummyOverlay>
           <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
             <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
-            <BackdropFilterer style={backdropStyle}/>
+            <BackdropFilterer style={backgroundFilter} zIndex={5}/>
             <Container>
               <OverArea>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverArea>
               <MiddleArea>
@@ -136,6 +151,7 @@ const Home: NextPage<HomeStaticProps> = props => {
             />
           </Root>
         </DummyOverlay>
+        <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
         <PostsContainer><PostsView items={props.posts}/></PostsContainer>
       </SnappedScroll>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
@@ -192,13 +208,14 @@ const Column = styled.div`
   flex-direction: column;
 `
 
-const BackdropFilterer = styled.div`
-  position: absolute;
-  z-index: 5;
+const BackdropFilterer = styled.div<{ zIndex: number, fixed?: boolean }>`
+  position: ${({ fixed }) => fixed ? "fixed" : "absolute"};
+  z-index: ${({ zIndex }) => zIndex};
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 `
 
 const Background = styled.img<{ fillMode: "width" | "height", fixed?: boolean, overlay?: boolean }>`
