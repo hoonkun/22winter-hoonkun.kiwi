@@ -13,6 +13,7 @@ body {
   width: 100%;
   height: calc(100% - 1px);
   overflow: hidden;
+  color: white;
 }
 
 @media screen and (max-device-width: 480px){

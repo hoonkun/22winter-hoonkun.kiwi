@@ -8,12 +8,13 @@ export default Home;
 
 export type HomeStaticProps = {
   posts: Post[]
-  page: number
+  routedPage: number | null
+  total: number
 }
 
-export const getStaticProps: GetStaticProps = context => {
+export const getStaticProps: GetStaticProps<HomeStaticProps> = context => {
   const page = parseInt(context.params?.paths?.[1] ?? "1");
-  return { props: { posts: Posts.list(page), page: page } }
+  return { props: { posts: Posts.list(page), routedPage: page, total: Posts.total } }
 }
 
 export const getStaticPaths: GetStaticPaths = () => {

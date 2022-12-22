@@ -2,10 +2,23 @@ import React from "react";
 import { Post } from "../../utils/Posts";
 import styled from "@emotion/styled";
 
-const PostsView: React.FC<{ items: Post[] }> = ({ items }) => {
+export type PostPaginator = {
+  next: () => void
+  previous: () => void
+  navigate: (page: number) => void
+  maxPage: number
+}
+
+type Props = {
+  items: Post[]
+  paginator: PostPaginator
+}
+
+const PostsView: React.FC<Props> = ({ items, paginator }) => {
   return (
     <PostsViewRoot>
       {items.map(it => <PostItemView key={it.key} item={it}/>)}
+      <div onClick={paginator.next}>다음페이지</div>
     </PostsViewRoot>
   )
 }
@@ -19,6 +32,7 @@ const PostsViewRoot = styled.div`
   align-items: stretch;
   
   padding: 80px 20px 20px 20px;
+  pointer-events: auto;
 `
 
 const PostItemView: React.FC<{ item: Post }> = ({ item }) => {
