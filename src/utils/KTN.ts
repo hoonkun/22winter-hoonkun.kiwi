@@ -14,6 +14,7 @@ declare global {
     coerceIn(this: number, minimumValue: number, maximumValue: number): number
     get absolute(): number
     get floor(): number
+    get ceil(): number
   }
   interface Object {
     let<T, R>(this: T, block: (it: T) => R): R
@@ -74,6 +75,11 @@ safeDefineProperty(Number.prototype, "absolute", {
 safeDefineProperty(Number.prototype, "floor", {
   configurable: false, enumerable: false,
   get: function () { return Math.floor(this) }
+})
+
+safeDefineProperty(Number.prototype, "ceil", {
+  configurable: false, enumerable: false,
+  get: function () { return Math.ceil(this) }
 })
 
 Array.prototype.count = function <T extends Array<T>>(this: T, predicate: (it: T) => boolean) {

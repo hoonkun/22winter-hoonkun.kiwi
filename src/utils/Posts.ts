@@ -3,9 +3,11 @@ import matter from 'gray-matter';
 
 import config from "../config";
 
+export type PostMetadata = { title: string, date: string, author: string, categories: string[] }
+
 export type Post = {
   key: string
-  data: { title: string, date: string, author: string, categories: string[] }
+  data: PostMetadata
   excerpt: string
 }
 
@@ -18,7 +20,7 @@ export class Posts {
     return dir.length
   }
 
-  static list(page: number) {
+  static list(page: number): Post[] {
     if (page === 0) throw Error("invalid page: 0. page must be bigger than zero.")
 
     return fs.readdirSync("./_posts")
@@ -28,7 +30,7 @@ export class Posts {
           .let(it => matter(it, { excerpt: true, excerpt_separator: config.blog.excerpt_separator }))
           .pick("data", "excerpt")
           .also(it => it.data = it.data.pick("title", "date", "author", "categories"))
-          .let(it => ({ ...it, key }))
+          .let(it => ({ ...it, key }) as Post)
       )
   }
 

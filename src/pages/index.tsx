@@ -1,6 +1,15 @@
 import "../utils/KTN";
 
-import { CSSProperties, UIEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  CSSProperties,
+  TouchEventHandler,
+  UIEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import { GetStaticProps, NextPage } from "next";
 import styled from "@emotion/styled";
 import HighlightedLink from "../components/HighlightedLink";
@@ -11,13 +20,16 @@ import RandomPaper, { createPaperController } from "../components/core/RandomPap
 import CircularProgressBar from "../components/CircularProgressBar";
 import { css, keyframes } from "@emotion/react";
 import { FullFixed } from "../../styles/globals";
-import PostsView from "../components/home/PostsView";
+import PostsView, { PostPaginator } from "../components/home/PostsView";
 import { Posts } from "../utils/Posts";
 import { HomeStaticProps } from "./[...paths]";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
 import Actionbar from "../components/home/Actionbar";
+import { Times } from "../utils/Times";
+import Router from "next/router";
+import config from "../config";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
@@ -26,6 +38,11 @@ const Home: NextPage<HomeStaticProps> = props => {
   const scrollable = useRef<HTMLDivElement>(null)
   const backdrop = useRef<HTMLDivElement>(null)
   const actionbar = useRef<HTMLDivElement>(null)
+
+  const time = useRef(Times())
+
+  const previousPage = useRef(props.routedPage)
+  const [page, setPage] = useState(props.routedPage)
 
   const [[windowWidth, windowHeight], setWindowDimension]
     = useState<[number, number]>([-1, -1])
@@ -82,9 +99,42 @@ const Home: NextPage<HomeStaticProps> = props => {
     applyActionbar(height, position)
   }, [applyBackdrop, applyActionbar])
 
+  const onTouchEnd = useCallback<TouchEventHandler<HTMLDivElement>>(async () => {
+    if (!scrollable.current) return
+    const toBelowSection = scrollable.current.scrollTop > window.innerHeight;
+
+    const prev = scrollable.current.scrollTop
+    await time.current.sleep(10)
+    const next = scrollable.current.scrollTop
+    const delta = next - prev
+
+    if (delta > 0 && toBelowSection) {
+      setPage(previousPage.current ?? 1)
+    } else if (delta < 0 && !toBelowSection) {
+
+    }
+    if (delta < 0 && toBelowSection) {
+      setPage(null)
+    }
+  }, [])
+
+  const toBelowSection = useCallback(() => {
+    scrollable.current?.scrollTo({ top: window.innerHeight * 2, behavior: "smooth" })
+    setPage(previousPage.current ?? 1)
+  }, [])
+
   const backToMain = useCallback(() => {
     scrollable.current?.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+    setPage(null)
   }, [])
+
+  const next = useCallback(() => setPage(prevState => (prevState ?? 1) + 1), [])
+  const previous = useCallback(() => setPage(prevState => (prevState ?? 1) - 1), [])
+  const navigate = useCallback((page: number) => setPage(page), [])
+
+  const paginator = useMemo<PostPaginator>(() => ({
+    next, previous, navigate, maxPage: (props.total / config.blog.page_size).ceil
+  }), [next, previous, navigate, props.total])
 
   useEffect(() => {
     const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
@@ -96,6 +146,7 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   useEffect(() => {
     document.querySelector("html")!.style.fontSize = `${scale}px`
+    if (scrollable.current && scale === 2) scrollable.current.style.pointerEvents = "none"
   }, [scale])
 
   useEffect(() => {
@@ -106,12 +157,19 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   useEffect(() => {
     if (!scrollable.current) return;
-    scrollable.current.scrollTop = window.innerHeight;
+    if (!previousPage.current) scrollable.current.scrollTop = window.innerHeight
+    else scrollable.current.scrollTop = window.innerHeight * 2
   }, [])
+
+  useEffect(() => {
+    if (page) previousPage.current = page
+    if (!page) Router.replace(`/`, undefined).then()
+    else Router.replace(`/page/${page}`, undefined).then();
+  }, [page])
 
   return (
     <>
-      <SnappedScroll ref={scrollable} onScroll={onScroll}>
+      <SnappedScroll ref={scrollable} onScroll={onScroll} onTouchEnd={onTouchEnd}>
         <About/>
         <DummyOverlay>
           <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
@@ -169,10 +227,12 @@ const Home: NextPage<HomeStaticProps> = props => {
               loading={loading}
               onPaperShow={setPaperShowing}
             />
+            <OverSectionNavigator>︿</OverSectionNavigator>
+            <BelowSectionNavigator onClick={toBelowSection}>﹀</BelowSectionNavigator>
           </Root>
         </DummyOverlay>
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
-        <PostsContainer><PostsView items={props.posts}/></PostsContainer>
+        <PostsContainer><PostsView items={props.posts} paginator={paginator}/></PostsContainer>
       </SnappedScroll>
       <Actionbar ref={actionbar} onNavigateBack={backToMain}/>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
@@ -180,8 +240,8 @@ const Home: NextPage<HomeStaticProps> = props => {
   )
 }
 
-export const getStaticProps: GetStaticProps = () => {
-  return { props: { posts: Posts.list(1), page: 1 } }
+export const getStaticProps: GetStaticProps<HomeStaticProps> = () => {
+  return { props: { posts: Posts.list(1), routedPage: null, total: Posts.total } }
 }
 
 const Root = styled.div`
@@ -453,6 +513,27 @@ const LoadingParent = styled.div`
     
     animation: ${LoadingAnimation} 0.45s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   }
+`
+
+const SectionNavigator = styled.div`
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  font-size: 16rem;
+  opacity: 0.4;
+  cursor: pointer;
+  pointer-events: auto;
+`
+
+const BelowSectionNavigator = styled(SectionNavigator)`
+  bottom: 0;
+  padding: 10px 10px 0 10px;
+`
+
+const OverSectionNavigator = styled(SectionNavigator)`
+  top: 0;
+  padding: 0 10px 10px 10px;
 `
 
 export default Home
