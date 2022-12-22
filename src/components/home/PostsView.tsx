@@ -17,6 +17,8 @@ const PostsViewRoot = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  
+  padding: 80px 20px 20px 20px;
 `
 
 const PostItemView: React.FC<{ item: Post }> = ({ item }) => {
