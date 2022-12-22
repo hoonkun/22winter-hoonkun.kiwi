@@ -17,6 +17,7 @@ import { HomeStaticProps } from "./[...paths]";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
+import Actionbar from "../components/home/Actionbar";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
@@ -24,6 +25,7 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   const scrollable = useRef<HTMLDivElement>(null)
   const backdrop = useRef<HTMLDivElement>(null)
+  const actionbar = useRef<HTMLDivElement>(null)
 
   const [[windowWidth, windowHeight], setWindowDimension]
     = useState<[number, number]>([-1, -1])
@@ -50,21 +52,39 @@ const Home: NextPage<HomeStaticProps> = props => {
   }, [backgroundFillMode, windowWidth, windowHeight])
 
   const backgroundFilter = useMemo<CSSProperties>(() =>
-    `blur(${Math.floor(dp * 30)}px) brightness(0.75)`.let(it => ({ backdropFilter: it, WebkitBackdropFilter: it })),
+    `blur(${(dp * 30).floor}px) brightness(0.75)`.let(it => ({ backdropFilter: it, WebkitBackdropFilter: it })),
     [dp]
   );
 
-  const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
+  const applyBackdrop = useCallback((height: number, position: number) => {
     if (!backdrop.current) return
-    const height = window.innerHeight
-    const position = event.currentTarget.scrollTop
-    const ratio = Math.abs(height - position) / height
+    const ratio = (height - position).absolute / height
 
     const style = backdrop.current.style as any
     const filter = `blur(${ratio * 20}px) brightness(${(1 - ratio * 0.8)})`
     style.backdropFilter = filter
     style.webkitBackdropFilter = filter
-  }, []);
+  }, [])
+
+  const applyActionbar = useCallback((height: number, position: number) => {
+    if (!actionbar.current) return
+
+    const ratio = (((height - position).absolute / height).coerceIn(0.8, 1) - 0.8) / 0.2
+    const style = actionbar.current.style
+    style.transform = `translateY(${60 * (ratio - 1)}px)`
+  }, [])
+
+  const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
+    const height = window.innerHeight
+    const position = event.currentTarget.scrollTop
+
+    applyBackdrop(height, position)
+    applyActionbar(height, position)
+  }, [applyBackdrop, applyActionbar])
+
+  const backToMain = useCallback(() => {
+    scrollable.current?.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+  }, [])
 
   useEffect(() => {
     const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
@@ -154,6 +174,7 @@ const Home: NextPage<HomeStaticProps> = props => {
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
         <PostsContainer><PostsView items={props.posts}/></PostsContainer>
       </SnappedScroll>
+      <Actionbar ref={actionbar} onNavigateBack={backToMain}/>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
     </>
   )
