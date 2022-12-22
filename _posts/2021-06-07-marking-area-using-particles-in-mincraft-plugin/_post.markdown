@@ -1,7 +1,7 @@
 ---
 layout: post.liquid
 author: GoHoon
-title: 마인크래프트 플러그인의 Particle을 사용해 월드의 특정 영역에 경계선을 그려보자
+title: 마인크래프트 Particle을 사용해 월드의 특정 영역에 경계선을 그려보자
 date: 2021-06-07, 15:40
 image: /assets/images/posts/2021-06-07-marking-area-using-particles-in-mincraft-plugin/preview.png
 categories: [dev,minecraft-plugin]

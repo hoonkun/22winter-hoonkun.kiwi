@@ -5,6 +5,7 @@ declare global {
     chunked<R>(size: number, transform: (it: T[]) => R): R[]
     count(predicate: (it: T) => boolean): number
     distinct(): T[]
+    sum(this: number[]): number
     get isEmpty(): boolean
     get lastIndex(): number
   }
@@ -53,6 +54,10 @@ Array.prototype.chunked = function <R>(size: number, transform?: (it: any[]) => 
     buffer.splice(0, size)
   }
   return result
+}
+
+Array.prototype.sum = function (this: number[]) {
+  return this.reduce((p, c) => p + c, 0)
 }
 
 Number.prototype.coerceAtLeast = function (minimumValue) {
