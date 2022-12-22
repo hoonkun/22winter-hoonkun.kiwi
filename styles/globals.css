@@ -16,6 +16,10 @@ body {
   color: white;
 }
 
+body {
+  font-size: 12px;
+}
+
 @media screen and (max-device-width: 480px){
   body{
     -webkit-text-size-adjust: none;
