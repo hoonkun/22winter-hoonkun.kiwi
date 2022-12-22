@@ -164,6 +164,7 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   useEffect(() => {
     if (page) previousPage.current = page
+    if (scrollable.current) scrollable.current.style.pointerEvents = page && page > 1 ? "none" : "auto"
     if (!page) Router.replace(`/`, undefined).then()
     else Router.replace(`/page/${page}`, undefined).then();
   }, [page])
