@@ -1,4 +1,5 @@
 import "../utils/KTN";
+import "../utils/String";
 
 import {
   CSSProperties,
@@ -227,12 +228,16 @@ const Home: NextPage<HomeStaticProps> = props => {
               loading={loading}
               onPaperShow={setPaperShowing}
             />
-            <OverSectionNavigator>︿</OverSectionNavigator>
-            <BelowSectionNavigator onClick={toBelowSection}>﹀</BelowSectionNavigator>
+            {scale === 2 &&
+              <>
+                <OverSectionNavigator>︿</OverSectionNavigator>
+                <BelowSectionNavigator onClick={toBelowSection}>﹀</BelowSectionNavigator>
+              </>
+            }
           </Root>
         </DummyOverlay>
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
-        <PostsContainer><PostsView items={props.posts} paginator={paginator}/></PostsContainer>
+        <PostsContainer><PostsView items={props.posts} paginator={paginator} /></PostsContainer>
       </SnappedScroll>
       <Actionbar ref={actionbar} onNavigateBack={backToMain}/>
       {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
@@ -276,6 +281,9 @@ const PostsContainer = styled.div`
   position: relative;
   z-index: 15;
   scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const About = PostsContainer;

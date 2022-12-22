@@ -24,6 +24,7 @@ export class Posts {
     if (page === 0) throw Error("invalid page: 0. page must be bigger than zero.")
 
     return fs.readdirSync("./_posts")
+      .reverse()
       .slice((page - 1) * config.blog.page_size, page * config.blog.page_size)
       .map(key =>
         fs.readFileSync(`./_posts/${key}/_post.markdown`, { encoding: "utf8" })
