@@ -134,8 +134,8 @@ const Home: NextPage<HomeStaticProps> = props => {
   const navigate = useCallback((page: number) => setPage(page), [])
 
   const paginator = useMemo<PostPaginator>(() => ({
-    next, previous, navigate, maxPage: (props.total / config.blog.page_size).ceil
-  }), [next, previous, navigate, props.total])
+    next, previous, navigate, maxPage: (props.total / config.blog.page_size).ceil, page: page ?? 1
+  }), [next, previous, navigate, props.total, page])
 
   useEffect(() => {
     const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
