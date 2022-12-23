@@ -3,6 +3,8 @@ declare global {
     randomize(this: string, minimumValue: number, maximumValue: number): number
     get byteSize(): number
     truncateByteSize(length: number): string
+    toNumber(this: string): number
+    get px(): number
   }
 }
 
@@ -24,6 +26,10 @@ String.prototype.truncateByteSize = function(length: number) {
   return result;
 }
 
+String.prototype.toNumber = function() {
+  return parseInt(this)
+}
+
 const safeDefineProperty = (obj: any, p:  PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => {
   if (obj.hasOwnProperty(p)) return;
   Object.defineProperty(obj, p, attributes);
@@ -32,6 +38,11 @@ const safeDefineProperty = (obj: any, p:  PropertyKey, attributes: PropertyDescr
 safeDefineProperty(String.prototype, "byteSize", {
   configurable: false, enumerable: false,
   get: function () { return (this as string).split("").map(it => it.match(/[가-힣ㄱ-ㅎㅏ-ㅣ]/) ? 2 : 1).sum() }
+})
+
+safeDefineProperty(String.prototype, "px", {
+  configurable: false, enumerable: false,
+  get: function () { return this.replace("px", "").toNumber() }
 })
 
 export {}
