@@ -2,6 +2,7 @@ import React, { CSSProperties, useCallback, useMemo, useRef } from "react";
 import { Post } from "../../utils/Posts";
 import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
+import { Breakpoint } from "../../../styles/globals";
 
 export type PostPaginator = {
   next: () => void
@@ -47,14 +48,19 @@ const PostsView: React.FC<Props> = ({ items, paginator }) => {
 const PostsViewRoot = styled.div`
   width: 100%;
   height: 100%;
-  max-width: 400rem;
   overflow: auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  
-  padding: 80px 20px 20px 20px;
   pointer-events: auto;
+
+  max-width: 400px;
+  padding: 80px 20px 20px 20px;
+  
+  ${Breakpoint} {
+    max-width: 800px;
+    padding: 80px 20px 20px 20px;
+  }
 `
 
 const PostListContainer = styled.div`

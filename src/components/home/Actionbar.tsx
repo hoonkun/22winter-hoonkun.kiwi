@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
+import { Breakpoint } from "../../../styles/globals";
 
 type Props = {
   onNavigateBack: () => void
@@ -22,12 +23,20 @@ Actionbar.displayName = "ActionBar"
 const Root = styled.div`
   position: fixed;
   z-index: 50;
+  left: 50%;
   width: 100%;
-  height: 60px;
-  padding: 0 20px;
   display: flex;
   align-items: center;
-  transform: translateY(-60px);
+  transform: translate(-50%, -100%);
+  padding: 0 20px;
+  
+  height: 60px;
+  max-width: 400px;
+
+  ${Breakpoint} {
+    height: 60px;
+    max-width: 800px;
+  }
 `
 
 export default Actionbar

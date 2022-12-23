@@ -20,7 +20,7 @@ import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import CircularProgressBar from "../components/CircularProgressBar";
 import { css, keyframes } from "@emotion/react";
-import { FullFixed } from "../../styles/globals";
+import { Breakpoint, FullFixed } from "../../styles/globals";
 import PostsView, { PostPaginator } from "../components/home/PostsView";
 import { Posts } from "../utils/Posts";
 import { HomeStaticProps } from "./[...paths]";
@@ -60,8 +60,6 @@ const Home: NextPage<HomeStaticProps> = props => {
   const [loading, setLoading] = useState(false)
   const [paperShowing, setPaperShowing] = useState(false)
 
-  const scale = useMemo(() => windowWidth <= 840 ? 1 : 2, [windowWidth])
-
   const paper = useRef(createPaperController())
 
   const dp = useMemo(() => {
@@ -90,7 +88,7 @@ const Home: NextPage<HomeStaticProps> = props => {
 
     const ratio = (((height - position).absolute / height).coerceIn(0.8, 1) - 0.8) / 0.2
     const style = actionbar.current.style
-    style.transform = `translateY(${60 * (ratio - 1)}px)`
+    style.transform = `translate(-50%, ${(ratio - 1) * 100}%)`
   }, [])
 
   const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
@@ -147,11 +145,6 @@ const Home: NextPage<HomeStaticProps> = props => {
   }, [])
 
   useEffect(() => {
-    document.querySelector("html")!.style.fontSize = `${scale}px`
-    if (scrollable.current && scale === 2) scrollable.current.style.overflow = "hidden"
-  }, [scale])
-
-  useEffect(() => {
     if (windowWidth < 0 || windowHeight < 0) return
     const timeout = setTimeout(() => setRenderSplash(false), 1000)
     return () => clearTimeout(timeout)
@@ -194,16 +187,16 @@ const Home: NextPage<HomeStaticProps> = props => {
                       </ProfileIdentifiers>
                       <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
                       <ProfileLinks>
-                        <HighlightedLink size={10 * scale} color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
-                        <HighlightedLink size={10 * scale} color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
-                        <HighlightedLink size={10 * scale} color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
-                        <HighlightedLink size={10 * scale} color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
+                        <HighlightedLink color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
+                        <HighlightedLink color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
+                        <HighlightedLink color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
+                        <HighlightedLink color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
                       </ProfileLinks>
                     </ProfileInfo>
                   </Row>
                 </MiddleContent>
               </MiddleArea>
-              <Spacer height={8 * scale}/>
+              {/*<Spacer height={8 * scale}/>*/}
               <MiddleArea sub>
                 <MiddleContent narrow align2end>
                   <Code>
@@ -214,8 +207,8 @@ const Home: NextPage<HomeStaticProps> = props => {
               </MiddleArea>
               <BelowArea>
                 <BelowAreaContainer>
-                  <RandomButton i={"arrow_forward"}/>
-                  <Spacer width={8 * scale}/>
+                  <RandomButton i={"arrow_forward"} margin/>
+                  {/*<Spacer width={8 * scale}/>*/}
                   {!loading ?
                     <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
                     <CircularProgressBar size={24}/>
@@ -224,19 +217,14 @@ const Home: NextPage<HomeStaticProps> = props => {
               </BelowArea>
             </Container>
             <RandomPaper
-              scale={scale}
               controller={paper}
               backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
               onLoading={setLoading}
               loading={loading}
               onPaperShow={setPaperShowing}
             />
-            {scale === 2 &&
-              <>
-                <OverSectionNavigator>︿</OverSectionNavigator>
-                <BelowSectionNavigator onClick={toBelowSection}>﹀</BelowSectionNavigator>
-              </>
-            }
+            <OverSectionNavigator>︿</OverSectionNavigator>
+            <BelowSectionNavigator onClick={toBelowSection}>﹀</BelowSectionNavigator>
           </Root>
         </DummyOverlay>
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
@@ -332,41 +320,70 @@ const Container = styled(Column)`
 
 const SurroundingArea = styled(Column)`
   width: 100%;
-  padding-left: 20rem;
-  padding-right: 20rem;
-  max-width: 400rem;
-
   color: var(--text-color-primary);
+  
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 400px;
+  
+  ${Breakpoint} {
+    padding-left: 40px;
+    padding-right: 40px;
+    max-width: 800px;
+  }
 `
 
 const OverArea = styled(SurroundingArea)`
   align-items: flex-start;
-  margin-bottom: 10rem;
-  
-  font-size: 10rem;
   opacity: .45;
+  
+  margin-bottom: 10px;
+  font-size: 10px;
+  
+  ${Breakpoint} {
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
 `
 
 const MiddleArea = styled(Column)<{ sub?: boolean }>`
   width: 100%;
   background-color: ${({ sub }) => sub ? "#00000060" : "#00000080"};
   align-items: center;
+
+  margin-top: ${({ sub }) => sub ? 8 : 0}px;
+  
+  ${Breakpoint} {
+    margin-top: ${({ sub }) => sub ? 16 : 0}px;
+  }
 `
 
 const MiddleContent = styled(SurroundingArea)<{ narrow?: boolean, align2end?: boolean }>`
   align-items: stretch;
-  padding-top: ${({ narrow }) => narrow ? 3 : 20}rem;
-  padding-bottom: ${({ narrow }) => narrow ? 3 : 20}rem;
-  ${({ narrow }) => narrow ? css`font-size: 12rem;` : ""}
   ${({ align2end }) => align2end ? css`align-items: flex-end;` : ""}
+
+  padding-top: ${({ narrow }) => narrow ? 3 : 20}px;
+  padding-bottom: ${({ narrow }) => narrow ? 3 : 20}px;
+  ${({ narrow }) => narrow ? css`font-size: 12px;` : ""}
+  
+  ${Breakpoint} {
+    padding-top: ${({ narrow }) => narrow ? 6 : 40}px;
+    padding-bottom: ${({ narrow }) => narrow ? 6 : 40}px;
+    ${({ narrow }) => narrow ? css`font-size: 24px;` : ""}
+  }
 `
 
 const Code = styled.div`
   font-family: "JetBrains Mono Light", sans-serif;
-  font-size: 10rem;
   white-space: nowrap;
   transform: scale(0.8);
   transform-origin: right center;
+  
+  font-size: 10px;
+  
+  ${Breakpoint} {
+    font-size: 20px;
+  }
 `
 
 const Orange = styled.span`
@@ -387,24 +404,43 @@ const Purple = styled.span`
 
 const BelowArea = styled(SurroundingArea)`
   align-items: flex-end;
-  margin-top: 10rem;
+  
+  margin-top: 10px;
+  
+  ${Breakpoint} {
+    margin-top: 20px;
+  }
 `
 
 const BelowAreaContainer = styled(Row)`
-  height: 40rem;
-  border-radius: 20rem;
   background-color: #00000060;
   align-items: center;
-  padding: 0 10rem;
-  margin-right: -5rem;
+
+  height: 40px;
+  border-radius: 20px;
+  padding: 0 10px;
+  margin-right: -5px;
+  
+  ${Breakpoint} {
+    height: 80px;
+    border-radius: 40px;
+    padding: 0 20px;
+    margin-right: -10px;
+  }
 `
 
 const ProfilePhotoContainer = styled.div`
-  width: 60rem;
-  height: 60rem;
   overflow: hidden;
   border-radius: 50%;
   flex-shrink: 0;
+  
+  width: 60px;
+  height: 60px;
+  
+  ${Breakpoint} {
+    width: 120px;
+    height: 120px;
+  }
 `
 
 const ProfilePhoto = styled.img`
@@ -414,8 +450,13 @@ const ProfilePhoto = styled.img`
 `
 
 const ProfileInfo = styled(Column)`
-  margin-left: 20rem;
   flex-grow: 1;
+  
+  margin-left: 20px;
+  
+  ${Breakpoint} {
+    margin-left: 40px;
+  }
 `
 
 const ProfileIdentifiers = styled(Row)`
@@ -423,40 +464,77 @@ const ProfileIdentifiers = styled(Row)`
 `
 
 const ProfileName = styled.div`
-  font-size: 13rem;
-  margin-left: 8rem;
-  line-height: 18rem;
   opacity: .75;
+  
+  font-size: 13px;
+  margin-left: 8px;
+  line-height: 18px;
+  
+  ${Breakpoint} {
+    font-size: 26px;
+    margin-left: 16px;
+    line-height: 36px;
+  }
 `
 
 const ProfileNickname = styled.div`
   font-weight: bold;
-  font-size: 20rem;
-  line-height: 23rem;
+  
+  font-size: 20px;
+  line-height: 23px;
+
+  ${Breakpoint} {
+    font-size: 40px;
+    line-height: 46px;
+  }
 `
 
 const ProfileMail = styled(HighlightedLink)`
-  font-size: 12rem;
   align-self: center;
+  
+  font-size: 12px;
+  
+  ${Breakpoint} {
+    font-size: 24px;
+  }
 `
 
 const ProfileMessage = styled.div`
-  font-size: 13rem;
-  line-height: 15rem;
-  margin-top: 4rem;
   opacity: .75;
+  
+  font-size: 13px;
+  line-height: 15px;
+  margin-top: 4px;
+  
+  ${Breakpoint} {
+    font-size: 26px;
+    line-height: 30px;
+    margin-top: 8px;
+  }
 `
 
 const ProfileLinks = styled(SlashedList)`
-  margin-top: 5rem;
-  font-size: 10rem;
+  margin-top: 5px;
+  font-size: 10px;
+  
+  ${Breakpoint} {
+    margin-top: 10px;
+    font-size: 20px;
+  }
 `
 
-const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: boolean }>`
-  font-size: 24rem;
-  
+const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: boolean, margin?: boolean }>`
   ${({ clickable, disabled }) => !disabled && clickable ? css`cursor: pointer;` : ""}
   opacity: ${({ disabled }) => disabled ? 0.4 : 1};
+  
+  margin-right: ${({ margin }) => margin ? 8 : 0}px;
+  
+  font-size: 24px;
+  
+  ${Breakpoint} {
+    font-size: 48px;
+    margin-right: ${({ margin }) => margin ? 16 : 0}px;
+  }
 `
 
 const Splash = styled.div<{ active: boolean }>`
@@ -531,10 +609,18 @@ const SectionNavigator = styled.div`
   left: 50%;
   transform: translateX(-50%);
   z-index: 15;
-  font-size: 16rem;
   opacity: 0.4;
   cursor: pointer;
   pointer-events: auto;
+  
+  display: none;
+  
+  font-size: 16px;
+  
+  ${Breakpoint} {
+    font-size: 32px;
+    display: block;
+  }
 `
 
 const BelowSectionNavigator = styled(SectionNavigator)`

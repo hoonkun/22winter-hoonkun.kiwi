@@ -6,3 +6,5 @@ export const FullFixed = css`
   width: 100%;
   height: calc(100% - 1px);
 `
+
+export const Breakpoint = `@media only screen and (min-width: 840px)`
