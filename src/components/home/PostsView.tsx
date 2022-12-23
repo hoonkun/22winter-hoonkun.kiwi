@@ -1,12 +1,14 @@
-import React, { CSSProperties, useMemo } from "react";
+import React, { CSSProperties, useCallback, useMemo, useRef } from "react";
 import { Post } from "../../utils/Posts";
 import styled from "@emotion/styled";
+import MaterialIcon from "../MaterialIcon";
 
 export type PostPaginator = {
   next: () => void
   previous: () => void
   navigate: (page: number) => void
   maxPage: number
+  page: number
 }
 
 type Props = {
@@ -15,13 +17,29 @@ type Props = {
 }
 
 const PostsView: React.FC<Props> = ({ items, paginator }) => {
+
+  const scrollable = useRef<HTMLDivElement>(null)
+
+  const paginate = useCallback((action: () => void) => {
+    return () => {
+      scrollable.current?.scrollTo({ top: 0, behavior: "smooth" })
+      action()
+    }
+  }, [])
+
   return (
-    <PostsViewRoot>
+    <PostsViewRoot ref={scrollable}>
       <PostListContainer>
         {items.map(it => <PostItemView key={it.key} item={it}/>)}
       </PostListContainer>
-      <div onClick={paginator.previous}>이전페이지</div>
-      <div onClick={paginator.next}>다음페이지</div>
+      <Pager>
+        <PagerArrow i={"chevron_left"} onClick={paginate(paginator.previous)} />
+        <PagerPageText>
+          <PagerCurrent>{paginator.page}</PagerCurrent>
+          <PagerMax>&nbsp;/&nbsp;{paginator.maxPage}</PagerMax>
+        </PagerPageText>
+        <PagerArrow i={"chevron_right"} onClick={paginate(paginator.next)} />
+      </Pager>
     </PostsViewRoot>
   )
 }
@@ -45,6 +63,32 @@ const PostListContainer = styled.div`
   grid-template-rows: auto;
   grid-template-columns: 100%;
   grid-row-gap: 10px;
+`
+
+const Pager = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  justify-content: flex-end;
+`
+
+const PagerArrow = styled(MaterialIcon)`
+  padding: 7px;
+`
+
+const PagerPageText = styled.div`
+  display: flex;
+  align-items: flex-end;
+`
+
+const PagerCurrent = styled.div`
+  font-weight: bold;
+  font-size: 16px;
+`
+
+const PagerMax = styled.div`
+  padding-bottom: 1.5px;
+  opacity: 0.75;
 `
 
 const PostItemView: React.FC<{ item: Post }> = ({ item }) => {
