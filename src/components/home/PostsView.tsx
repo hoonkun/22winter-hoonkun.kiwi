@@ -97,6 +97,10 @@ const Pager = styled.div`
   align-items: center;
   margin-top: 20px;
   justify-content: flex-end;
+  
+  ${Breakpoint} {
+    font-size: 20px;
+  }
 `
 
 const PagerArrow = styled(MaterialIcon)`
@@ -112,6 +116,10 @@ const PagerPageText = styled.div`
 const PagerCurrent = styled.div`
   font-weight: bold;
   font-size: 16px;
+  
+  ${Breakpoint} {
+    font-size: 26px;
+  }
 `
 
 const PagerMax = styled.div`
