@@ -72,8 +72,8 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   const applyBackdrop = useCallback((position: number) => {
     if (!backdrop.current) return
-    const height = window.innerHeight
-    const ratio = (height - position).absolute / height
+    const width = window.innerWidth
+    const ratio = (width - position).absolute / width
 
     const style = backdrop.current.style as any
     const filter = `blur(${ratio * 20}px) brightness(${(1 - ratio * 0.8)})`
@@ -84,20 +84,20 @@ const Home: NextPage<HomeStaticProps> = props => {
   const applyActionbar = useCallback((position: number) => {
     if (!actionbar.current) return
 
-    const height = window.innerHeight
-    const ratio = (((height - position).absolute / height).coerceIn(0.8, 1) - 0.8) / 0.2
+    const width = window.innerWidth
+    const ratio = (((width - position).absolute / width).coerceIn(0.8, 1) - 0.8) / 0.2
     const style = actionbar.current.style
     style.transform = `translate(-50%, ${(ratio - 1) * 100}%)`
   }, [])
 
   const saveStateToStorage = useCallback((position: number) => {
-    const height = window.innerHeight
-    const section = position.absolute <= 1 ? "about" : (position - height * 2).absolute <= 5 ? "posts" : "main"
+    const width = window.innerWidth
+    const section = position.absolute <= 1 ? "about" : (position - width * 2).absolute <= 5 ? "posts" : "main"
     localStorage.setItem("section", section)
   }, [])
 
   const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
-    const position = event.currentTarget.scrollTop
+    const position = event.currentTarget.scrollLeft
 
     applyBackdrop(position)
     applyActionbar(position)
@@ -106,11 +106,11 @@ const Home: NextPage<HomeStaticProps> = props => {
   }, [applyBackdrop, applyActionbar, saveStateToStorage])
 
   const toBelowSection = useCallback(() => {
-    scrollable.current?.scrollTo({ top: window.innerHeight * 2, behavior: "smooth" })
+    scrollable.current?.scrollTo({ left: window.innerWidth * 2, behavior: "smooth" })
   }, [])
 
   const backToMain = useCallback(() => {
-    scrollable.current?.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+    scrollable.current?.scrollTo({ left: window.innerWidth, behavior: "smooth" })
     Router.replace(`/`).then()
   }, [])
 
@@ -137,16 +137,16 @@ const Home: NextPage<HomeStaticProps> = props => {
     initial.current = false
     if (!page) {
       const section = localStorage.getItem("section")
-      let scrollTop: number
-      if (section === "about") scrollTop = 0
-      else if (section === "posts") scrollTop = window.innerHeight * 2
-      else scrollTop = window.innerHeight
-      scrollable.current.scrollTop = scrollTop
-      applyActionbar(scrollTop)
-      applyBackdrop(scrollTop)
+      let scrollLeft: number
+      if (section === "about") scrollLeft = 0
+      else if (section === "posts") scrollLeft = window.innerWidth * 2
+      else scrollLeft = window.innerWidth
+      scrollable.current.scrollLeft = scrollLeft
+      applyActionbar(scrollLeft)
+      applyBackdrop(scrollLeft)
     } else {
-      scrollable.current.scrollTop = window.innerHeight * 2
-      saveStateToStorage(window.innerHeight * 2)
+      scrollable.current.scrollLeft = window.innerWidth * 2
+      saveStateToStorage(window.innerWidth * 2)
     }
   }, [page, applyActionbar, applyBackdrop, saveStateToStorage])
 
@@ -241,7 +241,10 @@ const Root = styled.div`
 const SnappedScroll = styled.div<{ scrollable: boolean }>`
   ${FullFixed};
   ${HideScrollbar};
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  
+  & > div { flex-shrink: 0; }
   
   overflow: ${({ scrollable }) => scrollable ? "overlay" : "hidden"};
   
