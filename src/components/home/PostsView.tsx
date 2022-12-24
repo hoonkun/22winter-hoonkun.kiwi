@@ -101,6 +101,7 @@ const Pager = styled.div`
 
 const PagerArrow = styled(MaterialIcon)`
   padding: 7px;
+  cursor: pointer;
 `
 
 const PagerPageText = styled.div`
@@ -222,7 +223,7 @@ const PostTitle = styled.div`
   text-shadow: 0 0 4px #000000;
   
   font-size: 12px;
-  background:  radial-gradient(farthest-side at 50% 100%, black 0, transparent 100%);
+  background: radial-gradient(farthest-side at 50% 100%, black 0, transparent 100%);
   
   ${Breakpoint} {
     font-size: 20px;
@@ -230,7 +231,10 @@ const PostTitle = styled.div`
     padding-bottom: 14px;
     padding-top: 40px;
     width: 100%;
-    background:  radial-gradient(farthest-side at 75% 100%, black 0, transparent 100%);
+    background:
+      radial-gradient(farthest-side at 50% 100%, #00000075 0, transparent 100%),
+      radial-gradient(50% 50% at 60% 100%, #00000075 0, transparent 100%),
+      radial-gradient(50% 50% at 70% 100%, #00000075 0, transparent 100%);
   }
 `
 
