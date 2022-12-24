@@ -70,8 +70,9 @@ const Home: NextPage<HomeStaticProps> = props => {
     [dp]
   );
 
-  const applyBackdrop = useCallback((height: number, position: number) => {
+  const applyBackdrop = useCallback((position: number) => {
     if (!backdrop.current) return
+    const height = window.innerHeight
     const ratio = (height - position).absolute / height
 
     const style = backdrop.current.style as any
@@ -80,21 +81,29 @@ const Home: NextPage<HomeStaticProps> = props => {
     style.webkitBackdropFilter = filter
   }, [])
 
-  const applyActionbar = useCallback((height: number, position: number) => {
+  const applyActionbar = useCallback((position: number) => {
     if (!actionbar.current) return
 
+    const height = window.innerHeight
     const ratio = (((height - position).absolute / height).coerceIn(0.8, 1) - 0.8) / 0.2
     const style = actionbar.current.style
     style.transform = `translate(-50%, ${(ratio - 1) * 100}%)`
   }, [])
 
-  const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
+  const saveStateToStorage = useCallback((position: number) => {
     const height = window.innerHeight
+    const section = position.absolute <= 1 ? "about" : (position - height * 2).absolute <= 5 ? "posts" : "main"
+    localStorage.setItem("section", section)
+  }, [])
+
+  const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
     const position = event.currentTarget.scrollTop
 
-    applyBackdrop(height, position)
-    applyActionbar(height, position)
-  }, [applyBackdrop, applyActionbar])
+    applyBackdrop(position)
+    applyActionbar(position)
+
+    saveStateToStorage(position)
+  }, [applyBackdrop, applyActionbar, saveStateToStorage])
 
   const toBelowSection = useCallback(() => {
     scrollable.current?.scrollTo({ top: window.innerHeight * 2, behavior: "smooth" })
@@ -128,13 +137,24 @@ const Home: NextPage<HomeStaticProps> = props => {
   }, [windowWidth, windowHeight])
 
   useEffect(() => {
-    if (!initial.current) return;
-    if (!scrollable.current) return;
+    if (!initial.current) return
+    if (!scrollable.current) return
 
-    initial.current = false;
-    if (!page) scrollable.current.scrollTop = window.innerHeight
-    else scrollable.current.scrollTop = window.innerHeight * 2
-  }, [page])
+    initial.current = false
+    if (!page) {
+      const section = localStorage.getItem("section")
+      let scrollTop: number
+      if (section === "about") scrollTop = 0
+      else if (section === "posts") scrollTop = window.innerHeight * 2
+      else scrollTop = window.innerHeight
+      scrollable.current.scrollTop = scrollTop
+      applyActionbar(scrollTop)
+      applyBackdrop(scrollTop)
+    } else {
+      scrollable.current.scrollTop = window.innerHeight * 2
+      saveStateToStorage(window.innerHeight * 2)
+    }
+  }, [page, applyActionbar, applyBackdrop, saveStateToStorage])
 
   return (
     <>
