@@ -20,7 +20,7 @@ import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import CircularProgressBar from "../components/CircularProgressBar";
 import { css, keyframes } from "@emotion/react";
-import { Breakpoint, FullFixed } from "../../styles/globals";
+import { Breakpoint, FullFixed, HideScrollbar } from "../../styles/globals";
 import PostsView, { PostPaginator } from "../components/home/PostsView";
 import { Posts } from "../utils/Posts";
 import { HomeStaticProps } from "./[...paths]";
@@ -159,14 +159,9 @@ const Home: NextPage<HomeStaticProps> = props => {
     else scrollable.current.scrollTop = window.innerHeight * 2
   }, [page])
 
-  useEffect(() => {
-    if (!scrollable.current) return
-    scrollable.current.style.overflow = page && page > 1 ? "hidden" : "auto"
-  }, [page])
-
   return (
     <>
-      <SnappedScroll ref={scrollable} onScroll={onScroll} onTouchEnd={onTouchEnd}>
+      <SnappedScroll ref={scrollable} scrollable={!page || page === 1} onScroll={onScroll} onTouchEnd={onTouchEnd}>
         <About/>
         <DummyOverlay>
           <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
@@ -245,15 +240,21 @@ const Root = styled.div`
   top: 0;
   left: 0;
   overflow: hidden;
-  pointer-events: none ;
+  pointer-events: none;
   
   font-family: "IBM Plex Sans KR", sans-serif;
 `
 
-const SnappedScroll = styled.div`
+const SnappedScroll = styled.div<{ scrollable: boolean }>`
   ${FullFixed};
-  overflow: auto;
+  ${HideScrollbar};
   scroll-snap-type: y mandatory;
+  
+  overflow: ${({ scrollable }) => scrollable ? "overlay" : "hidden"};
+  
+  ${Breakpoint} {
+    overflow: hidden;
+  }
 `
 
 const DummyOverlay = styled.div`

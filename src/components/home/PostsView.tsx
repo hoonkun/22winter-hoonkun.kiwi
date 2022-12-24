@@ -2,7 +2,7 @@ import React, { CSSProperties, useCallback, useMemo, useRef } from "react";
 import { Post } from "../../utils/Posts";
 import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
-import { Breakpoint } from "../../../styles/globals";
+import { Breakpoint, OverlayOverflow } from "../../../styles/globals";
 
 export type PostPaginator = {
   next: () => void
@@ -30,17 +30,19 @@ const PostsView: React.FC<Props> = ({ items, paginator }) => {
 
   return (
     <PostsViewRoot ref={scrollable}>
-      <PostListContainer>
-        {items.map(it => <PostItemView key={it.key} item={it}/>)}
-      </PostListContainer>
-      <Pager>
-        <PagerArrow i={"chevron_left"} onClick={paginate(paginator.previous)} />
-        <PagerPageText>
-          <PagerCurrent>{paginator.page}</PagerCurrent>
-          <PagerMax>&nbsp;/&nbsp;{paginator.maxPage}</PagerMax>
-        </PagerPageText>
-        <PagerArrow i={"chevron_right"} onClick={paginate(paginator.next)} />
-      </Pager>
+      <PostsViewLimitedWidth>
+        <PostListContainer>
+          {items.map(it => <PostItemView key={it.key} item={it}/>)}
+        </PostListContainer>
+        <Pager>
+          <PagerArrow i={"chevron_left"} onClick={paginate(paginator.previous)} />
+          <PagerPageText>
+            <PagerCurrent>{paginator.page}</PagerCurrent>
+            <PagerMax>&nbsp;/&nbsp;{paginator.maxPage}</PagerMax>
+          </PagerPageText>
+          <PagerArrow i={"chevron_right"} onClick={paginate(paginator.next)} />
+        </Pager>
+      </PostsViewLimitedWidth>
     </PostsViewRoot>
   )
 }
@@ -48,17 +50,25 @@ const PostsView: React.FC<Props> = ({ items, paginator }) => {
 const PostsViewRoot = styled.div`
   width: 100%;
   height: 100%;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  ${OverlayOverflow};
+`
+
+const PostsViewLimitedWidth = styled.div`
+  width: 100%;
+  
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  pointer-events: auto;
-
+  
   max-width: 400px;
   padding: 80px 20px 20px 20px;
-  
+
   ${Breakpoint} {
-    max-width: 800px;
+    max-width: 1000px;
     padding: 80px 20px 20px 20px;
   }
 `
@@ -69,6 +79,11 @@ const PostListContainer = styled.div`
   grid-template-rows: auto;
   grid-template-columns: 100%;
   grid-row-gap: 10px;
+  
+  ${Breakpoint} {
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 40px;
+  }
 `
 
 const Pager = styled.div`
@@ -111,9 +126,7 @@ const PostItemView: React.FC<{ item: Post }> = ({ item }) => {
       </PostPreviewContainer>
       <PostDataContainer>
         <PostTitle>{item.data.title}</PostTitle>
-        <PostExcerptContainer>
-          {item.excerpt.truncateByteSize(113).let(it => it === item.excerpt ? it : `${it}...`)}
-        </PostExcerptContainer>
+        <PostExcerptContainer dangerouslySetInnerHTML={{ __html: item.excerpt }}/>
       </PostDataContainer>
     </PostsItemViewRoot>
   )
@@ -122,16 +135,25 @@ const PostItemView: React.FC<{ item: Post }> = ({ item }) => {
 const PostsItemViewRoot = styled.div`
   font-size: 17px;
   position: relative;
-  height: 125px;
+  height: 160px;
+  
+  ${Breakpoint} {
+    height: 320px;
+  }
 `
 
 const PostPreviewContainer = styled.div`
   position: absolute;
-  height: 100%;
+  height: 125px;
   aspect-ratio: 3.75 / 3;
   left: 0;
   top: 0;
   border: 4px solid white;
+  
+  ${Breakpoint} {
+    height: 250px;
+    border: 8px solid white;
+  }
 `
 
 const PostPreview = styled.img`
@@ -155,17 +177,29 @@ const PostPreviewOverlay = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  color: #ffffffA0;
+  
   font-size: 10px;
   padding: 2px 4px;
-  color: #ffffffA0;
+  
+  ${Breakpoint} {
+    font-size: 14px;
+    padding: 4px 8px;
+  }
 `
 
 const PostDataContainer = styled.div`
   position: absolute;
   right: 0;
-  bottom: 7px;
   width: 70%;
-  font-size: 12px;
+
+  bottom: 14px;
+  
+  ${Breakpoint} {
+    bottom: 28px;
+    padding-top: 10px;
+  }
+  
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -176,12 +210,32 @@ const PostTitle = styled.div`
   text-align: right;
   word-break: keep-all;
   width: 74%;
-  margin-bottom: 7px;
+  padding-bottom: 7px;
+  
+  text-shadow: 0 0 4px #000000;
+  
+  font-size: 12px ;
+  
+  ${Breakpoint} {
+    font-size: 20px;
+    padding-bottom: 14px;
+    padding-top: 40px;
+    width: 100%;
+    background:  radial-gradient(farthest-side at 75% 100%, black 0, transparent 100%);
+  }
 `
 
 const PostExcerptContainer = styled.div`
   background-color: #272727;
   padding: 10px;
+  
+  font-size: 12px;
+  
+  ${Breakpoint} {
+    padding: 15px;
+    font-size: 14px;
+    line-height: 150%;
+  }
 `
 
 export default PostsView
