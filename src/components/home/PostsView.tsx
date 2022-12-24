@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useMemo, useRef } from "react";
+import React, { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 import { Post } from "../../utils/Posts";
 import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
@@ -15,18 +15,24 @@ export type PostPaginator = {
 type Props = {
   items: Post[]
   paginator: PostPaginator
+  requestSplash: (request: boolean) => void
 }
 
-const PostsView: React.FC<Props> = ({ items, paginator }) => {
+const PostsView: React.FC<Props> = ({ items, paginator, requestSplash }) => {
 
   const scrollable = useRef<HTMLDivElement>(null)
 
   const paginate = useCallback((action: () => void) => {
     return () => {
-      scrollable.current?.scrollTo({ top: 0, behavior: "smooth" })
+      requestSplash(true)
       action()
     }
-  }, [])
+  }, [requestSplash])
+
+  useEffect(() => {
+    requestSplash(false)
+    scrollable.current?.scrollTo({ top: 0, behavior: "smooth" })
+  }, [items, requestSplash])
 
   return (
     <PostsViewRoot ref={scrollable}>
