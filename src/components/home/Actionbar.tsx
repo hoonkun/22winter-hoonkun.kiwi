@@ -35,7 +35,7 @@ const Root = styled.div`
 
   ${Breakpoint} {
     height: 60px;
-    max-width: 800px;
+    max-width: 1000px;
   }
 `
 
