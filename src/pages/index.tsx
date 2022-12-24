@@ -131,12 +131,6 @@ const Home: NextPage<HomeStaticProps> = props => {
   }, [])
 
   useEffect(() => {
-    if (windowWidth < 0 || windowHeight < 0) return
-    const timeout = setTimeout(() => setRenderSplash(false), 1000)
-    return () => clearTimeout(timeout)
-  }, [windowWidth, windowHeight])
-
-  useEffect(() => {
     if (!initial.current) return
     if (!scrollable.current) return
 
@@ -220,10 +214,12 @@ const Home: NextPage<HomeStaticProps> = props => {
           </Root>
         </DummyOverlay>
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
-        <PostsContainer><PostsView items={props.posts} paginator={paginator} /></PostsContainer>
+        <PostsContainer><PostsView items={props.posts} paginator={paginator} requestSplash={setRenderSplash} /></PostsContainer>
       </SnappedScroll>
       <Actionbar ref={actionbar} onNavigateBack={backToMain}/>
-      {renderSplash && <Splash active={windowWidth < 0 || windowHeight < 0}><LoadingParent><div/></LoadingParent></Splash>}
+      <Splash active={windowWidth < 0 || windowHeight < 0 || renderSplash} translucent={windowWidth > 0 && windowHeight > 0}>
+        <LoadingParent><div/></LoadingParent>
+      </Splash>
     </>
   )
 }
@@ -535,7 +531,7 @@ const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: bool
   }
 `
 
-const Splash = styled.div<{ active: boolean }>`
+const Splash = styled.div<{ active: boolean, translucent: boolean }>`
   position: fixed;
   left: 0;
   top: 0;
@@ -545,8 +541,8 @@ const Splash = styled.div<{ active: boolean }>`
   
   transition: background-color 0.35s linear 0.05s;
   
-  ${({ active }) => active ? css`
-    background-color: black;
+  ${({ active, translucent }) => active ? css`
+    background-color: ${translucent ? "#000000A0" : "black"};
     pointer-events: auto;
     
     & > div {
