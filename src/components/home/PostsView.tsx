@@ -135,16 +135,16 @@ const PostItemView: React.FC<{ item: Post }> = ({ item }) => {
 const PostsItemViewRoot = styled.div`
   font-size: 17px;
   position: relative;
-  height: 160px;
+  height: 175px;
   
   ${Breakpoint} {
-    height: 320px;
+    height: 350px;
   }
 `
 
 const PostPreviewContainer = styled.div`
   position: absolute;
-  height: 125px;
+  height: 150px;
   aspect-ratio: 3.75 / 3;
   left: 0;
   top: 0;
@@ -209,15 +209,18 @@ const PostTitle = styled.div`
   font-weight: bold;
   text-align: right;
   word-break: keep-all;
-  width: 74%;
+  padding-top: 14px;
+  padding-left: 24%;
   padding-bottom: 7px;
   
   text-shadow: 0 0 4px #000000;
   
-  font-size: 12px ;
+  font-size: 12px;
+  background:  radial-gradient(farthest-side at 50% 100%, black 0, transparent 100%);
   
   ${Breakpoint} {
     font-size: 20px;
+    padding-left: 0;
     padding-bottom: 14px;
     padding-top: 40px;
     width: 100%;
