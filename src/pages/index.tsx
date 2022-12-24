@@ -3,7 +3,6 @@ import "../utils/String";
 
 import {
   CSSProperties,
-  TouchEventHandler,
   UIEventHandler,
   useCallback,
   useEffect,
@@ -28,7 +27,6 @@ import { HomeStaticProps } from "./[...paths]";
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
 import Actionbar from "../components/home/Actionbar";
-import { Times } from "../utils/Times";
 import Router, { useRouter } from "next/router";
 import config from "../config";
 
@@ -42,7 +40,6 @@ const Home: NextPage<HomeStaticProps> = props => {
   const backdrop = useRef<HTMLDivElement>(null)
   const actionbar = useRef<HTMLDivElement>(null)
 
-  const time = useRef(Times())
   const { query: { paths } } = useRouter()
   const page = useMemo(() => paths?.[1] ? parseInt(paths[1]) : null, [paths])
 
@@ -99,28 +96,8 @@ const Home: NextPage<HomeStaticProps> = props => {
     applyActionbar(height, position)
   }, [applyBackdrop, applyActionbar])
 
-  const onTouchEnd = useCallback<TouchEventHandler<HTMLDivElement>>(async () => {
-    if (!scrollable.current) return
-    const toBelowSection = scrollable.current.scrollTop > window.innerHeight;
-
-    const prev = scrollable.current.scrollTop
-    await time.current.sleep(100)
-    const next = scrollable.current.scrollTop
-    const delta = next - prev
-
-    if (delta > 0 && toBelowSection) {
-      await Router.push(`/page/1`)
-    } else if (delta < 0 && !toBelowSection) {
-
-    }
-    if (delta < 0 && toBelowSection) {
-      await Router.replace(`/`)
-    }
-  }, [])
-
   const toBelowSection = useCallback(() => {
     scrollable.current?.scrollTo({ top: window.innerHeight * 2, behavior: "smooth" })
-    Router.push(`/page/1`).then()
   }, [])
 
   const backToMain = useCallback(() => {
@@ -129,7 +106,7 @@ const Home: NextPage<HomeStaticProps> = props => {
   }, [])
 
   const next = useCallback(() => Router.push(`/page/${(page ??  1) + 1}`), [page])
-  const previous = useCallback(() => Router.push(`/page/${(page ?? 1) - 1}`), [page])
+  const previous = useCallback(() => Router.push(page === 2 ? `/` : `/page/${(page ?? 1) - 1}`), [page])
   const navigate = useCallback((page: number) => Router.push(`/page/${page}`), [])
 
   const paginator = useMemo<PostPaginator>(() => ({
@@ -161,7 +138,7 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   return (
     <>
-      <SnappedScroll ref={scrollable} scrollable={!page || page === 1} onScroll={onScroll} onTouchEnd={onTouchEnd}>
+      <SnappedScroll ref={scrollable} scrollable={!page} onScroll={onScroll}>
         <About/>
         <DummyOverlay>
           <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
