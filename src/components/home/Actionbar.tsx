@@ -13,7 +13,7 @@ const Actionbar = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 
   return (
     <Root ref={ref}>
-      <MaterialIcon i={"arrow_back"} onClick={onNavigateBack}/>
+      <NavigateBack i={"arrow_back"} onClick={onNavigateBack} />
     </Root>
   )
 })
@@ -36,6 +36,16 @@ const Root = styled.div`
   ${Breakpoint} {
     height: 60px;
     max-width: 1000px;
+  }
+`
+
+const NavigateBack = styled(MaterialIcon)`
+  margin: -20px;
+  padding: 20px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #ffffff30;
   }
 `
 
