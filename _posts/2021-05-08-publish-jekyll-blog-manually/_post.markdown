@@ -8,7 +8,7 @@ categories: [dev,dev-others]
 excerpt_separator: <!-- Excerpt -->
 use_code_fragment: true
 ---
-CI인지 뭔지 없이, github-page에서 지원하지 않는 gem을 가진 jekyll 프로젝트를 하나의 git repository에 서로 다른 브런치를 사용해 master에는 프로젝트를, gh-pages에는 _site의 내용을 푸시하여 github-page를 만들어보자.   
+github-page에서 지원하지 않는 gem을 가진 jekyll 프로젝트를 github-pages(gh-pages 브랜치)에 _site의 내용으로 배포해보자.   
 <!-- Excerpt -->
 &nbsp;   
 
