@@ -350,9 +350,9 @@ const PostTitle = styled.div`
     padding-top: 40px;
     width: 100%;
     background:
-      radial-gradient(farthest-side at 50% 100%, #00000075 0, transparent 100%),
-      radial-gradient(50% 50% at 60% 100%, #00000075 0, transparent 100%),
-      radial-gradient(50% 50% at 70% 100%, #00000075 0, transparent 100%);
+      radial-gradient(farthest-side at 50% 100%, #00000075 0, #00000060 50%, transparent 100%),
+      radial-gradient(50% 50% at 60% 100%, #00000075 0, #00000060 50%, transparent 100%),
+      radial-gradient(50% 50% at 70% 100%, #00000075 0, #00000060 50%, transparent 100%);
   }
 `
 
