@@ -30,16 +30,16 @@ use_code_fragment: true
 ### BukkitRunnable
 말보다 코드가 나을 것 같으니 아래 코드를 보자.   
 제작중인 플러그인에서 룰을 어겼을 시 <code>BukkitRunnable</code>을 이용하여 1초 마다 플레이어에게 대미지를 입히는 코드 부분이다.   
-<pre><code class="language-kotlin"><span style="opacity: 0.6">parent.server.onlinePlayers.filter {
-    </span>it.health > 0<span style="opacity: 0.6"> && /*checking rule here*/
+<pre><code class="language-kotlin">parent.server.onlinePlayers.filter {
+    it.health > 0 && /*checking rule here*/
 }.forEach {
-    val damageAmount = if (it.world.difficulty == Difficulty.PEACEFUL) 5.0 else 2.0</span>
+    val damageAmount = if (it.world.difficulty == Difficulty.PEACEFUL) 5.0 else 2.0
     /* G.DEATH_BY_PLUGIN: MutableMap&lt;UUID, Boolean&gt; */
     if (it.health <= damageAmount && G.DEATH_BY_PLUGIN[it.uniqueId] != true) {
         G.DEATH_BY_PLUGIN[it.uniqueId] = true
     }
     it.damage(damageAmount)
-<span style="opacity: 0.6">}</span></code></pre>
+}</code></pre>
 <div class="code-fragment-name">runnable.PlayerRuleChecker</div>
 진하게 표시된 부분이 중요한 부분이다. 플레이어의 체력이 0보다 크고 룰을 어겼을 경우에만 대미지를 입히되,
 **대미지를 입히기 전에 먼저 '이만큼의 대미지를 입혔을 때 플레이어가 죽는가?'를 체크**하여 '참'이라면 <code>G.DEATH_BY_PLUGIN[player.uniqueId]</code>의 값을 <code>true</code>로 바꾼다.   
@@ -52,15 +52,15 @@ use_code_fragment: true
 
 ### PlayerDeathByPluginListener
 이제 플래그를 설정했으니 그것을 참조해서 <code>deathMessage</code>를 변경해보자. 이것은 어렵지 않다. 다음 코드를 보자:   
-<pre><code class="language-kotlin"><span style="opacity: 0.6">class PlayerDeathByWaffleEvent: Listener {
+<pre><code class="language-kotlin">class PlayerDeathByWaffleEvent: Listener {
     @EventHandler
-    fun onPlayerDeathByPlugin(event: PlayerDeathEvent) {</span>
+    fun onPlayerDeathByPlugin(event: PlayerDeathEvent) {
         if (G.DEATH_BY_PLUGIN[event.entity.uniqueId] == true) {
             event.deathMessage = "고훈 군이 포스트를 쓰다 죽었습니다... 좀 자라고 (ㅋㅋㅋ)"
             G.DEATH_BY_PLUGIN[event.entity.uniqueId] = false
         }
-    <span style="opacity: 0.6">}
-}</span></code></pre>
+    }
+}</code></pre>
 <div class="code-fragment-name">listener.PlayerDeathByPluginListener</div>
 보다시피 단순하다. <code>G.DEATH_BY_PLUGIN[event.entity.uniqueId]</code>를 참조해 값을 비교하여 '참'이면 플러그인에 의해 죽은것으로 간주하고 
 <code>deathMessage</code>를 변경하고있다. 그리고 설정되었던 플래그를 초기화하고있다.   

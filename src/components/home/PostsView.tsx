@@ -5,6 +5,7 @@ import MaterialIcon from "../MaterialIcon";
 import { Breakpoint, OverlayOverflow } from "../../../styles/globals";
 
 import PostsTitle from "./../../resources/images/posts_title.jpg"
+import Router from "next/router";
 
 export type PostPaginator = {
   next: () => void
@@ -239,7 +240,7 @@ const PostItemView: React.FC<{ item: Post }> = ({ item }) => {
   const previewStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${item.key.randomize(-5, 5)}deg` }), [item.key])
 
   return (
-    <PostsItemViewRoot>
+    <PostsItemViewRoot onClick={() => Router.push(`/post/${item.key}`)}>
       <PostPreviewContainer style={previewStyle}>
         <PostPreview src={require(`./../../../_posts/${item.key}/preview.png`).default.src}/>
         <PostPreviewOverlay>
@@ -258,6 +259,8 @@ const PostsItemViewRoot = styled.div`
   font-size: 17px;
   position: relative;
   height: 175px;
+  
+  cursor: pointer;
   
   ${Breakpoint} {
     height: 350px;

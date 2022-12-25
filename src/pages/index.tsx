@@ -1,6 +1,3 @@
-import "../utils/KTN";
-import "../utils/String";
-
 import {
   CSSProperties,
   UIEventHandler,
