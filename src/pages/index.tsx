@@ -234,11 +234,11 @@ const Root = styled.div`
   left: 0;
   overflow: hidden;
   pointer-events: none;
-  
-  font-family: "IBM Plex Sans KR", sans-serif;
 `
 
 const SnappedScroll = styled.div<{ scrollable: boolean }>`
+  font-family: "IBM Plex Sans KR", sans-serif;
+  
   ${FullFixed};
   ${HideScrollbar};
   scroll-snap-type: x mandatory;

@@ -7,9 +7,9 @@ image: /assets/images/posts/2021-05-09-blog-restart/preview.png
 categories: [dev,frontend]
 excerpt_separator: <!-- Excerpt -->
 ---
-jekyll 정적 페이지 생성기를 사용한 블로그 개발기. 밤새서 개발했기 때문에 잠을 자면서 개발한다면 3일 정도가 걸리지 않았을까 예상한다.   
-개발한 후기에 가까운 글이고, 빠르게 블로그를 개발해보고싶다면 추천하는 포스트.   
+jekyll을 사용한 블로그 개발 후기. 밤새서 개발했기 때문에 잠을 자면서 개발한다면 3일 정도가 걸리지 않았을까 예상한다.   
 <!-- Excerpt -->
+개발한 후기에 가까운 글이고, 빠르게 블로그를 개발해보고싶다면 추천하는 포스트.   
 &nbsp;   
 
 ## 서론

@@ -306,13 +306,15 @@ const PostTitle = styled.div`
   text-align: right;
   word-break: keep-all;
   padding-top: 14px;
-  padding-left: 24%;
+  padding-left: 15%;
   padding-bottom: 7px;
   
   text-shadow: 0 0 4px #000000;
   
   font-size: 12px;
   background: radial-gradient(farthest-side at 50% 100%, black 0, transparent 100%);
+
+  line-height: 150%;
   
   ${Breakpoint} {
     font-size: 20px;
@@ -332,6 +334,8 @@ const PostExcerptContainer = styled.div`
   padding: 10px;
   
   font-size: 12px;
+  
+  line-height: 150%;
   
   ${Breakpoint} {
     padding: 15px;
