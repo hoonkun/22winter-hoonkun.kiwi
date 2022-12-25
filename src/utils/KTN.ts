@@ -6,6 +6,15 @@ declare global {
     count(predicate: (it: T) => boolean): number
     distinct(): T[]
     sum(this: number[]): number
+    max(this: number[]): number
+    min(this: number[]): number
+    average(this: number[]): number
+    groupBy<K extends string>(keySelector: (it: T) => K): Record<K, T[]>
+    onEach(block: (it: T, index: number, array: T[]) => void | unknown): T[]
+    partition(predicate: (it: T) => boolean): [T[], T[]]
+    remove(element: T): T[]
+    removeAt(index: number): T[]
+    shuffle(): T[]
     get isEmpty(): boolean
     get lastIndex(): number
   }
@@ -56,8 +65,41 @@ Array.prototype.chunked = function <R>(size: number, transform?: (it: any[]) => 
   return result
 }
 
+Array.prototype.max = function (this: number[]) {
+  return Math.max(...this)
+}
+
+Array.prototype.min = function (this: number[]) {
+  return Math.min(...this)
+}
+
 Array.prototype.sum = function (this: number[]) {
   return this.reduce((p, c) => p + c, 0)
+}
+
+Array.prototype.average = function (this: number[]) {
+  return this.sum() / this.length
+}
+
+Array.prototype.onEach = function (block) {
+  this.forEach(block)
+  return this
+}
+
+Array.prototype.partition = function (predicate) {
+  return ([[], []] as [any[], any[]]).also(result => this.forEach(it => result[predicate(it) ? 0 : 1].push(it)))
+}
+
+Array.prototype.remove = function (element) {
+  return [...this].also(result => result.splice(result.indexOf(element), 1))
+}
+
+Array.prototype.removeAt = function (index) {
+  return [...this].also(result => result.splice(index, 1))
+}
+
+Array.prototype.shuffle = function () {
+  return this.sort(() => Math.random() - Math.random())
 }
 
 Number.prototype.coerceAtLeast = function (minimumValue) {
