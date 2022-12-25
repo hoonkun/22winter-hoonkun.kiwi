@@ -113,24 +113,22 @@ const PostsViewTitleImageContainer = styled.div`
   rotate: z 2deg;
   transform: scale(0.95);
   border: 5px solid white;
-  aspect-ratio: 4 / 2.5;
-  overflow: hidden;
   position: relative;
   
   ${Breakpoint} {
     rotate: z 1deg;
-    aspect-ratio: 4 / 1.5;
   }
 `
 
 const PostsViewTitleImage = styled.img`
   width: 100%;
-  height: 100%;
   object-fit: cover;
   display: block;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  aspect-ratio: 4 / 2.5;
+  
+  ${Breakpoint} {
+    aspect-ratio: 4 / 1.5;
+  }
 `
 
 const PostsViewTitleOverlay = styled.div`
