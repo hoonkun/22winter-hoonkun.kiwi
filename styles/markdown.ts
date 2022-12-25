@@ -24,7 +24,7 @@ export const Markdown = css`
 
   & .math-inline {
     max-width: 100%;
-    line-height: 100%;
+    //line-height: 100%;
     //margin-bottom: -11px;
     //margin-top: 10px;
     display: inline-block;

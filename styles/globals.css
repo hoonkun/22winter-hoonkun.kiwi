@@ -20,6 +20,22 @@ body {
   font-size: 12px;
 }
 
+table {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-collapse: collapse;
+  margin: 5px 0;
+}
+
+table td, table th {
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  text-align: center;
+}
+
+.math-inline {
+  line-height: 275%;
+}
+
 @media screen and (max-device-width: 480px){
   body{
     -webkit-text-size-adjust: none;
