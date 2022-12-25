@@ -105,6 +105,10 @@ const Home: NextPage<HomeStaticProps> = props => {
     saveStateToStorage(position)
   }, [applyBackdrop, applyActionbar, saveStateToStorage])
 
+  const toUpperSection = useCallback(() => {
+    scrollable.current?.scrollTo({ left: 0, behavior: "smooth" })
+  }, [])
+
   const toBelowSection = useCallback(() => {
     scrollable.current?.scrollTo({ left: window.innerWidth * 2, behavior: "smooth" })
   }, [])
@@ -159,7 +163,12 @@ const Home: NextPage<HomeStaticProps> = props => {
             <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
             <BackdropFilterer style={backgroundFilter} zIndex={5}/>
             <Container>
-              <OverArea>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverArea>
+              <OverArea>
+                <OverLinks>
+                  <span onClick={toUpperSection}>〈 &nbsp; 키위새에 대해 &nbsp;</span> &nbsp; <span onClick={toBelowSection}>&nbsp; 아무말 집합소 &nbsp; 〉</span>
+                </OverLinks>
+                Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01
+              </OverArea>
               <MiddleArea>
                 <MiddleContent>
                   <Row>
@@ -182,7 +191,6 @@ const Home: NextPage<HomeStaticProps> = props => {
                   </Row>
                 </MiddleContent>
               </MiddleArea>
-              {/*<Spacer height={8 * scale}/>*/}
               <MiddleArea sub>
                 <MiddleContent narrow align2end>
                   <Code>
@@ -194,7 +202,6 @@ const Home: NextPage<HomeStaticProps> = props => {
               <BelowArea>
                 <BelowAreaContainer>
                   <RandomButton i={"arrow_forward"} margin/>
-                  {/*<Spacer width={8 * scale}/>*/}
                   {!loading ?
                     <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
                     <CircularProgressBar size={24}/>
@@ -209,8 +216,6 @@ const Home: NextPage<HomeStaticProps> = props => {
               loading={loading}
               onPaperShow={setPaperShowing}
             />
-            <OverSectionNavigator>︿</OverSectionNavigator>
-            <BelowSectionNavigator onClick={toBelowSection}>﹀</BelowSectionNavigator>
           </Root>
         </DummyOverlay>
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
@@ -340,6 +345,15 @@ const OverArea = styled(SurroundingArea)`
   ${Breakpoint} {
     margin-bottom: 20px;
     font-size: 20px;
+  }
+`
+
+const OverLinks = styled.div`
+  margin-left: -7px;
+  pointer-events: auto;
+  
+  & > span {
+    cursor: pointer;
   }
 `
 
@@ -599,35 +613,6 @@ const LoadingParent = styled.div`
     
     animation: ${LoadingAnimation} 0.45s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   }
-`
-
-const SectionNavigator = styled.div`
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-  opacity: 0.4;
-  cursor: pointer;
-  pointer-events: auto;
-  
-  display: none;
-  
-  font-size: 16px;
-  
-  ${Breakpoint} {
-    font-size: 32px;
-    display: block;
-  }
-`
-
-const BelowSectionNavigator = styled(SectionNavigator)`
-  bottom: 0;
-  padding: 10px 10px 0 10px;
-`
-
-const OverSectionNavigator = styled(SectionNavigator)`
-  top: 0;
-  padding: 0 10px 10px 10px;
 `
 
 export default Home

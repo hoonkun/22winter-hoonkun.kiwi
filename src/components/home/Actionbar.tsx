@@ -44,8 +44,10 @@ const NavigateBack = styled(MaterialIcon)`
   padding: 20px;
   cursor: pointer;
   
-  &:hover {
-    background-color: #ffffff30;
+  ${Breakpoint} {
+    &:hover {
+      background-color: #ffffff30;
+    }
   }
 `
 

@@ -125,6 +125,7 @@ const PostsViewTitleImageContainer = styled.div`
 
 const PostsViewTitleImage = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
   display: block;
   position: absolute;
@@ -319,7 +320,7 @@ const PostDataContainer = styled.div`
   bottom: 14px;
   
   ${Breakpoint} {
-    bottom: 28px;
+    bottom: 75px;
     padding-top: 10px;
   }
   
