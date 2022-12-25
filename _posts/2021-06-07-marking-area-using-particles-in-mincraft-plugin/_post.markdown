@@ -23,7 +23,7 @@ Particle을 사용해 그림처럼 특정 영역에 경계선을 그리는 방�
 <code>outline.start</code>가 시작점, <code>outline.end</code>가 끝점이라고 가정한다.   
 &nbsp;   
 코드를 보면 다음과 같다:   
-<pre><code class="language-kotlin"><span style="opacity: 0.6">parent.server.onlinePlayers.forEach { player ->
+<pre><code class="language-kotlin">parent.server.onlinePlayers.forEach { player ->
     // Insert if here if you want to draw area outlines only specific world.
     // ex: if (player.environment == World.Environment.NORMAL)
     
@@ -36,10 +36,10 @@ Particle을 사용해 그림처럼 특정 영역에 경계선을 그리는 방�
             (outline.end.x - outline.start.x).absoluteValue
         
         for (offset in 0 until outlineLength) {
-            val x = outline.start.x</span>
-            var y = player.location.y.toInt()<span style="opacity: 0.6">
+            val x = outline.start.x
+            var y = player.location.y.toInt()
             val z = outline.start.z
-</span>
+
             var block = player.world.getBlockAt(x, y, z)
             if (!(block.type.isBlock && block.type.isSolid)) {
                 while (!(block.type.isBlock && block.type.isSolid) && y > 0) {
@@ -51,7 +51,7 @@ Particle을 사용해 그림처럼 특정 영역에 경계선을 그리는 방�
                     block = player.world.getBlockAt(x, ++y, z)
                 }
             }
-<div style="opacity: 0.6">
+
             player.spawnParticle(
                 Particle.REDSTONE,
                 Location(player.world, x + 0.5, y + 0.02, z + 0.5),
@@ -63,7 +63,7 @@ Particle을 사용해 그림처럼 특정 영역에 경계선을 그리는 방�
         } // End of 'offset' for loop
         
     } // End of 'outline' forEach loop
-} // End of 'player' forEach loop</div></code></pre>
+} // End of 'player' forEach loop</code></pre>
 <div class="code-fragment-name">runnable.BorderParticleCreator</div>
 
 이게 파티클을 딱 한 번 그리는 코드이다. 이걸 이제 BukkitRunnable같은 곳에 넣으면 되는 것이다.   
@@ -94,12 +94,14 @@ Particle을 사용해 그림처럼 특정 영역에 경계선을 그리는 방�
 
 ![기대하지 않은](...image_base.../unexpected.png)
 <div class="image-description">아래쪽 영역이 보이지 않는다...</div>
+
 알고리즘 상 이런 식으로 배치가 되어있으면 눈에 보이는 곳은 아래쪽임에도 아래쪽에 경계가 표시되지 않는다.   
 이럴 경우 아래에 보이는 필드로 내려가면 그 때는 경계가 표시되지만 지금같은 위치에서는 표시가 안된다...   
 &nbsp;   
 그래서 음... 일단... 해결은 했다.   
 위의 코드에서 선명하게 표시된 부분을 다음 코드로 대치해보자.   
-<pre><code class="language-kotlin"><span style="opacity: 0.6">// ...</span>
+
+<pre><code class="language-kotlin">// ...
 
 val playerY = player.location.y
 var overY = playerY.toInt()
@@ -124,17 +126,17 @@ while (!(block.type.isBlock && block.type.isSolid) && belowY > 0) {
 belowY++
 
 var targetY = if (overY != playerY.toInt() && overY - playerY <= 1.55) overY else belowY
-<span style="opacity: 0.6">
+
 player.spawnParticle(
     Particle.REDSTONE,
-    Location(world, x + 0.5,</span> targetY <span style="opacity: 0.6">+ 0.02, z + 0.5),
+    Location(world, x + 0.5, targetY + 0.02, z + 0.5),
     3,
     if (horizontal) 0.0 else 0.2, 0.0, if (horizontal) 0.2 else 0.0,
     0.75,
     Particle.DustOptions(colors[Random.nextInt(colors.indices)], 1.0f)
 )
 
-// ... </span></code></pre>
+// ... </code></pre>
 <div class="code-fragment-name">runnable.BorderParticleCreator</div>
 
 코드가 바뀌었다. 위의 코드는 가장 간단한 형태로 바꾼거라 그냥 보면 약간 이해가 안갈 수도 있을 것 같다.   
