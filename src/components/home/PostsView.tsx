@@ -102,6 +102,10 @@ const PostsViewTitle = styled.div`
   width: calc(100% + 40px);
   margin: 0 -20px;
   padding-bottom: 20px;
+  
+  ${Breakpoint} {
+    padding-bottom: 30px;
+  }
 `
 
 const PostsViewTitleImageContainer = styled.div`
@@ -110,12 +114,22 @@ const PostsViewTitleImageContainer = styled.div`
   transform: scale(0.95);
   border: 5px solid white;
   aspect-ratio: 4 / 2.5;
+  overflow: hidden;
+  position: relative;
+  
+  ${Breakpoint} {
+    rotate: z 1deg;
+    aspect-ratio: 4 / 1.5;
+  }
 `
 
 const PostsViewTitleImage = styled.img`
   width: 100%;
   object-fit: cover;
   display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 `
 
 const PostsViewTitleOverlay = styled.div`
@@ -132,6 +146,10 @@ const PostsViewTitleOverlay = styled.div`
   justify-content: flex-end;
   
   padding: 15px;
+  
+  ${Breakpoint} {
+    padding: 25px;
+  }
 `
 
 const PostsViewTitleClip = styled.div`
@@ -146,6 +164,10 @@ const PostsViewTitleClip = styled.div`
 const PostsViewTitleText = styled.div`
   font-size: 25px;
   font-weight: bold;
+  
+  ${Breakpoint} {
+    font-size: 40px;
+  }
 `
 
 const PostsViewSubtitleList = styled.ul`
@@ -153,6 +175,11 @@ const PostsViewSubtitleList = styled.ul`
   display: flex;
   margin: 0 0 -3px 0;
   opacity: 0.75;
+
+  ${Breakpoint} {
+    font-size: 20px;
+  }
+  
   & > li:nth-of-type(n+2):before {
     content: "/";
     margin: 0 5px;
