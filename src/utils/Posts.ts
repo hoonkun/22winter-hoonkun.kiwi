@@ -24,6 +24,7 @@ export class Posts {
     if (page === 0) throw Error("invalid page: 0. page must be bigger than zero.")
 
     return fs.readdirSync("./_posts")
+      .filter(it => !it.startsWith("_"))
       .reverse()
       .let(it => page ? it.slice((page - 1) * config.blog.page_size, page * config.blog.page_size) : it)
       .map(key =>
