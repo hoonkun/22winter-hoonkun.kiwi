@@ -41,7 +41,7 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
       .use(rehypeReact, { createElement, Fragment, components: {
           img: (props: any) => <ContentImage src={props.src} alt={props.alt} postId={key}/>,
           code: (props: any) => props.className ?
-            <Highlighter className={props.className.replace("language-", "")} style={darcula}>{props.children}</Highlighter> :
+            <Highlighter language={props.className.replace("language-", "")} style={darcula}>{props.children}</Highlighter> :
             <InlineCode {...props}/>,
           pre: (props: any) => props.className === "important" ? <pre {...props}>{props.children}</pre> : <>{props.children}</>,
           a: (props: any) => props.href.startsWith("/") ?
