@@ -51,6 +51,15 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
   return (
     <Root>
       <PostLimitedWidth>
+        <PostTitle>{pageProps.post.data.title}</PostTitle>
+        <PostDescription>
+          <li>{pageProps.post.data.date}</li>
+          <li>{pageProps.post.data.author}</li>
+        </PostDescription>
+        <PostPreviewImage
+          src={require(`./../../../_posts/${pageProps.post.key}/main.png`).default.src}
+          alt={""}
+        />
         {PostContent}
       </PostLimitedWidth>
     </Root>
@@ -84,6 +93,33 @@ const PostLimitedWidth = styled.div`
   max-width: 800px;
   padding: 20px;
   font-size: 16px;
+`
+
+const PostTitle = styled.div`
+  font-weight: bold;
+  font-size: 30px;
+  word-break: keep-all;
+  line-height: 125%;
+`
+
+const PostDescription = styled.ul`
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-inline-start: 0 !important;
+  font-size: 13px;
+  
+  li:nth-of-type(n+2):before {
+    content: "|";
+    margin: 0 10px;
+    opacity: 0.5;
+  }
+`
+
+const PostPreviewImage = styled.img`
+  margin: 0 -20px;
+  width: calc(100% + 40px);
 `
 
 const Root = styled.div`
