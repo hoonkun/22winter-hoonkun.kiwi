@@ -80,6 +80,13 @@ a {
 }
 
 @font-face {
+  font-family: "JetBrains Mono";
+  src: url('/resources/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "IBM Plex Sans KR";
   src: url('/resources/fonts/IBMPlexSansKR-Regular.woff') format('woff');
   font-weight: normal;

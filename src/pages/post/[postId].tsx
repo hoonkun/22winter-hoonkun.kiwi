@@ -9,7 +9,6 @@ import remarkRehype from "remark-rehype";
 import remarkParse from "remark-parse";
 import rehypeRaw from "rehype-raw";
 import Link from "next/link";
-import { Markdown } from "../../../styles/markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeStringify from "rehype-stringify";
 import remarkMath from "remark-math";
@@ -19,9 +18,6 @@ import rehypeParse from "rehype-parse";
 
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
-import { Highlight } from "../../../styles/highlight";
-
-// const Prism = dynamic<any>(() => import('react-syntax-highlighter').then(it => it.Prism))
 
 type PostPageProps = {
   post: Post
@@ -52,10 +48,11 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
       .then(file => setPostContent(file.result))
   }, [content, key])
 
-
   return (
     <Root>
-      {PostContent}
+      <PostLimitedWidth>
+        {PostContent}
+      </PostLimitedWidth>
     </Root>
   )
 }
@@ -82,22 +79,170 @@ export const getStaticPaths: GetStaticPaths = () => {
   return { paths: postIds.map(it => ({ params: { postId: it } })), fallback: false }
 }
 
+const PostLimitedWidth = styled.div`
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  font-size: 16px;
+`
+
 const Root = styled.div`
   background-color: #323232;
   
   overflow: auto;
   height: 100%;
   
-  ${Highlight};
+  line-height: 250%;
   
-  ${Markdown};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  table {
+    border-color: #FFFFFFBB;
+    table-layout: fixed;
+  }
+
+  table td, th {
+    border-color: #FFFFFFBB;
+  }
+
+  del {
+    opacity: 0.55;
+  }
+
+  ul, ol {
+    padding-inline-start: 20px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF;
+  }
+
+  .math-inline {
+    max-width: 100%;
+    margin-bottom: -17.5px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    color: #FFFFFF;
+    padding-right: 3px;
+  }
+
+  table .math-inline {
+    margin-bottom: -10px;
+  }
+
+  p:has(> img) + blockquote {
+    text-align: center;
+    color: #FFFFFF90;
+    font-size: 14px;
+    margin-top: -35px;
+    background-color: transparent;
+    border-left: none;
+  }
+
+  code {
+    font-family: "JetBrains Mono", sans-serif !important;
+    font-size: 13px;
+    line-height: 150%;
+  }
+
+  pre + blockquote {
+    margin: -0.5em 0 0 0;
+    font-size: 13px;
+    background-color: #00000040;
+    padding: 8px 15px;
+    font-family: "JetBrains Mono", sans-serif;
+    border-radius: 0 0 5px 5px;
+    border-left: none;
+  }
+
+  pre {
+    margin: 0;
+    border-radius: 5px 5px 0 0;
+  }
+  
+  pre:not(:has(> pre)) {
+    border-radius: 5px;
+    padding: 7px 15px;
+    font-size: 16px;
+    font-family: "JetBrains Mono", sans-serif;
+    background-color: rgb(43, 43, 43);
+  }
+
+  a {
+    color: #FFFFFF;
+    text-decoration: underline;
+  }
+
+  blockquote {
+    p {
+      margin: 0;
+    }
+    margin: 0;
+    background-color: #FFFFFF10;
+    padding: 15px 25px;
+    border-left: 5px solid #78a718;
+    border-radius: 5px;
+  }
+  
+  .hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 10px 15px;
+    border-radius: 5px 5px 0 0;
+    background: #00000020;
+  }
+  
+  .hljs {
+    color: #bababa;
+  }
+
+  .hljs-strong, .hljs-emphasis {
+    color: #a8a8a2;
+  }
+
+  .hljs-bullet, .hljs-quote, .hljs-link, .hljs-number, .hljs-regexp, .hljs-literal {
+    color: #6896ba;
+  }
+
+  .hljs-code, .hljs-selector-class {
+    color: #a6e22e;
+  }
+
+  .hljs-emphasis {
+    font-style: italic;
+  }
+
+  .hljs-keyword, .hljs-selector-tag, .hljs-section, .hljs-attribute, .hljs-name, .hljs-variable {
+    color: #cb7832;
+  }
+
+  .hljs-params {
+    color: #b9b9b9;
+  }
+
+  .hljs-string {
+    color: #6a8759;
+  }
+
+  .hljs-subst, .hljs-type, .hljs-built_in, .hljs-builtin-name, .hljs-symbol, .hljs-selector-id, .hljs-selector-attr, .hljs-selector-pseudo, .hljs-template-tag, .hljs-template-variable, .hljs-addition {
+    color: #e0c46c;
+  }
+
+  .hljs-comment, .hljs-deletion, .hljs-meta {
+    color: #7f7f7f;
+  }
+
 `
 
 const ContentImage: React.FC<{ alt: string, postId: string, src: string }> = (props) => {
   return (
     <Image src={require(`./../../../_posts/${props.postId}${props.src.replace("...image_base...", "")}`)}
            alt={props.alt}
-           style={{ width: "100%", height: "auto" }}
+           style={{ width: "100%", height: "auto", marginTop: 15 }}
     />
   )
 }
