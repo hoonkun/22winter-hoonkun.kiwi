@@ -44,44 +44,36 @@ excerpt_separator: <!-- Excerpt -->
 문제를 많이 풀었다면 수소결합수와 전체 염기 결합 수로부터 A-T 결합과 G-C 결합의 수를 구하는 공식을 외웠을 것이다.   
 수소 결합 수에서 전체 염기 수를 2배한 것을 빼면 나오는 것이 G-C 결합 수가 된다.   
 따라서 29 - 12 * 2 = 5 이므로 **가닥 I와 w 사이에서 G-C 결합 수가 5이고, 전체 결합 수가 12이므로 A-T 결합 수가 7임을 알 수 있다.**   
-&nbsp;   
+   
 이제 염기서열에서 G와 C에 모두 동그라미를 치고, 오른쪽이 I라고 가정해보자.   
-<style>
-    .pre_child > b {
-        color: #ff6f36;
-    }
+<style>.pre-h > b { color: #ff6f36; } .pre-h { font-size: 1.75rem !important; }</style>
+<pre class="pre-h"><b>C</b>A<b>T</b>GAA㉠㉠㉠㉡<b>C</b>G<b>T</b>G | <b>C</b><b>G</b><b>G</b>㉠㉡㉠㉡A<b>G</b>AT<b>G</b></pre>
 
-    .pre_child {
-        font-size: 1.75rem !important;
-    }
-</style>
-<pre><div class="pre_child"><b>C</b>A<b>T</b>GAA㉠㉠㉠㉡<b>C</b>G<b>T</b>G | <b>C</b><b>G</b><b>G</b>㉠㉡㉠㉡A<b>G</b>AT<b>G</b></div></pre>
 오른쪽이 I라면 이미 C-G 결합이 5개 있으므로 ㉠, ㉡이 A와 T중 각 하나가 된다. 그런데 이러면 'II는 퓨린 계열 염기의 수가 3개' 라는 조건에 위배된다(II가 퓨린이므로 주어진 염기서열에서 피리미딘 염기를 찾자).   
-&nbsp;   
-<pre><div class="pre_child">CATGAA㉠㉠㉠㉡CG | <b>T</b>G<b>C</b>GG㉠㉡㉠㉡AGA<b>T</b>G</div></pre>
+
+<pre class="pre-h">CATGAA㉠㉠㉠㉡CG | <b>T</b>G<b>C</b>GG㉠㉡㉠㉡AGA<b>T</b>G</pre>
+
 따라서 **왼쪽이 I이다**. 그래서 오른쪽이 II가 되고, 주어진 서열의 오른쪽 14염기에 이미 피리미딘 계열의 염기가 3개 있으므로 **㉠, ㉡는 모두 퓨린 계열 염기가 된다**.   
-<pre><div class="pre_child"><b>C</b>AT<b>G</b>AA㉠㉠㉠㉡<b>C</b><b>G</b> | TGCGG㉠㉡㉠㉡AGATG</div></pre>
+<pre class="pre-h"><b>C</b>AT<b>G</b>AA㉠㉠㉠㉡<b>C</b><b>G</b> | TGCGG㉠㉡㉠㉡AGATG</pre>
+
 이 때 주어진 서열의 왼쪽 12 염기를 보면 G-C 결합이 5개 있어야 하며 기호를 제외하고 4개가 있다. 따라서 하나 뿐인 **㉡이 G가 되고 ㉠은 A가 된다**.   
-&nbsp;   
+
 
 ### 프라이머
 이제 프라이머의 위치를 찾자.   
 I, II에 연결된 프라이머 모두 4개의 염기로 이루어지고 U의 수가 모두 1이라고 하였는데, II가 먼저 합성되었다면 II에 연결된 프라이머에 U가 없게 되어 모순이 발생한다.   
-&nbsp;   
+
 따라서 **I가 먼저 합성되었다.**   
-&nbsp;   
 
 ### BOGI를 보자
-<ol class="bio2_bogi">
-  <li seq="ㄱ. ">I에서 퓨린계열 염기의 수는 주어진 서열의 왼쪽 12 염기 중 피리미딘 계열 염기의 수와 같으므로, 3개가 맞다. (O)</li>
-  <li seq="ㄴ. ">I가 먼저 합성되었다. (X)</li>
-  <li seq="ㄷ. ">㉡은 G였다. (X)</li>
-</ol>
+- I에서 퓨린계열 염기의 수는 주어진 서열의 왼쪽 12 염기 중 피리미딘 계열 염기의 수와 같으므로, 3개가 맞다. (O)
+- I가 먼저 합성되었다. (X)
+- ㉡은 G였다. (X)
 &nbsp;
 
 ## 후기
 솔직히 미친 난이도를 자랑하는 수능 문제에 비하면 정말이지 혜자스러운 문제인 것 같다.   
 풀이에 막힘이 없고 논리적인 추론도 그다지 필요하지 않다.   
 역시 긴장을 풀게 하려는 6평 답다.   
-&nbsp;   
+
 수능에서도 이런 문제만 나오면... 등급컷이 50점이겠지. 현역 고3들은 정말 무서운 것이에요...

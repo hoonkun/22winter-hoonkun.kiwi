@@ -43,9 +43,8 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
           code: (props: any) => props.className ?
             <Highlighter language={props.className.replace("language-", "")} style={darcula}>{props.children}</Highlighter> :
             <InlineCode {...props}/>,
-          pre: (props: any) => props.className === "important" ? <pre {...props}>{props.children}</pre> : <>{props.children}</>,
           a: (props: any) => props.href.startsWith("/") ?
-            <Link href={props.href} scroll={false}><a>{props.children}</a></Link> :
+            <Link href={props.href} scroll={false}>{props.children}</Link> :
             <a {...props}>{props.children}</a>
         } }
       )
