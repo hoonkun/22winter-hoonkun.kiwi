@@ -36,17 +36,14 @@ $$
 \begin{equation*}
 \begin{split}
 ㉠ &= \frac{2(1-p)^2 + 2p(1-p)}{2((1-p)^2 + 2p(1-p))} = \frac{1}{1 + p}\\\
-\\\
 ㉡ &= \frac{2p^2 + 2p(1-p)}{2(p^2 + 2p(1-p))} = \frac{1}{2-p}\\\
-\\\
 \frac{㉠}{㉡} &= \frac{2-p}{1+p} = \frac{5}{7}\\\
-\\\
 \therefore p &= \frac{9}{12} = \frac{3}{4}
 \end{split}
 \end{equation*}
 $$
 
-### 세 번째 과정: 시각화 및 <del>또</del> 계산
+### 세 번째 과정: 시각화 및 ~~또~~ 계산
 세 번째 과정에서는 다섯 번째 조건으로부터 I과 II의 개체수 비율을 계산한다.   
 우선 다음과 같은 표를 그리는 것이 좋다.
 | | $$AA$$ | $$AA^*$$ | $$A^*A^*$$ |
@@ -77,10 +74,10 @@ $$
 \begin{equation*}
 \begin{split}
 \frac{2a + b}{32x} &= \frac{3}{4} \cdot\cdot\cdot ① \\\
-\\\
 \frac{x}{a + b} &= \frac{1}{13} \cdot\cdot\cdot ② \\\
 \\\
-\therefore b = 2x, a &= 11x
+\therefore b &= 2x\\\
+a &= 11x
 \end{split}
 \end{equation*}
 $$
