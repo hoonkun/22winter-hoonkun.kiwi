@@ -4,6 +4,8 @@ title: jekyll로 만든 정적 사이트를 github pages에 수동으로 배포�
 date: 2021-05-08, 22:36
 categories: [dev,dev-others]
 ---
+> 최근에는 Github Actions 가 꽤 잘 되어있을 것이므로 가능하다면 그것을 사용합시다. 그게 훨 깔끔합니다.
+
 github-page에서 지원하지 않는 gem을 가진 jekyll 프로젝트를 github-pages(gh-pages 브랜치)에 _site의 내용으로 배포해보자.   
 <!-- Excerpt -->
 

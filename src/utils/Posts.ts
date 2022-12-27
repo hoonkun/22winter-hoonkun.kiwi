@@ -32,7 +32,7 @@ export class Posts {
           .let(it => matter(it, { excerpt: true, excerpt_separator: config.blog.excerpt_separator }))
           .pick("data", "excerpt")
           .also(it => it.data = it.data.pick("title", "date", "author", "categories"))
-          .let(it => ({ ...it, key }) as Post)
+          .let(it => ({ ...it, excerpt: it.excerpt?.replace(/^> .+$/gm, ""), key }) as Post)
       )
   }
 
@@ -41,7 +41,7 @@ export class Posts {
       .let(it => matter(it, { excerpt: true, excerpt_separator: config.blog.excerpt_separator }))
       .pick("data", "excerpt", "content")
       .also(it => it.data = it.data.pick("title", "date", "author", "categories"))
-      .let(it => ({ ...it, key }) as PostWithContent)
+      .let(it => ({ ...it, excerpt: it.excerpt?.replace(/^> .+$/gm, ""), key }) as PostWithContent)
   }
 
 }
