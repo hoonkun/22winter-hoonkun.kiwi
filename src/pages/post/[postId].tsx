@@ -152,6 +152,13 @@ const PostDescription = styled.ul`
 const PostPreviewImage = styled.img`
   margin: 0 -20px;
   width: calc(100% + 40px);
+  
+  & + blockquote {
+    background-color: #ff572220;
+    border-radius: 0;
+    border-left: none;
+    margin: 15px 0;
+  }
 `
 
 const Root = styled.div`
