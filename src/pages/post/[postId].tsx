@@ -230,6 +230,7 @@ const Root = styled.div`
   pre {
     margin: 0;
     border-radius: 5px 5px 0 0;
+    overflow-x: auto;
   }
   
   pre:not(:has(> pre)) {
