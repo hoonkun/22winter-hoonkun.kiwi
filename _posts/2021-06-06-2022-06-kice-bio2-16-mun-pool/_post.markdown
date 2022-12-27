@@ -1,7 +1,7 @@
 ---
 layout: post.liquid
 author: GoHoon
-title: 2022학년도 6월 평가원 생명과학 II 16번 풀이
+title: 2022학년도 6월 평가원 생명과학 II 16번 '샤가프의 법칙' 풀이
 date: 2021-06-06, 20:27
 image: /assets/images/posts/2021-06-06-2022-06-kice-bio2-16-mun-pool/preview.png
 categories: [biology-ii,dna-replication]

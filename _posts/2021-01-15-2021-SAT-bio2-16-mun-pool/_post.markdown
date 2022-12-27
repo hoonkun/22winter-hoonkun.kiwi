@@ -1,6 +1,6 @@
 ---
 author: GoHoon
-title: 2021학년도 대수능 생명과학 II 16번 풀이
+title: 2021학년도 대수능 생명과학 II 16번 '샤가프의 법칙' 풀이
 date: 2021-01-15, 21:29
 categories: [biology-ii,dna-replication]
 ---
