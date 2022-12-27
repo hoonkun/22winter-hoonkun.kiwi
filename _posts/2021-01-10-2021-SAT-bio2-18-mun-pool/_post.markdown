@@ -1,6 +1,6 @@
 ---
 author: GoHoon
-title: 2021학년도 대수능 생명과학 II 18번 풀이
+title: 2021학년도 대수능 생명과학 II 18번 '코돈' 풀이
 date: 2021-01-10, 20:42
 categories: [biology-ii,codon]
 ---

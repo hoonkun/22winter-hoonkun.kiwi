@@ -1,6 +1,6 @@
 ---
 author: GoHoon
-title: 2021학년도 대수능 생명과학 II 20번 풀이
+title: 2021학년도 대수능 생명과학 II 20번 '집단유전' 풀이
 date: 2021-01-11, 09:54
 categories: [biology-ii,group-inheritance]
 ---
