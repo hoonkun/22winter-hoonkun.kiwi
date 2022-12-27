@@ -1,6 +1,5 @@
 import React, { createElement, Fragment, useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Image from "next/image";
 import { Post, Posts } from "../../utils/Posts";
 import styled from "@emotion/styled";
 import { unified } from "unified";
@@ -18,6 +17,7 @@ import rehypeParse from "rehype-parse";
 
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
+import Head from "next/head";
 
 type PostPageProps = {
   post: Post
@@ -50,6 +50,7 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
 
   return (
     <Root>
+      <PostHead post={pageProps.post}/>
       <PostLimitedWidth>
         <PostTitle>{pageProps.post.data.title}</PostTitle>
         <PostDescription>
@@ -86,6 +87,37 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async context => {
 export const getStaticPaths: GetStaticPaths = () => {
   const postIds = Posts.list().map(it => it.key)
   return { paths: postIds.map(it => ({ params: { postId: it } })), fallback: false }
+}
+
+const PostHead: React.FC<{ post: Post }> = ({ post }) => {
+
+  const title = `${post.data.title} - 아무말 집합소`
+  const baseurl = `https://hoonkun.kiwi`
+
+  return (
+    <Head>
+      <title>{title}</title>
+      <meta name="title" content={title}/>
+      <meta name="description"
+            content={post.excerpt}/>
+
+      <meta property="og:type" content="website"/>
+      <meta property="og:url" content={`${baseurl}/post/${post.key}`}/>
+      <meta property="og:title" content={title}/>
+      <meta property="og:description"
+            content={post.excerpt}/>
+      <meta property="og:image"
+            content={`${baseurl}${require(`./../../../_posts/${post.key}/main.png`).default.src}`}/>
+
+      <meta property="twitter:card" content="summary_large_image"/>
+      <meta property="twitter:url" content={`${baseurl}/post/${post.key}`}/>
+      <meta property="twitter:title" content={post.data.title}/>
+      <meta property="twitter:description"
+            content={post.excerpt}/>
+      <meta property="twitter:image"
+            content={`${baseurl}${require(`./../../../_posts/${post.key}/main.png`).default.src}`}/>
+    </Head>
+  )
 }
 
 const PostLimitedWidth = styled.div`
@@ -276,12 +308,14 @@ const Root = styled.div`
 
 const ContentImage: React.FC<{ alt: string, postId: string, src: string }> = (props) => {
   return (
-    <Image src={require(`./../../../_posts/${props.postId}${props.src.replace("...image_base...", "")}`)}
+    <Img src={require(`./../../../_posts/${props.postId}${props.src.replace("...image_base...", "")}`).default.src}
            alt={props.alt}
            style={{ width: "100%", height: "auto", marginTop: 15 }}
     />
   )
 }
+
+const Img = styled.img``
 
 const InlineCode = styled.code`
   padding: 2px 5px;
