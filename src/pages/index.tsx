@@ -1,37 +1,25 @@
-import {
-  CSSProperties,
-  UIEventHandler,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
-import { GetStaticProps, NextPage } from "next";
+import { CSSProperties, UIEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { NextPage } from "next";
 import styled from "@emotion/styled";
+import { css, keyframes } from "@emotion/react";
+
 import HighlightedLink from "../components/HighlightedLink";
 import SlashedList from "../components/SlashedList";
 import Spacer from "../components/Spacer";
 import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import CircularProgressBar from "../components/CircularProgressBar";
-import { css, keyframes } from "@emotion/react";
+import Actionbar from "../components/home/Actionbar";
+import { useRouter } from "next/router";
+
 import { Breakpoint, FullFixed, HideScrollbar } from "../../styles/globals";
-import PostsView, { PostPaginator } from "../components/home/PostsView";
-import { Posts } from "../utils/Posts";
-import { HomeStaticProps } from "./[...paths]";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
-import Actionbar from "../components/home/Actionbar";
-import Router, { useRouter } from "next/router";
-import config from "../config";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
-const Home: NextPage<HomeStaticProps> = props => {
-
-  const initial = useRef(true)
+const Home: NextPage = () => {
 
   const scrollable = useRef<HTMLDivElement>(null)
   const backdrop = useRef<HTMLDivElement>(null)
@@ -48,8 +36,6 @@ const Home: NextPage<HomeStaticProps> = props => {
 
   const backgroundFillMode
     = useMemo(() => windowRatio <= BackgroundRatio ? "height" : "width", [windowRatio])
-
-  const [renderSplash, setRenderSplash] = useState(true)
 
   const [loading, setLoading] = useState(false)
   const [paperShowing, setPaperShowing] = useState(false)
@@ -87,41 +73,20 @@ const Home: NextPage<HomeStaticProps> = props => {
     style.transform = `translate(-50%, ${(ratio - 1) * 100}%)`
   }, [])
 
-  const saveStateToStorage = useCallback((position: number) => {
-    const width = window.innerWidth
-    const section = position.absolute <= 1 ? "about" : (position - width * 2).absolute <= 5 ? "posts" : "main"
-    localStorage.setItem("section", section)
-  }, [])
-
   const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
     const position = event.currentTarget.scrollLeft
 
     applyBackdrop(position)
     applyActionbar(position)
+  }, [applyBackdrop, applyActionbar])
 
-    saveStateToStorage(position)
-  }, [applyBackdrop, applyActionbar, saveStateToStorage])
-
-  const toUpperSection = useCallback(() => {
+  const toAboutSection = useCallback(() => {
     scrollable.current?.scrollTo({ left: 0, behavior: "smooth" })
   }, [])
 
-  const toBelowSection = useCallback(() => {
-    scrollable.current?.scrollTo({ left: window.innerWidth * 2, behavior: "smooth" })
-  }, [])
-
-  const backToMain = useCallback(() => {
+  const toMainSection = useCallback(() => {
     scrollable.current?.scrollTo({ left: window.innerWidth, behavior: "smooth" })
-    Router.replace(`/`).then()
   }, [])
-
-  const next = useCallback(() => Router.push(`/page/${(page ??  1) + 1}`), [page])
-  const previous = useCallback(() => Router.push(page === 2 ? `/` : `/page/${(page ?? 1) - 1}`), [page])
-  const navigate = useCallback((page: number) => Router.push(`/page/${page}`), [])
-
-  const paginator = useMemo<PostPaginator>(() => ({
-    next, previous, navigate, maxPage: (props.total / config.blog.page_size).ceil, page: page ?? 1
-  }), [next, previous, navigate, props.total, page])
 
   useEffect(() => {
     const handler = () => setWindowDimension([window.innerWidth, window.innerHeight])
@@ -132,24 +97,9 @@ const Home: NextPage<HomeStaticProps> = props => {
   }, [])
 
   useEffect(() => {
-    if (!initial.current) return
     if (!scrollable.current) return
-
-    initial.current = false
-    if (!page) {
-      const section = localStorage.getItem("section")
-      let scrollLeft: number
-      if (section === "about") scrollLeft = 0
-      else if (section === "posts") scrollLeft = window.innerWidth * 2
-      else scrollLeft = window.innerWidth
-      scrollable.current.scrollLeft = scrollLeft
-      applyActionbar(scrollLeft)
-      applyBackdrop(scrollLeft)
-    } else {
-      scrollable.current.scrollLeft = window.innerWidth * 2
-      saveStateToStorage(window.innerWidth * 2)
-    }
-  }, [page, applyActionbar, applyBackdrop, saveStateToStorage])
+    scrollable.current.scrollLeft = window.innerWidth
+  }, [])
 
   return (
     <>
@@ -162,7 +112,7 @@ const Home: NextPage<HomeStaticProps> = props => {
             <Container>
               <OverArea>
                 <OverLinks>
-                  <span onClick={toUpperSection}>〈 &nbsp; 키위새에 대해 &nbsp;</span> &nbsp; <span onClick={toBelowSection}>&nbsp; 아무말 집합소 &nbsp; 〉</span>
+                  <span onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</span>
                 </OverLinks>
                 Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01
               </OverArea>
@@ -216,18 +166,13 @@ const Home: NextPage<HomeStaticProps> = props => {
           </Root>
         </DummyOverlay>
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
-        <PostsContainer><PostsView items={props.posts} paginator={paginator} requestSplash={setRenderSplash} /></PostsContainer>
       </SnappedScroll>
-      <Actionbar ref={actionbar} onNavigateBack={backToMain}/>
-      <Splash active={windowWidth < 0 || windowHeight < 0 || renderSplash} translucent={windowWidth > 0 && windowHeight > 0}>
+      <Actionbar ref={actionbar} onNavigateBack={toMainSection}/>
+      <Splash active={windowWidth < 0 || windowHeight < 0} translucent={windowWidth > 0 && windowHeight > 0}>
         <LoadingParent><div/></LoadingParent>
       </Splash>
     </>
   )
-}
-
-export const getStaticProps: GetStaticProps<HomeStaticProps> = () => {
-  return { props: { posts: Posts.list(1), routedPage: null, total: Posts.total } }
 }
 
 const Root = styled.div`
