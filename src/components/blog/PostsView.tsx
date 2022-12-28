@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
 import { Breakpoint, OverlayOverflow } from "../../../styles/globals";
 
-import PostsTitle from "./../../resources/images/posts_title.jpg"
 import Router from "next/router";
 
 export type PostPaginator = {
@@ -23,7 +22,7 @@ type Props = {
 
 const PostsView: React.FC<Props> = ({ items, paginator, requestSplash }) => {
 
-  const scrollable = useRef<HTMLDivElement>(null)
+  const top = useRef<HTMLDivElement>(null)
 
   const paginate = useCallback((action: () => void) => {
     return () => {
@@ -34,29 +33,13 @@ const PostsView: React.FC<Props> = ({ items, paginator, requestSplash }) => {
 
   useEffect(() => {
     requestSplash(false)
-    scrollable.current?.scrollTo({ top: 0, behavior: "smooth" })
+    top.current?.scrollIntoView({ behavior: "smooth" });
   }, [items, requestSplash])
 
   return (
-    <PostsViewRoot ref={scrollable}>
+    <PostsViewRoot>
+      <div ref={top}/>
       <PostsViewLimitedWidth>
-        {paginator.page === 1 &&
-          <PostsViewTitle>
-            <PostsViewTitleImageContainer>
-              <PostsViewTitleImage src={PostsTitle.src} />
-              <PostsViewTitleOverlay>
-                <PostsViewTitleText>키위새의 아무말 집합소</PostsViewTitleText>
-                <PostsViewSubtitleList>
-                  <li>코딩</li>
-                  <li>생명과학II</li>
-                  <li>게임</li>
-                  <li>일상</li>
-                </PostsViewSubtitleList>
-              </PostsViewTitleOverlay>
-              <PostsViewTitleClip/>
-            </PostsViewTitleImageContainer>
-          </PostsViewTitle>
-        }
         <PostListContainer>
           {items.map(it => <PostItemView key={it.key} item={it}/>)}
         </PostListContainer>
@@ -80,7 +63,10 @@ const PostsViewRoot = styled.div`
   flex-direction: column;
   align-items: center;
   pointer-events: auto;
-  ${OverlayOverflow};
+  
+  ${Breakpoint} {
+    ${OverlayOverflow};
+  }
 `
 
 const PostsViewLimitedWidth = styled.div`
@@ -96,94 +82,6 @@ const PostsViewLimitedWidth = styled.div`
   ${Breakpoint} {
     max-width: 1000px;
     padding: 80px 20px 20px 20px;
-  }
-`
-
-const PostsViewTitle = styled.div`
-  width: calc(100% + 40px);
-  margin: 0 -20px;
-  padding-bottom: 20px;
-  
-  ${Breakpoint} {
-    padding-bottom: 30px;
-  }
-`
-
-const PostsViewTitleImageContainer = styled.div`
-  width: 100%;
-  rotate: z 2deg;
-  transform: scale(0.95);
-  border: 5px solid white;
-  position: relative;
-  
-  ${Breakpoint} {
-    rotate: z 1deg;
-  }
-`
-
-const PostsViewTitleImage = styled.img`
-  width: 100%;
-  object-fit: cover;
-  display: block;
-  aspect-ratio: 4 / 2.5;
-  
-  ${Breakpoint} {
-    aspect-ratio: 4 / 1.5;
-  }
-`
-
-const PostsViewTitleOverlay = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(-15deg, #000000B0, transparent);
-  
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-end;
-  
-  padding: 15px;
-  
-  ${Breakpoint} {
-    padding: 25px;
-  }
-`
-
-const PostsViewTitleClip = styled.div`
-  position: absolute;
-  right: -10px;
-  top: 20px;
-  width: 60px;
-  height: 25px;
-  background-color: #fdd835;
-`
-
-const PostsViewTitleText = styled.div`
-  font-size: 25px;
-  font-weight: bold;
-  
-  ${Breakpoint} {
-    font-size: 40px;
-  }
-`
-
-const PostsViewSubtitleList = styled.ul`
-  list-style-type: none;
-  display: flex;
-  margin: 0 0 -3px 0;
-  opacity: 0.75;
-
-  ${Breakpoint} {
-    font-size: 20px;
-  }
-  
-  & > li:nth-of-type(n+2):before {
-    content: "/";
-    margin: 0 5px;
-    opacity: 0.5;
   }
 `
 

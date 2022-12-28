@@ -2,11 +2,13 @@ import { Post, Posts } from "../../utils/Posts";
 import config from "../../config";
 import { ArrayK } from "../../utils/KTN";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import PostsView, { PostPaginator } from "../../components/home/PostsView";
+import PostsView, { PostPaginator } from "../../components/blog/PostsView";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Router from "next/router";
 import { SplashView } from "../../components/SplashView";
 import styled from "@emotion/styled";
+import { Breakpoint, OverlayOverflow } from "../../../styles/globals";
+import AsideView from "../../components/blog/AsideView";
 
 export type PostsStaticProps = {
   posts: Post[]
@@ -32,7 +34,10 @@ const PostsPage: NextPage<PostsStaticProps> = ({ posts, routedPage: page, total 
 
   return (
     <Root>
-      <PostsView items={posts} paginator={paginator} requestSplash={setLoading}/>
+      <Container>
+        <AsideView/>
+        <PostsView items={posts} paginator={paginator} requestSplash={setLoading}/>
+      </Container>
       <SplashView active={loading}/>
     </Root>
   )
@@ -57,6 +62,21 @@ const Root = styled.div`
   width: 100%;
   height: 100%;
   font-family: "IBM Plex Sans KR", sans-serif;
+`
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  
+  ${OverlayOverflow}
+  
+  ${Breakpoint} {
+    flex-direction: row;
+    overflow: unset;
+  }
 `
 
 export default PostsPage
