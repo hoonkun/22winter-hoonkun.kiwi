@@ -16,3 +16,10 @@ export const HideScrollbar = css`
 export const OverlayOverflow = css`overflow: overlay;`
 
 export const Breakpoint = `@media only screen and (min-width: 840px)`
+
+export const not = (selector: string) => {
+  if (selector === Breakpoint) {
+    return `@media only screen and (max-width: 840px)`;
+  }
+  return undefined;
+}
