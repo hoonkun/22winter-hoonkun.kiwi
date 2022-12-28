@@ -1,6 +1,6 @@
 declare global {
   interface String {
-    randomize(this: string, minimumValue: number, maximumValue: number): number
+    randomize(this: string, minimumValue: number, maximumValue: number, multiplier?: number): number
     get byteSize(): number
     truncateByteSize(length: number): string
     toNumber(this: string): number
@@ -8,10 +8,10 @@ declare global {
   }
 }
 
-String.prototype.randomize = function (minimumValue, maximumValue) {
+String.prototype.randomize = function (minimumValue, maximumValue, multiplier) {
   const sum = this.split("").map(it => ((it.codePointAt(0) ?? 0) / 8).floor).sum()
   const diff = maximumValue - minimumValue
-  return minimumValue + (sum * 2.183) % diff
+  return minimumValue + (sum * (multiplier ?? 2.183)) % diff
 }
 
 String.prototype.truncateByteSize = function(length: number) {
