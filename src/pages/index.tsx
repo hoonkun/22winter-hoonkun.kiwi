@@ -1,7 +1,7 @@
 import { CSSProperties, UIEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import styled from "@emotion/styled";
-import { css, keyframes } from "@emotion/react";
+import { css } from "@emotion/react";
 
 import HighlightedLink from "../components/HighlightedLink";
 import SlashedList from "../components/SlashedList";
@@ -16,6 +16,7 @@ import { Breakpoint, FullFixed, HideScrollbar } from "../../styles/globals";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
+import { SplashView } from "../components/SplashView";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
@@ -168,9 +169,7 @@ const Home: NextPage = () => {
         <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
       </SnappedScroll>
       <Actionbar ref={actionbar} onNavigateBack={toMainSection}/>
-      <Splash active={windowWidth < 0 || windowHeight < 0} translucent={windowWidth > 0 && windowHeight > 0}>
-        <LoadingParent><div/></LoadingParent>
-      </Splash>
+      <SplashView active={windowWidth < 0 || windowHeight < 0}/>
     </>
   )
 }
@@ -487,73 +486,6 @@ const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: bool
   ${Breakpoint} {
     font-size: 48px;
     margin-right: ${({ margin }) => margin ? 16 : 0}px;
-  }
-`
-
-const Splash = styled.div<{ active: boolean, translucent: boolean }>`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 50;
-  
-  transition: background-color 0.35s linear 0.05s;
-  
-  ${({ active, translucent }) => active ? css`
-    background-color: ${translucent ? "#000000A0" : "black"};
-    pointer-events: auto;
-    
-    & > div {
-      background-color: #ffffff40;
-      & > div {
-        background-color: white;
-      }
-    }
-  ` : css`
-    background-color: transparent;
-    pointer-events: none;
-
-    & > div {
-      background-color: transparent;
-      & > div {
-        background-color: transparent;
-      }
-    }
-  `}
-`
-
-const LoadingAnimation = keyframes`
-  0% {
-    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-  }
-  50% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-  100% {
-    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-  }
-`
-
-const LoadingParent = styled.div`
-  width: 2px;
-  height: 100px;
-  background-color: #ffffff40;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  
-  transition: background-color 0.6s linear;
-  
-  & > div {
-    background-color: white;
-    width: 100%;
-    height: 100%;
-
-    transition: background-color 0.6s linear;
-    
-    animation: ${LoadingAnimation} 0.45s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   }
 `
 
