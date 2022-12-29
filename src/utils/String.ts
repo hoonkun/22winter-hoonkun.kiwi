@@ -11,7 +11,7 @@ declare global {
 String.prototype.randomize = function (minimumValue, maximumValue, multiplier) {
   const sum = this.split("").map(it => ((it.codePointAt(0) ?? 0) / 8).floor).sum()
   const diff = maximumValue - minimumValue
-  return minimumValue + (sum * (multiplier ?? 2.183)) % diff
+  return minimumValue + (sum * (multiplier ?? 2.183)).floor % diff
 }
 
 String.prototype.truncateByteSize = function(length: number) {

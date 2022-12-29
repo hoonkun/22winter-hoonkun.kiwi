@@ -1,8 +1,10 @@
 import React, { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 import { Post } from "../../utils/Posts";
+import { Category } from "../../utils/Categories";
 import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
 import { Breakpoint, not, OverlayOverflow } from "../../../styles/globals";
+import Link from "next/link";
 
 export type PostPaginator = {
   next: () => void
@@ -13,12 +15,13 @@ export type PostPaginator = {
 }
 
 type Props = {
-  items: Post[]
+  posts: Post[]
+  categories: Category[]
   paginator: PostPaginator
   requestSplash: (request: boolean) => void
 }
 
-const PostsView: React.FC<Props> = ({ items, paginator, requestSplash }) => {
+const PostsView: React.FC<Props> = ({ posts, paginator, requestSplash, categories }) => {
 
   const top = useRef<HTMLDivElement>(null)
 
@@ -41,7 +44,7 @@ const PostsView: React.FC<Props> = ({ items, paginator, requestSplash }) => {
       <div ref={top}/>
       <PostsViewLimitedWidth>
         <PostListContainer>
-          {items.map((it, index) => <PostItemView key={it.key} item={it} latest={paginator.page === 1 && index === 0} />)}
+          {posts.map((it, index) => <PostItemView key={it.key} categories={categories} post={it} latest={paginator.page === 1 && index === 0} />)}
         </PostListContainer>
         <Pager>
           <PagerArrow i={"chevron_left"} onClick={paginate(paginator.previous)} />
@@ -92,7 +95,7 @@ const PostListContainer = styled.div`
   
   ${Breakpoint} {
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 80px;
+    grid-column-gap: 60px;
     grid-row-gap: 60px;
   }
 `
@@ -132,10 +135,21 @@ const PagerMax = styled.div`
   opacity: 0.75;
 `
 
-const PostItemView: React.FC<{ item: Post, latest: boolean }> = ({ item, latest }) => {
+const PostItemView: React.FC<{ post: Post, categories: Category[], latest: boolean }> = ({ post, categories, latest }) => {
 
-  const previewStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${item.key.randomize(-5, 5)}deg` }), [item.key])
-  const contentStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${-1 * item.key.randomize(-5, 5)}deg` }), [item.key])
+  const previewStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${post.key.randomize(-5, 5)}deg` }), [post.key])
+  const contentStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${-1 * post.key.randomize(-5, 5)}deg` }), [post.key])
+
+  const firstCategoryIndicatorStyle = useMemo<CSSProperties>(() => ({
+    [post.key.randomize(0, 2, 4.12) === 0 ? "left" : "right"]: -20,
+    [post.key.randomize(0, 2, 0.47) === 0 ? "top" : "bottom"]: 20,
+    rotate: `${post.key.randomize(-3, 3, 0.21)}deg`
+  }), [post.key]);
+  const secondCategoryIndicatorStyle = useMemo<CSSProperties>(() => ({
+    [post.key.randomize(0, 2, 0.78) === 0 ? "left" : "right"]: -20,
+    [post.key.randomize(0, 2, 0.31) === 0 ? "top" : "bottom"]: 50,
+    rotate: `${post.key.randomize(-3, 3, 0.52)}deg`
+  }), [post.key]);
 
   const Root = latest ? LatestPostItemViewRoot : NormalPostItemViewRoot
   const PreviewContainer = latest ? LatestPostPreviewContainer : NormalPostPreviewContainer
@@ -144,15 +158,23 @@ const PostItemView: React.FC<{ item: Post, latest: boolean }> = ({ item, latest 
 
   return (
     <Root>
-      <PreviewContainer style={previewStyle}>
-        <LatestPostPreview src={require(`./../../../_posts/${item.key}/preview.png`).default.src} />
-        <LatestPostPreviewOverlay>
-          <LatestPostPreviewContent style={contentStyle}>
-            <PostTitle>{ item.data.title }</PostTitle>
-            <PostExcerpt>{ item.excerpt }</PostExcerpt>
-          </LatestPostPreviewContent>
-        </LatestPostPreviewOverlay>
-      </PreviewContainer>
+      <Link href={`/post/${post.key}`}>
+        <PreviewContainer style={previewStyle}>
+          <LatestPostPreview src={require(`./../../../_posts/${post.key}/preview.png`).default.src} />
+          <LatestPostPreviewOverlay>
+            <LatestPostPreviewContent style={contentStyle}>
+              <PostTitle>{ post.data.title }</PostTitle>
+              <PostExcerpt>{ post.excerpt }</PostExcerpt>
+            </LatestPostPreviewContent>
+          </LatestPostPreviewOverlay>
+          {post.data.categories[0] &&
+            <CategoryIndicator color={categories.find(it => it.name === post.data.categories[0])!.color.dark} style={firstCategoryIndicatorStyle}/>
+          }
+          {post.data.categories[1] &&
+            <CategoryIndicator color={categories.find(it => it.name === post.data.categories[1])!.color.dark} style={secondCategoryIndicatorStyle}/>
+          }
+        </PreviewContainer>
+      </Link>
     </Root>
   )
 }
@@ -234,7 +256,7 @@ const NormalPostItemViewRoot = styled(LatestPostItemViewRoot)`
     grid-row: unset;
     grid-column: unset;
 
-    height: 300px;
+    height: 250px;
   }
 
   ${Breakpoint} {
@@ -261,6 +283,8 @@ const LatestPostPreviewContainer = styled.div`
   border: 5px solid #eeeeee;
   height: 100%;
   position: relative;
+  
+  cursor: pointer;
   
   ${Breakpoint} {
     border: 12.5px solid #eeeeee;
@@ -298,6 +322,16 @@ const LatestPostPreviewContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`
+
+const CategoryIndicator = styled.div<{ color: string }>`
+  position: absolute;
+  width: 50px;
+  height: 20px;
+  background-color: ${({ color }) => color};
+  box-shadow: 0 0 5px #00000035;
+
+  filter: contrast(0.65);
 `
 
 export default PostsView
