@@ -95,8 +95,8 @@ const PostListContainer = styled.div`
   
   ${Breakpoint} {
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 60px;
-    grid-row-gap: 60px;
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
   }
 `
 
