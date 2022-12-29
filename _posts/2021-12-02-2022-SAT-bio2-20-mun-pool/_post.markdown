@@ -1,7 +1,7 @@
 ---
 author: GoHoon
 title: 2022학년도 대수능 생명과학 II 20번 '집단유전' 풀이
-date: 2021-01-11, 09:54
+date: 2021-12-02, 22:32
 categories: [biology-ii,group-inheritance]
 ---
 개체수 관련 문제 오류로 논란이 되었던, 2022학년도 대학수학능력시험 20번 '집단유전' 문제를 풀어보자.  
