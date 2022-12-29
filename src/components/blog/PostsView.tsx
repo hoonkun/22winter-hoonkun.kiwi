@@ -47,12 +47,12 @@ const PostsView: React.FC<Props> = ({ posts, paginator, requestSplash, categorie
           {posts.map((it, index) => <PostItemView key={it.key} categories={categories} post={it} latest={paginator.page === 1 && index === 0} />)}
         </PostListContainer>
         <Pager>
-          <PagerArrow i={"chevron_left"} onClick={paginate(paginator.previous)} />
+          <PagerArrow i={"chevron_left"} onClick={paginate(paginator.previous)} enabled={paginator.page > 1} />
           <PagerPageText>
             <PagerCurrent>{paginator.page}</PagerCurrent>
             <PagerMax>&nbsp;/&nbsp;{paginator.maxPage}</PagerMax>
           </PagerPageText>
-          <PagerArrow i={"chevron_right"} onClick={paginate(paginator.next)} />
+          <PagerArrow i={"chevron_right"} onClick={paginate(paginator.next)} enabled={paginator.page < paginator.maxPage} />
         </Pager>
       </PostsViewLimitedWidth>
     </PostsViewRoot>
@@ -111,9 +111,12 @@ const Pager = styled.div`
   }
 `
 
-const PagerArrow = styled(MaterialIcon)`
+const PagerArrow = styled(MaterialIcon)<{ enabled: boolean }>`
   padding: 7px;
   cursor: pointer;
+  
+  pointer-events: ${({ enabled }) => enabled ? "auto" : "none"};
+  opacity: ${({ enabled }) => enabled ? 1 : 0.35}
 `
 
 const PagerPageText = styled.div`
