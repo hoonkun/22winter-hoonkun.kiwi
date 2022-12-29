@@ -26,7 +26,7 @@ const Root = styled.div`
   width: 100%;
   height: 35%;
   
-  min-height: 400px;
+  min-height: 300px;
   
   ${Breakpoint} {
     min-width: 400px;
