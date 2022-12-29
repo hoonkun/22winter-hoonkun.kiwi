@@ -18,9 +18,11 @@ import rehypeParse from "rehype-parse";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
 import Head from "next/head";
+import { Categories, Category } from "../../utils/Categories";
 
 type PostPageProps = {
   post: Post
+  category: Category[]
   content: string
 }
 
@@ -57,6 +59,10 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
           <li>{pageProps.post.data.date}</li>
           <li>{pageProps.post.data.author}</li>
         </PostDescription>
+        <PostCategory>
+          <li>{pageProps.category[0].display}</li>
+          {pageProps.category[1] && <li>{pageProps.category[1].display}</li>}
+        </PostCategory>
         <PostPreviewImage
           src={require(`./../../../_posts/${pageProps.post.key}/main.png`).default.src}
           alt={""}
@@ -81,7 +87,10 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async context => {
     .process(post.content)
     .let(async it => String(await it))
 
-  return { props: { post: Posts.retrieve(context.params!.postId as string).pick("key", "data", "excerpt"), content: result } }
+  const categories = Categories.list()
+  const category = post.data.categories.map(category => categories.find(it => it.name === category)!);
+
+  return { props: { post: post.pick("key", "data", "excerpt"), content: result, category } }
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
@@ -141,9 +150,19 @@ const PostDescription = styled.ul`
   align-items: center;
   padding-inline-start: 0 !important;
   font-size: 13px;
+  margin: 10px 0 0 0;
   
   li:nth-of-type(n+2):before {
     content: "|";
+    margin: 0 10px;
+    opacity: 0.5;
+  }
+`
+
+const PostCategory = styled(PostDescription)`
+  margin: 0 0 20px 0;
+  li:nth-of-type(n+2):before {
+    content: "〉";
     margin: 0 10px;
     opacity: 0.5;
   }
