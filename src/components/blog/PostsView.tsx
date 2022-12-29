@@ -215,7 +215,7 @@ const LatestPostExcerpt = styled.div`
   word-break: keep-all;
   text-align: center;
   font-size: 10px;
-  opacity: 0.8;
+  opacity: 1;
   
   ${Breakpoint} {
     font-size: 18px;
@@ -239,6 +239,9 @@ const NormalPostExcerpt = styled(LatestPostExcerpt)`
 const LatestPostItemViewRoot = styled.div`
   align-self: center;
   justify-self: stretch;
+  
+  width: 100%;
+  aspect-ratio: 4 / 3;
   
   ${Breakpoint} {
     grid-column: 1 / 3;
@@ -284,7 +287,8 @@ const NormalPostItemViewRoot = styled(LatestPostItemViewRoot)`
 
 const LatestPostPreviewContainer = styled.div`
   border: 5px solid #eeeeee;
-  height: 100%;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   position: relative;
   
   cursor: pointer;
@@ -296,6 +300,9 @@ const LatestPostPreviewContainer = styled.div`
 
 const NormalPostPreviewContainer = styled(LatestPostPreviewContainer)`
   border: 5px solid #eeeeee;
+  width: unset;
+  aspect-ratio: unset;
+  height: 100%;
   
   ${Breakpoint} {
     border: 8px solid #eeeeee;
