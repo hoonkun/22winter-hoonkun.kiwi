@@ -30,9 +30,11 @@ const PostsView: React.FC<Props> = ({ items, paginator, requestSplash }) => {
   }, [requestSplash])
 
   useEffect(() => {
+    if (paginator.page === 1) return;
+
     requestSplash(false)
     top.current?.scrollIntoView({ behavior: "smooth" });
-  }, [items, requestSplash])
+  }, [paginator.page, requestSplash])
 
   return (
     <PostsViewRoot>
