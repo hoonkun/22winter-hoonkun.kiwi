@@ -17,6 +17,7 @@ import { Breakpoint, FullFixed, HideScrollbar } from "../../styles/globals";
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
 import { SplashView } from "../components/SplashView";
+import Link from "next/link";
 
 const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 
@@ -113,7 +114,8 @@ const Home: NextPage = () => {
             <Container>
               <OverArea>
                 <OverLinks>
-                  <span onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</span>
+                  <Link href={"/posts/1"}>〈 &nbsp; 아무말 집합소 &nbsp;</Link>
+                  <div onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</div>
                 </OverLinks>
                 Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01
               </OverArea>
