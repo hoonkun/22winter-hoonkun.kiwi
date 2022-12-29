@@ -60,7 +60,7 @@ export const getStaticPaths: GetStaticPaths = () => {
 }
 
 const Root = styled.div`
-  background-color: #181818;
+  background-color: #252525;
   width: 100%;
   height: 100%;
   font-family: "IBM Plex Sans KR", sans-serif;
