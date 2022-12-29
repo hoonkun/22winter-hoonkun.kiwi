@@ -191,6 +191,8 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  
+  font-family: "IBM Plex Sans KR", sans-serif;
 
   table {
     border-color: #FFFFFFBB;
