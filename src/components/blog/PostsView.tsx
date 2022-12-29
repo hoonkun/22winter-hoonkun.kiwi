@@ -159,7 +159,7 @@ const LatestPostItemView: React.FC<{ item: Post, latest: boolean }> = ({ item, l
 
 const LatestPostTitle = styled.div`
   color: #eeeeee;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   width: 85%;
   text-align: center;
@@ -189,7 +189,7 @@ const LatestPostExcerpt = styled.div`
   width: 75%;
   word-break: keep-all;
   text-align: center;
-  font-size: 14px;
+  font-size: 10px;
   opacity: 0.8;
   
   ${Breakpoint} {
