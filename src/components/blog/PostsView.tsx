@@ -79,7 +79,7 @@ const PostsViewLimitedWidth = styled.div`
   flex-direction: column;
   align-items: stretch;
   
-  padding: 80px 20px 20px 20px;
+  padding: 40px 20px 20px 20px;
 
   ${Breakpoint} {
     padding: 80px;
