@@ -14,7 +14,7 @@ export const AsideView: React.FC = () => {
         <AsidePhoto src={ProfilePhotoResource.src}/>
         <AsideTitle>키위새의 아무말 집합소</AsideTitle>
         <AsideList>{["코딩", "생명과학II", "마인크래프트", "일상"].map(it => <li key={it}>{it}</li>)}</AsideList>
-        <RootPageLink href={"https://hoonkun.kiwi"} color={"#689f38"}>hoonkun.kiwi</RootPageLink>
+        <RootPageLink href={"/"} color={"#689f38"}>hoonkun.kiwi</RootPageLink>
       </Overlay>
     </Root>
   )
