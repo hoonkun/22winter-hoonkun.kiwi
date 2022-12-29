@@ -163,7 +163,7 @@ const PostCategory = styled(PostDescription)`
   margin: 0 0 20px 0;
   li:nth-of-type(n+2):before {
     content: "〉";
-    margin: 0 10px;
+    margin: 0 0 0 10px;
     opacity: 0.5;
   }
 `
