@@ -241,7 +241,7 @@ const LatestPostItemViewRoot = styled.div`
   justify-self: stretch;
   
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   
   ${Breakpoint} {
     grid-column: 1 / 3;
@@ -288,13 +288,15 @@ const NormalPostItemViewRoot = styled(LatestPostItemViewRoot)`
 const LatestPostPreviewContainer = styled.div`
   border: 5px solid #eeeeee;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 2.5;
   position: relative;
   
   cursor: pointer;
   
   ${Breakpoint} {
     border: 12.5px solid #eeeeee;
+    aspect-ratio: unset;
+    height: 100%;
   }
 `
 
