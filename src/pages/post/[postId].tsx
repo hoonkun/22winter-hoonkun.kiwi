@@ -217,7 +217,7 @@ const Root = styled.div`
 
   .math-inline {
     max-width: 100%;
-    margin-bottom: -17.5px;
+    margin-bottom: -18.5px;
     display: inline-block;
     white-space: nowrap;
     overflow-x: auto;
