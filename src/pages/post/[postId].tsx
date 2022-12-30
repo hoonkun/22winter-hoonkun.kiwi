@@ -18,7 +18,7 @@ import rehypeParse from "rehype-parse";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
 import Head from "next/head";
-import { Breakpoint } from "../../../styles/globals";
+import { Breakpoint, ScaleBreakpoint } from "../../../styles/globals";
 
 type PostPageProps = {
   post: Post
@@ -180,14 +180,16 @@ const RecommendedPostTitle = styled.div`
 
 const RecommendedPostView: React.FC<{ post: Post, type: "next" | "previous" | "related" }> = ({ post, type }) => {
   return (
-    <PostViewRoot>
-      <PostPreview src={require(`./../../../_posts/${post.key}/preview.png`).default.src}/>
-      <PostOverlay>
-        <PostItemDescription>{ RecommendTypeText[type] }</PostItemDescription>
-        <PostItemTitle>{ post.data.title }</PostItemTitle>
-        <PostItemExcerpt>{ post.excerpt }</PostItemExcerpt>
-      </PostOverlay>
-    </PostViewRoot>
+    <Link href={`/post/${post.key}`} style={{ textDecoration: "none" }}>
+      <PostViewRoot>
+        <PostPreview src={require(`./../../../_posts/${post.key}/preview.png`).default.src}/>
+        <PostOverlay>
+          <PostItemDescription>{ RecommendTypeText[type] }</PostItemDescription>
+          <PostItemTitle>{ post.data.title }</PostItemTitle>
+          <PostItemExcerpt>{ post.excerpt }</PostItemExcerpt>
+        </PostOverlay>
+      </PostViewRoot>
+    </Link>
   )
 }
 
@@ -195,9 +197,21 @@ const PostViewRoot = styled.div`
   width: calc(100% + 80px);
   margin-left: -40px;
   height: 250px;
-  background-color: white;
   margin-bottom: 20px;
   position: relative;
+  
+  ${ScaleBreakpoint} {
+    &:hover {
+      transform: scale(1);
+    }
+  }
+  
+  ${Breakpoint} {
+    transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1);
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
 `
 
 const PostPreview = styled.img`
