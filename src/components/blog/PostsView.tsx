@@ -68,6 +68,7 @@ const PostsViewRoot = styled.div`
   pointer-events: auto;
   
   ${Breakpoint} {
+    margin-left: 27%;
     ${OverlayOverflow};
   }
 `
@@ -277,6 +278,10 @@ const PostDate = styled.div`
     right: 8px;
     bottom: 6px;
     font-size: 13px;
+  }
+  
+  ${ScaleBreakpoint} {
+    font-size: 10px;
   }
 `
 

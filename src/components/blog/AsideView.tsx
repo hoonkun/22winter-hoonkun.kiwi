@@ -29,8 +29,12 @@ const Root = styled.div`
   min-height: 300px;
   
   ${Breakpoint} {
+    position: absolute;
+    left: 0;
+    top: 0;
+
     min-width: 400px;
-    width: 35%;
+    width: 27%;
     height: 100%;
   }
 
@@ -79,6 +83,7 @@ const AsideTitle = styled.div`
   font-weight: bold;
   text-align: center;
   line-height: 125%;
+  word-break: keep-all;
 `
 
 const AsideList = styled.ul`
