@@ -3,7 +3,7 @@ import { Post } from "../../utils/Posts";
 import { Category } from "../../utils/Categories";
 import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
-import { Breakpoint, not, OverlayOverflow } from "../../../styles/globals";
+import { Breakpoint, not, OverlayOverflow, ScaleBreakpoint } from "../../../styles/globals";
 import Link from "next/link";
 import { css } from "@emotion/react";
 
@@ -85,6 +85,10 @@ const PostsViewLimitedWidth = styled.div`
   ${Breakpoint} {
     padding: 80px;
   }
+  
+  ${ScaleBreakpoint} {
+    padding: 35px;
+  }
 `
 
 const PostListContainer = styled.div`
@@ -100,6 +104,10 @@ const PostListContainer = styled.div`
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 10px;
+  }
+
+  ${ScaleBreakpoint} {
+    grid-auto-rows: 200px;
   }
 `
 
@@ -193,9 +201,14 @@ const LatestPostTitle = styled.div`
   text-align: center;
   word-break: keep-all;
   margin-bottom: 15px;
+  text-shadow: 0 0 5px #00000099;
   
   ${Breakpoint} {
     font-size: 40px;
+  }
+
+  ${ScaleBreakpoint} {
+    font-size: 35px;
   }
 `
 
@@ -211,6 +224,10 @@ const NormalPostTitle = styled(LatestPostTitle)`
   ${Breakpoint} {
     font-size: 20px;
   }
+
+  ${ScaleBreakpoint} {
+    font-size: 15px;
+  }
 `
 
 const LatestPostExcerpt = styled.div`
@@ -219,9 +236,15 @@ const LatestPostExcerpt = styled.div`
   text-align: center;
   font-size: 10px;
   opacity: 1;
+  text-shadow: 0 0 5px #000000;
   
   ${Breakpoint} {
     font-size: 18px;
+  }
+
+  ${ScaleBreakpoint} {
+    font-size: 15px;
+    width: 85%;
   }
 `
 
@@ -235,7 +258,11 @@ const NormalPostExcerpt = styled(LatestPostExcerpt)`
   transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.15s linear;
   
   ${Breakpoint} {
-    font-size: 11px;
+    font-size: 15px;
+  }
+  
+  ${ScaleBreakpoint} {
+    font-size: 10px;
   }
 `
 
@@ -254,6 +281,11 @@ const LatestPostItemViewRoot = styled.div<{ expand?: { columns: number, rows: nu
       z-index: 100;
     }
     ${({ expand }) => expand ? css`grid-column: span ${expand.columns};grid-row: span ${expand.rows};` : ""}
+  }
+  ${ScaleBreakpoint} {
+    &:hover {
+      transform: scale(1);
+    }
   }
 
   transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1);
@@ -282,6 +314,27 @@ const NormalPostItemViewRoot = styled(LatestPostItemViewRoot)`
     & ${NormalPostExcerpt} {
       transform: translate(-50%, calc(8px));
       opacity: 1;
+    }
+  }
+  ${ScaleBreakpoint} {
+    &:hover ${NormalPostTitle} {
+      transform: translate(0, 0);
+    }
+    &:hover ${NormalPostExcerpt} {
+      transform: translate(0, 0);
+    }
+    & ${NormalPostTitle} {
+      position: relative;
+      top: unset;
+      left: unset;
+      transform: translate(0, 0);
+    }
+    & ${NormalPostExcerpt} {
+      position: relative;
+      top: unset;
+      left: unset;
+      transform: translate(0, 0);
+      opacity: 0.75;
     }
   }
 `
@@ -318,6 +371,7 @@ const LatestPostPreview = styled.img`
   height: 100%;
   object-fit: cover;
   display: block;
+  filter: brightness(0.3);
 `
 
 const LatestPostPreviewOverlay = styled.div`
@@ -326,7 +380,6 @@ const LatestPostPreviewOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #000000A0;
 `
 
 const LatestPostPreviewContent = styled.div`

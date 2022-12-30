@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Breakpoint } from "../../../styles/globals";
+import { Breakpoint, ScaleBreakpoint } from "../../../styles/globals";
 
 import ProfilePhotoResource from "./../../resources/images/profile_photo.jpg"
 import BackgroundResource from "./../../resources/images/background_original.jpg"
@@ -32,6 +32,10 @@ const Root = styled.div`
     min-width: 400px;
     width: 35%;
     height: 100%;
+  }
+
+  ${ScaleBreakpoint} {
+    min-width: 225px;
   }
 `
 
@@ -73,6 +77,8 @@ const AsidePhoto = styled.img`
 const AsideTitle = styled.div`
   font-size: 35px;
   font-weight: bold;
+  text-align: center;
+  line-height: 125%;
 `
 
 const AsideList = styled.ul`
