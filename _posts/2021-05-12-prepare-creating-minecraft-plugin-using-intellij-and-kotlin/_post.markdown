@@ -8,8 +8,7 @@ categories: [dev,minecraft-plugin]
 excerpt_separator: <!-- Excerpt -->
 use_code_fragment: true
 ---
-예전에는 마인크래프트 플러그인은 java로 짜는 것 같았는데, java 대신 kotlin을 사용할 수 있다면 kotlin으로 해야 마음이 편하다.    
-그래서 인터넷을 뒤져보니 kotlin으로도 짤 수 있었던 것이다! 그래서 그 방법을 공유해보고자 한다.   
+인터넷을 뒤져보니 마크 플러그인을 kotlin으로도 짤 수 있었던 것이다! 그래서 그 방법을 기록해보고자 한다.   
 <!-- Excerpt -->
 
 ## 서론
