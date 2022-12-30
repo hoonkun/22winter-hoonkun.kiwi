@@ -1,7 +1,7 @@
 declare global {
   interface Array<T> {
     random(): T
-    chucked(size: number): T[]
+    chunked(size: number): T[][]
     chunked<R>(size: number, transform: (it: T[]) => R): R[]
     count(predicate: (it: T) => boolean): number
     distinct(): T[]
@@ -59,7 +59,7 @@ Array.prototype.chunked = function <R>(size: number, transform?: (it: any[]) => 
   for (let i = 0; i < this.length; i++) {
     buffer.push(this[i])
     if (buffer.length !== size) continue
-    result.push(transform ? transform(buffer) : buffer)
+    result.push(transform ? transform([...buffer]) : [...buffer])
     buffer.splice(0, size)
   }
   return result
@@ -170,7 +170,7 @@ safeDefineProperty(Object.prototype, "takeUnless", {
 safeDefineProperty(Object.prototype, "pick", {
   value: function(...keys: any[]) {
     const result: any = { };
-    keys.forEach(it => result[it] = this[it]);
+    keys.forEach(it => this[it] ? result[it] = this[it] : undefined);
     return result;
   },
   writable: false, configurable: false, enumerable: false
