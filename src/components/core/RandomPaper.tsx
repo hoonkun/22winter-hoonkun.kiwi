@@ -3,6 +3,7 @@ import { Times } from "../../utils/Times";
 import styled from "@emotion/styled";
 import { EmptyFunction } from "../../utils/KTN";
 import { paper } from "../../random";
+import { Breakpoint } from "../../../styles/globals";
 
 type RandomResponse = { image: string, text: string, duration: number }
 type RandomPaperController = { make: () => void }
@@ -24,13 +25,12 @@ export const createPaperController: () => RandomPaperController = () => ({ make:
 type Props = {
   controller: MutableRefObject<RandomPaperController>
   backgroundRender: JSX.Element
-  scale: number
   loading: boolean
   onLoading: React.Dispatch<React.SetStateAction<boolean>>
   onPaperShow: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onLoading, loading, onPaperShow }) => {
+const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, onLoading, loading, onPaperShow }) => {
 
   const [state, setState] = useState<RandomPaperState>("destroyed")
   const stateRef = useRef<RandomPaperState>("destroyed")
@@ -60,7 +60,7 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onL
 
     onLoading(false)
 
-    const position = Math.random() * (20 - scale * 2)
+    const position = Math.random() * 20
     onPaperShow(true);
     setDirection(Math.random() > 0.5 ? "normal" : "reversed")
     setPosition(2 + (Math.random() > 0.5 ? position : 68 + position))
@@ -74,7 +74,7 @@ const RandomPaper: React.FC<Props> = ({ controller, backgroundRender, scale, onL
     setRandom(null)
     setState("destroyed")
     onPaperShow(false);
-  }, [scale, onLoading, loading, onPaperShow])
+  }, [onLoading, loading, onPaperShow])
 
   useEffect(() => {
     const instance = times.current
@@ -122,7 +122,11 @@ const Content = styled.div`
   position: relative;
   z-index: 1000;
   background-color: #00000090;
-  padding: 10rem 20rem;
+  
+  padding: 10px 20px;
+  ${Breakpoint} {
+    padding: 20px 40px;
+  }
   
   display: flex;
   flex-direction: row;
@@ -130,21 +134,34 @@ const Content = styled.div`
 `
 
 const RandomImage = styled.img`
-  width: 65rem;
-  height: 65rem;
-  border: 3rem solid var(--text-color-primary);
+  width: 65px;
+  height: 65px;
+  border: 3px solid var(--text-color-primary);
+  
+  ${Breakpoint} {
+    width: 130px;
+    height: 130px;
+    border: 6px solid var(--text-color-primary);
+  }
 `
 
 const RandomText = styled.div`
   color: var(--text-color-primary);
-  font-size: 13rem;
   white-space: pre-wrap;
-  margin: 0 15rem;
+  font-size: 13px;
+  margin: 0 15px;
+  ${Breakpoint} {
+    font-size: 26px;
+    margin: 0 30px; 
+  }
 `
 
 const LimitedWidth = styled.div`
   width: 100%;
-  max-width: 360rem;
+  max-width: 360px;
+  ${Breakpoint} {
+    max-width: 720px;
+  }
 
   display: flex;
   align-items: center;
