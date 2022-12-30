@@ -1,4 +1,4 @@
-import React, { createElement, Fragment, useEffect, useState } from "react";
+import React, { createElement, Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Post, Posts, PostWithContent } from "../../utils/Posts";
 import styled from "@emotion/styled";
@@ -35,6 +35,8 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
   const { post: { key }, content, next, previous, related } = pageProps
   const [PostContent, setPostContent] = useState(<Fragment/>)
 
+  const comments = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (!content) return
 
@@ -53,6 +55,21 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
       .process(content)
       .then(file => setPostContent(file.result))
   }, [content, key])
+
+  useLayoutEffect(() => {
+    if ((comments.current?.childNodes.length ?? 0) > 0) return
+
+    const script = document.createElement("script")
+    script.setAttribute("repo", "hoonkun/22winter-hoonkun.kiwi")
+    script.setAttribute("issue-term", "title")
+    script.setAttribute("label", "post comment")
+    script.setAttribute("theme", "github-dark")
+    script.crossOrigin = "anonymous"
+    script.async = true
+    script.src = "https://utteranc.es/client.js"
+
+    comments.current?.appendChild(script)
+  }, [])
 
   return (
     <Root>
@@ -79,6 +96,7 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
           &nbsp;&nbsp;
           <ExternalLink rel={"me"} href={"https://twingyeo.kr/@hoon_kiwicraft"} color={"#595aff"}>Mastodon</ExternalLink>
         </ExternalLinks>
+        <Comments ref={comments}/>
         <RecommendedPosts related={related} previous={previous} next={next}/>
       </PostLimitedWidth>
     </Root>
@@ -141,6 +159,8 @@ const PostHead: React.FC<{ post: Post }> = ({ post }) => {
     </Head>
   )
 }
+
+const Comments = styled.div``
 
 const BackButton = styled(MaterialIcon)`
   margin-bottom: 20px;
