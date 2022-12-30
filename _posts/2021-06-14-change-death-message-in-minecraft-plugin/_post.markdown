@@ -4,7 +4,7 @@ title: 마인크래프트의 DeathMessage를 플러그인을 사용해 바꿔보
 date: 2021-06-15, 4:17
 categories: [dev,minecraft-plugin]
 ---
-마인크래프트에서 플레이어가 내 플러그인의 `Entity.damage(Double)`에 의해 사망했을 때 출력되는 DeathMessage를 바꾸는 방법에 대해 알아보자.   
+마인크래프트에서 플레이어가 내 플러그인에 의해 사망했을 때 출력되는 DeathMessage를 바꾸는 방법에 대해 알아보자.   
 <!-- Excerpt -->
 
 ## 서론

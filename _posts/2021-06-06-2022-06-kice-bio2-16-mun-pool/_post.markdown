@@ -8,7 +8,6 @@ categories: [biology-ii,dna-replication]
 use_math: true
 excerpt_separator: <!-- Excerpt -->
 ---
-2022학년도 6월 평가원 모의고사에서 출제된 DNA 복제에 관한 문제(16번)을 풀어보자.   
 항상 드는 생각이지만 그냥 풀면 재미있는데 이런걸 시험시간에 풀고있으려면 꽤 괴로울 것 같다...   
 <!-- Excerpt -->
 &nbsp;   
