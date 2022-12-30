@@ -10,6 +10,8 @@ export const OverlayOverflow = css`overflow: overlay;`
 
 export const Breakpoint = `@media only screen and (min-width: 840px)`
 
+export const ScaleBreakpoint = `@media only screen and (max-width: 1400px) and (min-width: 840px)`
+
 export const FullFixed = css`
   position: fixed;
   width: 100%;
