@@ -45,7 +45,7 @@ const PostsPage: NextPage<PostsStaticProps> = ({ posts, routedPage: page, total 
 
 export const getStaticProps: GetStaticProps<PostsStaticProps> = context => {
   const page = parseInt(context.params?.page as string ?? "1");
-  return { props: { posts: Posts.list(page), routedPage: page, total: Posts.total } }
+  return { props: { posts: Posts.list(page, true), routedPage: page, total: Posts.total } }
 }
 
 export const getStaticPaths: GetStaticPaths = () => {

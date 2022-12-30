@@ -24,11 +24,12 @@ type PostPageProps = {
   content: string
   next: Post | null
   previous: Post | null
+  related: Post[]
 }
 
 const PostPage: NextPage<PostPageProps> = pageProps => {
 
-  const { post: { key }, content } = pageProps
+  const { post: { key }, content, next, previous, related } = pageProps
   const [PostContent, setPostContent] = useState(<Fragment/>)
 
   useEffect(() => {
@@ -68,6 +69,12 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
           alt={""}
         />
         {PostContent}
+        <ExternalLinks>
+          <ExternalLink href={"https://twitter.com/arctic_apteryx"} color={"#1d9bf0"}>Twitter</ExternalLink>
+          &nbsp;&nbsp;
+          <ExternalLink rel={"me"} href={"https://twingyeo.kr/@hoon_kiwicraft"} color={"#595aff"}>Mastodon</ExternalLink>
+        </ExternalLinks>
+        <RecommendedPosts related={related} previous={previous} next={next}/>
       </PostLimitedWidth>
     </Root>
   )
@@ -89,8 +96,9 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async context => {
 
   const next = Posts.next(post.key)
   const previous = Posts.previous(post.key)
+  const related = Posts.related(post.key, post.category[0].name)
 
-  return { props: { post: post.pick("key", "data", "excerpt", "category"), content: result, next, previous } }
+  return { props: { post: post.omit("content"), content: result, next, previous, related } }
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
@@ -128,6 +136,118 @@ const PostHead: React.FC<{ post: Post }> = ({ post }) => {
     </Head>
   )
 }
+
+const ExternalLinks = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 40px 0 20px 0;
+  font-size: 14px;
+  line-height: 20px;
+  border-bottom: 1px solid #ffffff30;
+  padding-bottom: 20px;
+`
+
+const ExternalLink = styled.a<{ color: string }>`
+  text-decoration: none !important;
+  padding: 0 10px;
+  border-radius: 3px;
+  background-color: ${({ color }) => color};
+`
+
+const RecommendTypeText = {
+  "next": "다음 글",
+  "previous": "이전 글",
+  "related": "비슷한 글"
+} as const
+
+const RecommendedPosts: React.FC<{ related: Post[], next: Post | null, previous: Post | null }> = ({ related, next, previous }) => {
+  return (
+    <>
+      <RecommendedPostTitle>다른 글도 살펴보실래오?</RecommendedPostTitle>
+      {related.map(it => <RecommendedPostView key={it.key} post={it} type={"related"}/>)}
+      {next && <RecommendedPostView post={next} type={"next"}/>}
+      {previous && <RecommendedPostView post={previous} type={"previous"}/>}
+    </>
+  )
+}
+
+const RecommendedPostTitle = styled.div`
+  font-size: 25px;
+  font-weight: bold;
+  margin: 60px 0 20px 0;
+`
+
+const RecommendedPostView: React.FC<{ post: Post, type: "next" | "previous" | "related" }> = ({ post, type }) => {
+  return (
+    <PostViewRoot>
+      <PostPreview src={require(`./../../../_posts/${post.key}/preview.png`).default.src}/>
+      <PostOverlay>
+        <PostItemDescription>{ RecommendTypeText[type] }</PostItemDescription>
+        <PostItemTitle>{ post.data.title }</PostItemTitle>
+        <PostItemExcerpt>{ post.excerpt }</PostItemExcerpt>
+      </PostOverlay>
+    </PostViewRoot>
+  )
+}
+
+const PostViewRoot = styled.div`
+  width: calc(100% + 80px);
+  margin-left: -40px;
+  height: 250px;
+  background-color: white;
+  margin-bottom: 20px;
+  position: relative;
+`
+
+const PostPreview = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: brightness(0.3);
+  z-index: 0;
+`
+
+const PostOverlay = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+`
+
+const PostItemDescription = styled.div`
+  position: absolute;
+  z-index: 1;
+  right: 30px;
+  top: 5px;
+  font-size: 12px;
+  opacity: 0.75;
+`
+
+const PostItemTitle = styled.div`
+  width: 80%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  text-shadow: 0 0 5px #00000099;
+  word-break: keep-all;
+`
+
+const PostItemExcerpt = styled.div`
+  width: 80%;
+  text-align: center;
+  opacity: 0.85;
+  font-size: 14px;
+  line-height: 20px;
+  text-shadow: 0 0 5px #000000;
+  word-break: keep-all;
+`
 
 const PostLimitedWidth = styled.div`
   width: 100%;
