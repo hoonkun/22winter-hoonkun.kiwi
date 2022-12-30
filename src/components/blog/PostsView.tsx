@@ -380,6 +380,7 @@ const LatestPostPreviewOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 10;
 `
 
 const LatestPostPreviewContent = styled.div`
