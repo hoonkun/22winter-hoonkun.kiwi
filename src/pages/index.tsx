@@ -105,7 +105,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <SnappedScroll ref={scrollable} scrollable={!page} onScroll={onScroll}>
+      <SnappedScroll ref={scrollable} scrollable={!page} onScroll={onScroll} style={{ overflow: "hidden" }}>
         <About/>
         <DummyOverlay>
           <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
@@ -114,10 +114,10 @@ const Home: NextPage = () => {
             <Container>
               <OverArea>
                 <OverLinks>
-                  <Link href={"/posts/1"}>〈 &nbsp; 아무말 집합소 &nbsp;</Link>
-                  <div onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</div>
+                  <Link href={"/posts/1"}>아무말 집합소 &nbsp; <LinkArrow i={"arrow_forward"}/></Link>
+                  {/*<div onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</div>*/}
                 </OverLinks>
-                Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01
+                <OverText>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverText>
               </OverArea>
               <MiddleArea>
                 <MiddleContent>
@@ -154,7 +154,7 @@ const Home: NextPage = () => {
                   <RandomButton i={"arrow_forward"} margin/>
                   {!loading ?
                     <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
-                    <CircularProgressBar size={24}/>
+                    <CircularProgressBar/>
                   }
                 </BelowAreaContainer>
               </BelowArea>
@@ -280,7 +280,6 @@ const SurroundingArea = styled(Column)`
 
 const OverArea = styled(SurroundingArea)`
   align-items: flex-start;
-  opacity: .45;
   
   margin-bottom: 10px;
   font-size: 10px;
@@ -292,12 +291,35 @@ const OverArea = styled(SurroundingArea)`
 `
 
 const OverLinks = styled.div`
-  margin-left: -7px;
   pointer-events: auto;
   
   & > span {
     cursor: pointer;
   }
+  
+  & > a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    opacity: .75;
+    transition: opacity 0.1s linear;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+`
+
+const LinkArrow = styled(MaterialIcon)`
+  font-size: 12px;
+  
+  ${Breakpoint} {
+    font-size: 20px;
+  }
+`
+
+const OverText = styled.div`
+  opacity: .45;
 `
 
 const MiddleArea = styled(Column)<{ sub?: boolean }>`
@@ -488,6 +510,12 @@ const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: bool
   ${Breakpoint} {
     font-size: 48px;
     margin-right: ${({ margin }) => margin ? 16 : 0}px;
+    ${({ disabled }) => disabled ? "" : css`
+      &:hover {
+        background-color: #ffffff30;
+        border-radius: 6px;
+      }
+    `}
   }
 `
 
