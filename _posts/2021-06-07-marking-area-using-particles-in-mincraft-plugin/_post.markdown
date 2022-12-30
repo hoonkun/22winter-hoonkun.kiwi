@@ -1,12 +1,11 @@
 ---
-layout: post.liquid
 author: GoHoon
 title: 마인크래프트 Particle을 사용해 월드의 특정 영역에 경계선을 그려보자
 date: 2021-06-07, 15:40
-image: /assets/images/posts/2021-06-07-marking-area-using-particles-in-mincraft-plugin/preview.png
 categories: [dev,minecraft-plugin]
-excerpt_separator: <!-- Excerpt -->
-use_code_fragment: true
+expand:
+  max_columns: 1
+  max_rows: 2
 ---
 Particle을 사용해 그림처럼 특정 영역에 경계선을 그리는 방법을 알아보자. 현재 플레이어의 위치를 기반으로 그리기 때문에 지하에서도, 지상에서도 표시된다.   
 <!-- Excerpt -->
