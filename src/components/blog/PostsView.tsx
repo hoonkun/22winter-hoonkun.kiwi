@@ -245,9 +245,12 @@ const LatestPostItemViewRoot = styled.div`
   width: 100%;
   height: 100%;
   
+  position: relative;
+  
   ${Breakpoint} {
     &:hover {
       transform: scale(1.05);
+      z-index: 100;
     }
     &:nth-of-type(1) {
       grid-column: span 2;
