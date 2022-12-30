@@ -1,9 +1,8 @@
-import React, { CSSProperties, PropsWithChildren } from "react";
+import React, { CSSProperties, PropsWithChildren, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 
 type Props = {
   color?: string
-  size?: number
   style?: CSSProperties
   className?: string
 }
@@ -11,20 +10,31 @@ type Props = {
 type AnchorProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
 
 const DefaultHighlightColor = "#ffffff"
-const DefaultFontSize = 12
 
-const HighlightedLink: React.FC<PropsWithChildren<Props & AnchorProps>> = ({ href, className, onClick, color, children, size, style, ...props }) => {
+const HighlightedLink: React.FC<PropsWithChildren<Props & AnchorProps>> = ({ href, className, onClick, color, children, style, ...props }) => {
+
+  const root = useRef<HTMLDivElement>(null)
+  const highlight = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!root.current || !highlight.current) return
+
+    const size = window.getComputedStyle(root.current).fontSize.px
+    const value = `${size / 2}px`;
+    highlight.current.style.height = value
+    highlight.current.style.marginTop = `-${value}`
+  }, [])
+
   return (
-    <AnchorStyled className={className} style={style}>
+    <AnchorStyled ref={root} className={className} style={style}>
       <Text href={href} onClick={onClick} {...props}>{children}</Text>
-      <Highlight color={color ?? DefaultHighlightColor} size={(size ?? DefaultFontSize) / 2}/>
+      <Highlight ref={highlight} color={color ?? DefaultHighlightColor} />
     </AnchorStyled>
   )
 }
 
 HighlightedLink.defaultProps = {
   color: DefaultHighlightColor,
-  size: DefaultFontSize
 }
 
 const AnchorStyled = styled.div`
@@ -40,12 +50,10 @@ const Text = styled.a`
   line-height: 100%;
 `
 
-const Highlight = styled.div<{ color: string, size: number }>`
+const Highlight = styled.div<{ color: string }>`
   background-color: ${({ color }) => color};
-  height: ${({ size }) => size}px;
   margin-left: -2px;
   margin-right: -2px;
-  margin-top: -${({ size }) => size}px;
   transform: translateY(1px);
   opacity: .2;
   z-index: 0;
