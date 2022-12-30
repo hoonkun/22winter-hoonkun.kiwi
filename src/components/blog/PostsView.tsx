@@ -94,9 +94,11 @@ const PostListContainer = styled.div`
   grid-row-gap: 10px;
   
   ${Breakpoint} {
+    grid-template-rows: unset;
+    grid-auto-rows: 250px;
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 50px;
-    grid-row-gap: 50px;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
   }
 `
 
@@ -140,8 +142,8 @@ const PagerMax = styled.div`
 
 const PostItemView: React.FC<{ post: Post, categories: Category[], latest: boolean }> = ({ post, categories, latest }) => {
 
-  const previewStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${post.key.randomize(-5, 5)}deg` }), [post.key])
-  const contentStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${-1 * post.key.randomize(-5, 5)}deg` }), [post.key])
+  const previewStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${post.key.randomize(-1, 2)}deg` }), [post.key])
+  const contentStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${-1 * post.key.randomize(-1, 2)}deg` }), [post.key])
 
   const firstCategoryIndicatorStyle = useMemo<CSSProperties>(() => ({
     [post.key.randomize(0, 2, 4.12) === 0 ? "left" : "right"]: -20,
@@ -174,7 +176,7 @@ const PostItemView: React.FC<{ post: Post, categories: Category[], latest: boole
             <CategoryIndicator color={categories.find(it => it.name === post.data.categories[0])!.color.dark} style={firstCategoryIndicatorStyle}/>
           }
           {post.data.categories[1] &&
-            <CategoryIndicator color={categories.find(it => it.name === post.data.categories[1])!.color.dark} style={secondCategoryIndicatorStyle}/>
+            <CategoryIndicator color={categories.find(it => it.name === post.data.categories[1])!.color.dark} style={secondCategoryIndicatorStyle} second/>
           }
         </PreviewContainer>
       </Link>
@@ -244,11 +246,12 @@ const LatestPostItemViewRoot = styled.div`
   height: 100%;
   
   ${Breakpoint} {
-    grid-column: 1 / 3;
-    grid-row: 1 / 3;
-
     &:hover {
       transform: scale(1.05);
+    }
+    &:nth-of-type(1) {
+      grid-column: span 2;
+      grid-row: span 2;
     }
   }
 
@@ -262,7 +265,7 @@ const NormalPostItemViewRoot = styled(LatestPostItemViewRoot)`
     grid-row: unset;
     grid-column: unset;
 
-    height: 250px;
+    height: 100%;
   }
 
   ${Breakpoint} {
@@ -294,9 +297,10 @@ const LatestPostPreviewContainer = styled.div`
   cursor: pointer;
   
   ${Breakpoint} {
-    border: 12.5px solid #eeeeee;
+    border: none;
     aspect-ratio: unset;
     height: 100%;
+    rotate: none !important;
   }
 `
 
@@ -307,7 +311,7 @@ const NormalPostPreviewContainer = styled(LatestPostPreviewContainer)`
   height: 100%;
   
   ${Breakpoint} {
-    border: 8px solid #eeeeee;
+    border: none;
   }
 `
 
@@ -334,9 +338,13 @@ const LatestPostPreviewContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
+  ${Breakpoint} {
+    rotate: none !important;
+  }
 `
 
-const CategoryIndicator = styled.div<{ color: string }>`
+const CategoryIndicator = styled.div<{ color: string, second?: boolean }>`
   position: absolute;
   width: 50px;
   height: 20px;
@@ -344,6 +352,14 @@ const CategoryIndicator = styled.div<{ color: string }>`
   box-shadow: 0 0 5px #00000035;
 
   filter: contrast(0.65);
+  
+  ${Breakpoint} {
+    rotate: none !important;
+    left: 0 !important;
+    height: 15px;
+    width: 40px;
+    top: ${({ second }) => second ? 40 : 20}px !important;
+  }
 `
 
 export default PostsView
