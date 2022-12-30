@@ -1,6 +1,5 @@
 import React, { CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
 import { Post } from "../../utils/Posts";
-import { Category } from "../../utils/Categories";
 import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
 import { Breakpoint, not, OverlayOverflow, ScaleBreakpoint } from "../../../styles/globals";
@@ -17,12 +16,11 @@ export type PostPaginator = {
 
 type Props = {
   posts: Post[]
-  categories: Category[]
   paginator: PostPaginator
   requestSplash: (request: boolean) => void
 }
 
-const PostsView: React.FC<Props> = ({ posts, paginator, requestSplash, categories }) => {
+const PostsView: React.FC<Props> = ({ posts, paginator, requestSplash }) => {
 
   const top = useRef<HTMLDivElement>(null)
 
@@ -45,7 +43,7 @@ const PostsView: React.FC<Props> = ({ posts, paginator, requestSplash, categorie
       <div ref={top}/>
       <PostsViewLimitedWidth>
         <PostListContainer>
-          {posts.map((it, index) => <PostItemView key={it.key} categories={categories} post={it} latest={paginator.page === 1 && index === 0} />)}
+          {posts.map((it, index) => <PostItemView key={it.key} post={it} latest={paginator.page === 1 && index === 0} />)}
         </PostListContainer>
         {paginator.maxPage !== 1 &&
           <Pager>
@@ -151,7 +149,7 @@ const PagerMax = styled.div`
   opacity: 0.75;
 `
 
-const PostItemView: React.FC<{ post: Post, categories: Category[], latest: boolean }> = ({ post, categories, latest }) => {
+const PostItemView: React.FC<{ post: Post, latest: boolean }> = ({ post, latest }) => {
 
   const previewStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${post.key.randomize(-1, 2)}deg` }), [post.key])
   const contentStyle = useMemo<CSSProperties>(() => ({ rotate: `z ${-1 * post.key.randomize(-1, 2)}deg` }), [post.key])
@@ -183,11 +181,11 @@ const PostItemView: React.FC<{ post: Post, categories: Category[], latest: boole
               <PostExcerpt>{ post.excerpt }</PostExcerpt>
             </LatestPostPreviewContent>
           </LatestPostPreviewOverlay>
-          {post.data.categories[0] &&
-            <CategoryIndicator color={categories.find(it => it.name === post.data.categories[0])!.color.dark} style={firstCategoryIndicatorStyle}/>
+          {post.category[0] &&
+            <CategoryIndicator color={post.category[0].color.dark} style={firstCategoryIndicatorStyle}/>
           }
-          {post.data.categories[1] &&
-            <CategoryIndicator color={categories.find(it => it.name === post.data.categories[1])!.color.dark} style={secondCategoryIndicatorStyle} second/>
+          {post.category[1] &&
+            <CategoryIndicator color={post.category[1].color.dark} style={secondCategoryIndicatorStyle} second/>
           }
         </PreviewContainer>
       </Link>

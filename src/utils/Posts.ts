@@ -3,6 +3,7 @@ import matter from 'gray-matter';
 
 import config from "../config";
 import { ArrayK } from "./KTN";
+import { Categories, Category } from "./Categories";
 
 export type PostMetadata = {
   title: string
@@ -16,6 +17,7 @@ export type RawPost = {
   key: string
   data: PostMetadata
   excerpt: string
+  category: [Category, Category | undefined]
 }
 
 export type Post = RawPost & { expand?: { columns: number, rows: number } }
@@ -24,27 +26,22 @@ export type PostWithContent = Post & { content: string }
 
 export class Posts {
 
-  static get total() {
-    return fs
-      .readdirSync("./_posts")
+  private static get queryset() {
+    return fs.readdirSync("./_posts")
       .filter(it => !it.startsWith("_"))
-      .length
+      .reverse()
+  }
+
+  static get total() {
+    return Posts.queryset.length
   }
 
   static list(page?: number): Post[] {
     if (page === 0) throw Error("invalid page: 0. page must be bigger than zero.")
 
-    return fs.readdirSync("./_posts")
-      .filter(it => !it.startsWith("_"))
-      .reverse()
+    return Posts.queryset
       .let(it => page ? it.slice((page - 1) * config.blog.page_size, page * config.blog.page_size) : it)
-      .map(key =>
-        fs.readFileSync(`./_posts/${key}/_post.markdown`, { encoding: "utf8" })
-          .let(it => matter(it, { excerpt: true, excerpt_separator: config.blog.excerpt_separator }))
-          .pick("data", "excerpt")
-          .also(it => it.data = it.data.pick("title", "date", "author", "categories", "expand"))
-          .let(it => ({ ...it, excerpt: it.excerpt?.replace(/^> .+$/gm, ""), key }) as RawPost)
-      )
+      .map(key => Posts.retrieve<RawPost>(key))
       .let(it => Posts.withExpand(it))
   }
 
@@ -94,12 +91,25 @@ export class Posts {
     return posts.map(postsMapper)
   }
 
-  static retrieve(key: string): PostWithContent {
-    return fs.readFileSync(`./_posts/${key}/_post.markdown`)
+  static retrieve<T extends RawPost>(key: string, content: boolean = false): T {
+    const categories = Categories.list()
+
+    return fs.readFileSync(`./_posts/${key}/_post.markdown`, { encoding: "utf8" })
       .let(it => matter(it, { excerpt: true, excerpt_separator: config.blog.excerpt_separator }))
-      .pick("data", "excerpt", "content")
-      .also(it => it.data = it.data.pick("title", "date", "author", "categories"))
-      .let(it => ({ ...it, excerpt: it.excerpt?.replace(/^> .+$/gm, ""), key }) as PostWithContent)
+      .let(it => content ? it.pick("data", "excerpt", "content") : it.pick("data", "excerpt"))
+      .also(it => it.data = it.data.pick("title", "date", "author", "categories", "expand"))
+      .let(it => ({ ...it, excerpt: it.excerpt?.replace(/^> .+$/gm, ""), key }) as T)
+      .let(it => ({ ...it, category: [categories.find(category => it.data.categories[0] === category.name), categories.find(category => it.data.categories[1] === category.name)] }))
+  }
+
+  static next(key: string): Post | null {
+    return Posts.queryset[Posts.queryset.findIndex(it => it === key) - 1]
+      .let(it => it ? Posts.retrieve(it) : null)
+  }
+
+  static previous(key: string): Post | null {
+    return Posts.queryset[Posts.queryset.findIndex(it => it === key) + 1]
+      .let(it => it ? Posts.retrieve(it) : null)
   }
 
 }
