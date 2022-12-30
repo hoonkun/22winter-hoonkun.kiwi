@@ -104,12 +104,12 @@ export class Posts {
 
   static next(key: string): Post | null {
     return Posts.queryset[Posts.queryset.findIndex(it => it === key) - 1]
-      .let(it => it ? Posts.retrieve(it) : null)
+      ?.let(it => it ? Posts.retrieve(it) : null) ?? null
   }
 
   static previous(key: string): Post | null {
     return Posts.queryset[Posts.queryset.findIndex(it => it === key) + 1]
-      .let(it => it ? Posts.retrieve(it) : null)
+      ?.let(it => it ? Posts.retrieve(it) : null) ?? null
   }
 
   static related(key: string, name: string) {
