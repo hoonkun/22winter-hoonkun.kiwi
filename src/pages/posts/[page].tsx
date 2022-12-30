@@ -9,16 +9,14 @@ import { SplashView } from "../../components/SplashView";
 import styled from "@emotion/styled";
 import { Breakpoint, OverlayOverflow } from "../../../styles/globals";
 import AsideView from "../../components/blog/AsideView";
-import { Categories, Category } from "../../utils/Categories";
 
 export type PostsStaticProps = {
   posts: Post[]
-  categories: Category[]
   routedPage: number | null
   total: number
 }
 
-const PostsPage: NextPage<PostsStaticProps> = ({ posts, categories, routedPage: page, total }) => {
+const PostsPage: NextPage<PostsStaticProps> = ({ posts, routedPage: page, total }) => {
 
   const [loading, setLoading] = useState(false)
 
@@ -38,7 +36,7 @@ const PostsPage: NextPage<PostsStaticProps> = ({ posts, categories, routedPage: 
     <Root>
       <Container>
         <AsideView/>
-        <PostsView categories={categories} posts={posts} paginator={paginator} requestSplash={setLoading}/>
+        <PostsView posts={posts} paginator={paginator} requestSplash={setLoading}/>
       </Container>
       <SplashView active={loading}/>
     </Root>
@@ -47,7 +45,7 @@ const PostsPage: NextPage<PostsStaticProps> = ({ posts, categories, routedPage: 
 
 export const getStaticProps: GetStaticProps<PostsStaticProps> = context => {
   const page = parseInt(context.params?.page as string ?? "1");
-  return { props: { posts: Posts.list(page), routedPage: page, total: Posts.total, categories: Categories.list() } }
+  return { props: { posts: Posts.list(page), routedPage: page, total: Posts.total } }
 }
 
 export const getStaticPaths: GetStaticPaths = () => {

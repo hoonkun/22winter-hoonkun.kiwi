@@ -1,6 +1,6 @@
 import React, { createElement, Fragment, useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { Post, Posts } from "../../utils/Posts";
+import { Post, Posts, PostWithContent } from "../../utils/Posts";
 import styled from "@emotion/styled";
 import { unified } from "unified";
 import rehypeReact from "rehype-react";
@@ -18,12 +18,12 @@ import rehypeParse from "rehype-parse";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
 import Head from "next/head";
-import { Categories, Category } from "../../utils/Categories";
 
 type PostPageProps = {
   post: Post
-  category: Category[]
   content: string
+  next: Post | null
+  previous: Post | null
 }
 
 const PostPage: NextPage<PostPageProps> = pageProps => {
@@ -60,8 +60,8 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
           <li>{pageProps.post.data.author}</li>
         </PostDescription>
         <PostCategory>
-          <li>{pageProps.category[0].display}</li>
-          {pageProps.category[1] && <li>{pageProps.category[1].display}</li>}
+          <li>{pageProps.post.category[0].display}</li>
+          {pageProps.post.category[1] && <li>{pageProps.post.category[1].display}</li>}
         </PostCategory>
         <PostPreviewImage
           src={require(`./../../../_posts/${pageProps.post.key}/main.png`).default.src}
@@ -74,7 +74,7 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
 }
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async context => {
-  const post = Posts.retrieve(context.params!.postId as string)
+  const post = Posts.retrieve<PostWithContent>(context.params!.postId as string, true)
 
   const result = await unified()
     .use(remarkParse)
@@ -87,10 +87,10 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async context => {
     .process(post.content)
     .let(async it => String(await it))
 
-  const categories = Categories.list()
-  const category = post.data.categories.map(category => categories.find(it => it.name === category)!);
+  const next = Posts.next(post.key)
+  const previous = Posts.previous(post.key)
 
-  return { props: { post: post.pick("key", "data", "excerpt"), content: result, category } }
+  return { props: { post: post.pick("key", "data", "excerpt", "category"), content: result, next, previous } }
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
@@ -183,7 +183,8 @@ const PostPreviewImage = styled.img`
 const Root = styled.div`
   background-color: #323232;
   
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: 100%;
   
   line-height: 250%;
