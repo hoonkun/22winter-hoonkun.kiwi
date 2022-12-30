@@ -7,8 +7,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Router from "next/router";
 import { SplashView } from "../../components/SplashView";
 import styled from "@emotion/styled";
-import { Breakpoint, OverlayOverflow } from "../../../styles/globals";
+import { Breakpoint } from "../../../styles/globals";
 import AsideView from "../../components/blog/AsideView";
+import { css, Global } from "@emotion/react";
 
 export type PostsStaticProps = {
   posts: Post[]
@@ -34,6 +35,7 @@ const PostsPage: NextPage<PostsStaticProps> = ({ posts, routedPage: page, total 
 
   return (
     <Root>
+      <Global styles={css`body { background-color: #252525 }`}/>
       <Container>
         <AsideView/>
         <PostsView posts={posts} paginator={paginator} requestSplash={setLoading}/>
@@ -58,7 +60,6 @@ export const getStaticPaths: GetStaticPaths = () => {
 }
 
 const Root = styled.div`
-  background-color: #252525;
   width: 100%;
   height: 100%;
   font-family: "IBM Plex Sans KR", sans-serif;
@@ -66,14 +67,9 @@ const Root = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  
-  ${OverlayOverflow};
-  overflow-x: hidden;
-  overflow-y: auto;
   
   ${Breakpoint} {
     flex-direction: row;

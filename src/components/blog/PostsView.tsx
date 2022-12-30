@@ -62,7 +62,6 @@ const PostsView: React.FC<Props> = ({ posts, paginator, requestSplash }) => {
 
 const PostsViewRoot = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,6 +179,7 @@ const PostItemView: React.FC<{ post: Post, latest: boolean }> = ({ post, latest 
               <PostTitle>{ post.data.title }</PostTitle>
               <PostExcerpt>{ post.excerpt }</PostExcerpt>
             </LatestPostPreviewContent>
+            <PostDate>{ post.data.date }</PostDate>
           </LatestPostPreviewOverlay>
           {post.category[0] &&
             <CategoryIndicator color={post.category[0].color.dark} style={firstCategoryIndicatorStyle}/>
@@ -263,6 +263,20 @@ const NormalPostExcerpt = styled(LatestPostExcerpt)`
   
   ${ScaleBreakpoint} {
     font-size: 10px;
+  }
+`
+
+const PostDate = styled.div`
+  position: absolute;
+  right: 7px;
+  bottom: 5px;
+  opacity: 0.5;
+  font-size: 10px;
+  
+  ${Breakpoint} {
+    right: 8px;
+    bottom: 6px;
+    font-size: 13px;
   }
 `
 

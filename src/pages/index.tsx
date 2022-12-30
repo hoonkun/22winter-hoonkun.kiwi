@@ -1,7 +1,7 @@
 import { CSSProperties, UIEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { css, Global } from "@emotion/react";
 
 import HighlightedLink from "../components/HighlightedLink";
 import SlashedList from "../components/SlashedList";
@@ -105,6 +105,7 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Global styles={css`html, body { overflow: hidden; position: fixed; height: calc(100% - 1px); } #__next { height: 100%; }`}/>
       <SnappedScroll ref={scrollable} scrollable={!page} onScroll={onScroll} style={{ overflow: "hidden" }}>
         <About/>
         <DummyOverlay>
