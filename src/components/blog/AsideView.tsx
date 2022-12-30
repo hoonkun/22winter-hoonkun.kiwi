@@ -29,7 +29,7 @@ const Root = styled.div`
   min-height: 300px;
   
   ${Breakpoint} {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
 
