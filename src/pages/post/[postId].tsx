@@ -18,6 +18,7 @@ import rehypeParse from "rehype-parse";
 import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
 import Head from "next/head";
+import { Breakpoint } from "../../../styles/globals";
 
 type PostPageProps = {
   post: Post
@@ -261,6 +262,10 @@ const PostTitle = styled.div`
   font-size: 30px;
   word-break: keep-all;
   line-height: 125%;
+  
+  ${Breakpoint} {
+    margin-top: 40px;
+  }
 `
 
 const PostDescription = styled.ul`
