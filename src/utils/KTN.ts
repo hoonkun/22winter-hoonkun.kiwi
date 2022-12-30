@@ -32,6 +32,7 @@ declare global {
     takeIf<T>(this: T, block: (it: T) => boolean): T | null
     takeUnless<T>(this: T, block: (it: T) => boolean): T | null
     pick<T, P extends keyof T>(this: T, ...keys: P[]): Pick<T, P>
+    omit<T, P extends keyof T>(this: T, ...keys: P[]): Omit<T, P>
   }
 }
 
@@ -172,6 +173,14 @@ safeDefineProperty(Object.prototype, "pick", {
     const result: any = { };
     keys.forEach(it => this[it] ? result[it] = this[it] : undefined);
     return result;
+  },
+  writable: false, configurable: false, enumerable: false
+})
+
+safeDefineProperty(Object.prototype, "omit", {
+  value: function(...keys: any[]) {
+    const pick = Object.keys(this).filter(it => !keys.includes(it))
+    return this.pick(...pick);
   },
   writable: false, configurable: false, enumerable: false
 })
