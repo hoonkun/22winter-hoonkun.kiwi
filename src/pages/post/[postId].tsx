@@ -19,6 +19,7 @@ import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
 import Head from "next/head";
 import { Breakpoint, ScaleBreakpoint } from "../../../styles/globals";
+import MaterialIcon from "../../components/MaterialIcon";
 
 type PostPageProps = {
   post: Post
@@ -56,6 +57,7 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
     <Root>
       <PostHead post={pageProps.post}/>
       <PostLimitedWidth>
+        <Link href={"/posts/1"}><BackButton i={"arrow_back"}/></Link>
         <PostTitle>{pageProps.post.data.title}</PostTitle>
         <PostDescription>
           <li>{pageProps.post.data.date}</li>
@@ -137,6 +139,17 @@ const PostHead: React.FC<{ post: Post }> = ({ post }) => {
     </Head>
   )
 }
+
+const BackButton = styled(MaterialIcon)`
+  margin-bottom: 20px;
+  margin-top: -5px;
+  margin-left: -5px;
+  padding: 5px;
+  border-radius: 4px;
+  &:hover {
+    background-color: #ffffff30;
+  }
+`
 
 const ExternalLinks = styled.div`
   display: flex;
@@ -278,7 +291,7 @@ const PostTitle = styled.div`
   line-height: 125%;
   
   ${Breakpoint} {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 `
 
