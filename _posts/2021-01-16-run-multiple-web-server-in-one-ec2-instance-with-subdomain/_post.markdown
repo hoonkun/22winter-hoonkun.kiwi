@@ -1,6 +1,6 @@
 ---
 author: GoHoon
-title: 하나의 EC2 인스턴스로 여러 개의 웹 서버를 열고 메인 도메인, 서브 도메인을 각 서버에 연결하기
+title: 하나의 EC2 인스턴스로 여러 웹 서버를 열고 도메인 연결하기
 date: 2021-01-16, 10:36
 categories: [dev,backend]
 ---
