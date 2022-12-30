@@ -3,6 +3,9 @@ author: GoHoon
 title: block-pixel 개발 후기
 date: 2022-06-09, 19:21
 categories: [dev, dev-others]
+expand:
+  max_columns: 2
+  max_rows: 2
 ---
 
 마인크래프트 맵의 일부 데이터를 git을 통해 실시간 버전관리할 수 있는 플러그인 'block-pixel' 의 개발 후기.

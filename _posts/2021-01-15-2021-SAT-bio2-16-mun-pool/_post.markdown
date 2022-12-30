@@ -3,6 +3,9 @@ author: GoHoon
 title: 2021학년도 대수능 생명과학 II 16번 '샤가프의 법칙' 풀이
 date: 2021-01-15, 21:29
 categories: [biology-ii,dna-replication]
+expand:
+  max_columns: 1
+  max_rows: 2
 ---
 2021학년도 수능의 생명과학II 과목에서 16번으로 출제된 DNA 염기계산 문제를 풀어보자. 계산하기가 귀찮다 계산기도 없는데 으,,,   
 <!-- Excerpt -->
