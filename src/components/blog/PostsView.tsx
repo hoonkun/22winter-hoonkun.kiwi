@@ -62,7 +62,6 @@ const PostsView: React.FC<Props> = ({ posts, paginator, requestSplash }) => {
 
 const PostsViewRoot = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

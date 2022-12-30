@@ -20,6 +20,7 @@ import Highlighter from "react-syntax-highlighter"
 import Head from "next/head";
 import { Breakpoint, ScaleBreakpoint } from "../../../styles/globals";
 import MaterialIcon from "../../components/MaterialIcon";
+import { css, Global } from "@emotion/react";
 
 type PostPageProps = {
   post: Post
@@ -55,6 +56,7 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
 
   return (
     <Root>
+      <Global styles={css`body { background-color: #323232 }`}/>
       <PostHead post={pageProps.post}/>
       <PostLimitedWidth>
         <Link href={"/posts/1"}><BackButton i={"arrow_back"}/></Link>
@@ -333,11 +335,8 @@ const PostPreviewImage = styled.img`
 `
 
 const Root = styled.div`
-  background-color: #323232;
-  
   overflow-y: auto;
   overflow-x: hidden;
-  height: 100%;
   
   line-height: 250%;
   
