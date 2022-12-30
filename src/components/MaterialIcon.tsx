@@ -10,6 +10,7 @@ const MaterialIcon: React.FC<{ style?: CSSProperties, className?: string, i: str
 }
 
 const StyledMaterialIcon = styled.span`
+  pointer-events: auto;
   user-select: none;
 `
 

@@ -1,0 +1,114 @@
+[
+  {
+    "name": "biology-ii",
+    "display": "생명과학II",
+    "color": {
+      "dark": "#1976d2",
+      "bright": "#42a5f5"
+    }
+  },
+  {
+    "name": "game",
+    "display": "게임",
+    "color": {
+      "dark": "#43a047",
+      "bright": "#66bb6a"
+    }
+  },
+  {
+    "name": "nichijou",
+    "display": "일상",
+    "color": {
+      "dark": "#fdd835",
+      "bright": "#fdd835"
+    }
+  },
+  {
+    "name": "unnamed",
+    "display": "아무말",
+    "color": {
+      "dark": "#757575",
+      "bright": "#bdbdbd"
+    }
+  },
+  {
+    "name": "dev",
+    "display": "개발",
+    "color": {
+      "dark": "#f4511e",
+      "bright": "#ff7043"
+    }
+  },
+  {
+    "name": "react",
+    "display": "React",
+    "parent": "dev",
+    "color": {
+      "dark": "#f57c00",
+      "bright": "#ffa726"
+    }
+  },
+  {
+    "name": "minecraft-plugin",
+    "display": "마인크래프트 플러그인",
+    "parent": "dev",
+    "color": {
+      "dark": "#009688",
+      "bright": "#26a69a"
+    }
+  },
+  {
+    "name": "group-inheritance",
+    "display": "집단유전",
+    "parent": "biology-ii",
+    "color": {
+      "dark": "#3949ab",
+      "bright": "#3f51b5"
+    }
+  },
+  {
+    "name": "frontend",
+    "display": "프론트엔드",
+    "parent": "dev",
+    "color": {
+      "dark": "#6d4c41",
+      "bright": "#795548"
+    }
+  },
+  {
+    "name": "backend",
+    "display": "백엔드",
+    "parent": "dev",
+    "color": {
+      "dark": "#0288d1",
+      "bright": "#29b6f6"
+    }
+  },
+  {
+    "name": "dna-replication",
+    "display": "DNA 복제",
+    "parent": "biology-ii",
+    "color": {
+      "dark": "#616161",
+      "bright": "#9e9e9e"
+    }
+  },
+  {
+    "name": "dev-others",
+    "display": "기타 개발",
+    "parent": "dev",
+    "color": {
+      "dark": "#f9a825",
+      "bright": "#fbc02d"
+    }
+  },
+  {
+    "name": "codon",
+    "display": "코돈",
+    "parent": "biology-ii",
+    "color": {
+      "dark": "#1565c0",
+      "bright": "#1e88e5"
+    }
+  }
+]

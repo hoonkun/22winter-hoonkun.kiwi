@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
+import { Breakpoint } from "../../styles/globals";
 
 type CircularProgressBarProps = {
-  size: number
   className?: string
 }
 
@@ -17,24 +17,34 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ className, ..
 }
 
 const ProgressBarRoot = styled.div<CircularProgressBarProps>`
-  width: ${({ size }) => size}rem;
-  height: ${({ size }) => size}rem;
+  width: 24px;
+  height: 24px;
   position: relative;
   transform: scale(0.85);
+  
+  ${Breakpoint} {
+    width: 48px;
+    height: 48px;
+  }
 `
 
 const ProgressBarRail = styled.div<CircularProgressBarProps>`
-  width: ${({ size }) => size}rem;
-  height: ${({ size }) => size}rem;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border-style: solid;
-  border-width: 1rem;
+  border-width: 1px;
   border-color: var(--text-color-primary);
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%) scale(0.925);
   opacity: 0.45;
+
+  ${Breakpoint} {
+    width: 48px;
+    height: 48px;
+  }
 `
 
 const ProgressBarAnimation = keyframes`
@@ -47,7 +57,7 @@ const ProgressBarAnimation = keyframes`
 `
 
 const ProgressBarIndicator = styled(ProgressBarRail)`
-  border-width: 3rem;
+  border-width: 3px;
   clip-path: polygon(0 0, 50% 50%, 100% 0);
   animation: ${ProgressBarAnimation} 0.8562s linear infinite;
   transform-origin: 50% 50%;
