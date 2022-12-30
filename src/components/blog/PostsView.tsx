@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import MaterialIcon from "../MaterialIcon";
 import { Breakpoint, not, OverlayOverflow } from "../../../styles/globals";
 import Link from "next/link";
+import { css } from "@emotion/react";
 
 export type PostPaginator = {
   next: () => void
@@ -162,7 +163,7 @@ const PostItemView: React.FC<{ post: Post, categories: Category[], latest: boole
   const PostExcerpt = latest ? LatestPostExcerpt : NormalPostExcerpt
 
   return (
-    <Root>
+    <Root expand={post.expand}>
       <Link href={`/post/${post.key}`}>
         <PreviewContainer style={previewStyle}>
           <LatestPostPreview src={require(`./../../../_posts/${post.key}/preview.png`).default.src} />
@@ -238,7 +239,7 @@ const NormalPostExcerpt = styled(LatestPostExcerpt)`
   }
 `
 
-const LatestPostItemViewRoot = styled.div`
+const LatestPostItemViewRoot = styled.div<{ expand?: { columns: number, rows: number } }>`
   align-self: center;
   justify-self: stretch;
   
@@ -252,10 +253,7 @@ const LatestPostItemViewRoot = styled.div`
       transform: scale(1.05);
       z-index: 100;
     }
-    &:nth-of-type(1) {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
+    ${({ expand }) => expand ? css`grid-column: span ${expand.columns};grid-row: span ${expand.rows};` : ""}
   }
 
   transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1);
@@ -265,9 +263,6 @@ const NormalPostItemViewRoot = styled(LatestPostItemViewRoot)`
   height: 200px;
   
   ${Breakpoint} {
-    grid-row: unset;
-    grid-column: unset;
-
     height: 100%;
   }
 
