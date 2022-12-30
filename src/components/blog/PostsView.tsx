@@ -83,7 +83,7 @@ const PostsViewLimitedWidth = styled.div`
   padding: 40px 20px 20px 20px;
 
   ${Breakpoint} {
-    padding: 80px;
+    padding: 40px;
   }
   
   ${ScaleBreakpoint} {
