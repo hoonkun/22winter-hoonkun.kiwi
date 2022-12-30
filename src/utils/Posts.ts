@@ -36,13 +36,13 @@ export class Posts {
     return Posts.queryset.length
   }
 
-  static list(page?: number): Post[] {
+  static list(page?: number, expand?: boolean): Post[] {
     if (page === 0) throw Error("invalid page: 0. page must be bigger than zero.")
 
     return Posts.queryset
       .let(it => page ? it.slice((page - 1) * config.blog.page_size, page * config.blog.page_size) : it)
       .map(key => Posts.retrieve<RawPost>(key))
-      .let(it => Posts.withExpand(it))
+      .let(it => expand ? Posts.withExpand(it) : it)
   }
 
   private static withExpand(posts: RawPost[]): Post[] {
@@ -110,6 +110,11 @@ export class Posts {
   static previous(key: string): Post | null {
     return Posts.queryset[Posts.queryset.findIndex(it => it === key) + 1]
       .let(it => it ? Posts.retrieve(it) : null)
+  }
+
+  static related(key: string, name: string) {
+    return Posts.list()
+      .filter(it => it.key !== key && it.category[0].name === name).slice(0, 2)
   }
 
 }
