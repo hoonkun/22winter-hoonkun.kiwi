@@ -1,4 +1,7 @@
 declare global {
+  interface ReadonlyArray<T> {
+    random(): T
+  }
   interface Array<T> {
     random(): T
     chunked(size: number): T[][]
@@ -15,6 +18,7 @@ declare global {
     remove(element: T): T[]
     removeAt(index: number): T[]
     shuffle(): T[]
+    associate<T, R>(this: T[], transform: (it: T) => R): Map<T, R>
     get isEmpty(): boolean
     get lastIndex(): number
   }
@@ -33,6 +37,18 @@ declare global {
     takeUnless<T>(this: T, block: (it: T) => boolean): T | null
     pick<T, P extends keyof T>(this: T, ...keys: P[]): Pick<T, P>
     omit<T, P extends keyof T>(this: T, ...keys: P[]): Omit<T, P>
+  }
+}
+
+export class Random {
+  static range(minInclusive: number, maxExclusive: number): number {
+    return minInclusive + Math.random() * (maxExclusive - minInclusive)
+  }
+  static possibility(): number {
+    return Math.random()
+  }
+  static possible(possibility: number): boolean {
+    return Math.random() < possibility
   }
 }
 
@@ -136,6 +152,12 @@ Array.prototype.count = function <T extends Array<T>>(this: T, predicate: (it: T
 
 Array.prototype.distinct = function () {
   return Array.from(new Set(this));
+}
+
+Array.prototype.associate = function <T, R>(this: T[], transform: (it: T) => R) {
+  const result: Map<T, R> = new Map<T, R>()
+  this.forEach(each => result.set(each, transform(each)))
+  return result
 }
 
 safeDefineProperty(Array.prototype, "isEmpty", {
