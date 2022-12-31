@@ -10,10 +10,10 @@ const calculateRatioPosition: (width: number, height: number, input: number, whi
 
   if (which === "x") {
     const reference = windowRatio > BackgroundRatio ? width : height * BackgroundRatio
-    return reference * centered + width / 2
+    return (reference * centered + width / 2) / width * 100
   } else if (which === "y") {
     const reference = windowRatio > BackgroundRatio ? width / BackgroundRatio : height
-    return reference * centered + height / 2
+    return (reference * centered + height / 2) / height * 100
   } else {
     console.error("unknown type of useRatioPosition.calculateRatioPosition")
     return 0

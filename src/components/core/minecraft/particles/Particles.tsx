@@ -62,8 +62,8 @@ function Particles<T extends Particle>({
 
     element.style.width = `${particle.size.width}px`
     element.style.height = `${particle.size.height}px`
-    element.style.left = `${x + particle.offset.x * offsetScale}px`
-    element.style.top = `${y + particle.offset.y * offsetScale}px`
+    element.style.left = `calc(${x}% + ${particle.offset.x * offsetScale}px)`
+    element.style.top = `calc(${y}% + ${particle.offset.y * offsetScale}px)`
 
     element.style.position = "absolute"
     element.style.imageRendering = "pixelated"
