@@ -40,8 +40,6 @@ const Background: React.FC = () => {
         <FlameParticles position={[1125 / BgWidth, 880 / BgHeight]} dimension={dimension}/>
         <SmokeParticles position={[1125 / BgWidth, 880 / BgHeight]} dimension={dimension}/>
         <DrippingLavaParticles position={[1510 / BgWidth, 1037 / BgHeight]} type={"big"} intervalOffset={25} dimension={dimension}/>
-        {/*<DrippingLavaParticles position={[1695 / BgWidth, 1229 / BgHeight]} type={"big"} intervalOffset={25} dimension={dimension}/>*/}
-        {/*<DrippingLavaParticles position={[2172 / BgWidth, 1017 / BgHeight]} type={"small"} intervalOffset={78} dimension={dimension}/>*/}
       </Container>
     </BackgroundRoot>
   )
@@ -66,7 +64,7 @@ const Container = styled.div`
   perspective: 5000px;
   
   ${ParticleScaleBreakpoint} {
-    transform: translate3d(-50%, -50%, 0) scale(1);
+    transform: translate3d(-50%, -50%, 0) scale(2);
   }
 `
 
