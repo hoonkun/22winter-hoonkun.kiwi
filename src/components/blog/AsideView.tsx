@@ -63,7 +63,7 @@ const Overlay = styled.div`
   
   padding: 20px;
   
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
