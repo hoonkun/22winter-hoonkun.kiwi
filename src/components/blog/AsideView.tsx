@@ -3,13 +3,13 @@ import styled from "@emotion/styled";
 import { Breakpoint, ScaleBreakpoint } from "../../../styles/globals";
 
 import ProfilePhotoResource from "./../../resources/images/profile_photo.jpg"
-import BackgroundResource from "./../../resources/images/background_original.jpg"
 import HighlightedLink from "../HighlightedLink";
+import Background from "../core/minecraft/Background";
 
 export const AsideView: React.FC = () => {
   return (
     <Root>
-      <Background src={BackgroundResource.src}/>
+      <Background/>
       <Overlay>
         <AsidePhoto src={ProfilePhotoResource.src}/>
         <AsideTitle>키위새의 아무말 집합소</AsideTitle>
@@ -42,7 +42,7 @@ const Root = styled.div`
     min-width: 225px;
   }
 `
-
+/*
 const Background = styled.img`
   width: 100%;
   height: 100%;
@@ -53,6 +53,7 @@ const Background = styled.img`
   left: 0;
   z-index: 0;
 `
+*/
 
 const Overlay = styled.div`
   width: 100%;
