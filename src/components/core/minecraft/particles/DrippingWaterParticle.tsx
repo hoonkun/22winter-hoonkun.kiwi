@@ -46,7 +46,7 @@ const DrippingWaterParticle: React.FC<{ dimension: [width: number, height: numbe
       <DrippingWaterImage
         ref={particleRef}
         src={"/resources/textures/background/drip_water_fall.png"}
-        style={{top: y, left: x, opacity: 0}}
+        style={{top: `${y}%`, left: `${x}%`, opacity: 0}}
         className={"particle-scale"}
       />
       <TerrainImage src={"/resources/textures/background/bg_outer_water_drip_overlay.png"} alt={""}/>

@@ -37,8 +37,8 @@ const DrippingLavaParticles: React.FC<ParticlesWrapperProps & { type: "big" | "s
     setTimeout(() => element.src = `/resources/textures/background/drip_land.png`, 1000)
 
     const frames: Keyframe[] = [
-      { transform: "translateY(-100vh) scale(1)" },
-      { transform: "translateY(0) scale(1)" }
+      { transform: "translateY(-100vh)" },
+      { transform: "translateY(0)" }
     ]
     element.animate(frames, { duration: 1000, fill: "forwards", easing: "cubic-bezier(0.12, 0, 0.39, 0)" })
 
