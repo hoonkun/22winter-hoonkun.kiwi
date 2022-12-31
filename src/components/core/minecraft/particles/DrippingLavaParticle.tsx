@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import Particles, {
-  DecreasedParticleScale,
   Particle,
   ParticleGenerator,
-  ParticleImg,
-  ParticleProps, ParticleScaleBreakpoint,
   ParticlesWrapperProps
 } from "./Particles";
-import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
 import { Random } from "../../../../utils/KTN";
 
 const DrippingLavaParticleSizes = {
@@ -32,49 +27,30 @@ const DrippingLavaGenerator: ParticleGenerator<DrippingLavaParticleType> = (type
   size: DrippingLavaParticleSizes[type].let(it => ({ width: it, height: it }))
 })
 
-const DrippingLavaParticle: React.FC<ParticleProps<DrippingLavaParticleType>> = ({ particle, style }) => {
-  const [drippingState, setDrippingState] = useState<"fall" | "land">("fall")
-  const [initialWindowHeight] = useState(window.innerHeight)
+const DrippingLavaParticles: React.FC<ParticlesWrapperProps & { type: "big" | "small", intervalOffset: number }> = ({ position, dimension, type, intervalOffset }) => {
 
-  useEffect(() => {
-    const t = setTimeout(() => setDrippingState("land"), 1000)
-    return () => clearTimeout(t)
+  const factory = useCallback((particle: DrippingLavaParticleType) => {
+    const element = document.createElement("img")
+    element.style.filter = `brightness(${particle.brightness})`
+
+    element.src = `/resources/textures/background/drip_fall.png`
+    setTimeout(() => element.src = `/resources/textures/background/drip_land.png`, 1000)
+
+    const frames: Keyframe[] = [
+      { transform: "translateY(-100vh) scale(1)" },
+      { transform: "translateY(0) scale(1)" }
+    ]
+    element.animate(frames, { duration: 1000, fill: "forwards", easing: "cubic-bezier(0.12, 0, 0.39, 0)" })
+
+    return element
   }, [])
 
   return (
-    <DrippingLavaParticleImage
-      style={{
-        ...style,
-        animationDuration: `1000ms`,
-        animationFillMode: `forwards`,
-        animationTimingFunction: `cubic-bezier(0.12, 0, 0.39, 0)`,
-        filter: `brightness(${particle.brightness})`
-      }}
-      windowHeight={initialWindowHeight}
-      src={`/resources/textures/background/drip_${drippingState}.png`}
-    />
-  )
-}
-
-const DrippingLavaParticleAnimation = (size?: number) => keyframes`
-  from { transform: translateY(-100vh) scale(${size ?? 1}); }
-  to { transform: translateY(0) scale(${size ?? 1}); }
-`
-
-const DrippingLavaParticleImage = styled(ParticleImg)<{ windowHeight: number }>`
-  animation-name: ${DrippingLavaParticleAnimation()};
-  ${ParticleScaleBreakpoint} {
-    animation-name: ${DrippingLavaParticleAnimation(DecreasedParticleScale)};
-  }
-`
-
-const DrippingLavaParticles: React.FC<ParticlesWrapperProps & { type: "big" | "small", intervalOffset: number }> = ({ position, dimension, type, intervalOffset }) => {
-  return (
     <Particles
       generator={() => DrippingLavaGenerator(type)}
-      intervals={{ emitter: 400 + intervalOffset, limiter: 200 }}
+      intervals={{ emitter: 400 + intervalOffset }}
       possibilities={{ emitter: 0.035 }}
-      component={DrippingLavaParticle}
+      factory={factory}
       position={position}
       dimension={dimension}
     />

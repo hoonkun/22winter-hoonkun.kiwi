@@ -7,10 +7,10 @@ const ForceFieldSizeSmall = ForceFieldSize * DecreasedParticleScale
 
 const ForceFieldAnimation = (size: number) => keyframes`
   from {
-    transform: scaleX(-1) rotateY(20deg) translate3d(0, 0, 0);
+    transform: scaleX(-1) rotateY(20deg) translate(0, 0);
   }
   to {
-    transform: scaleX(-1) rotateY(20deg) translate3d(-${size}px, -${size}px, 0);
+    transform: scaleX(-1) rotateY(20deg) translate(-${size}px, -${size}px);
   }
 `
 

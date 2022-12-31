@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import Particles, {
-  DecreasedParticleScale,
   Particle,
   ParticleGenerator,
-  ParticleImg,
-  ParticleProps, ParticleScaleBreakpoint,
   ParticlesWrapperProps
 } from "./Particles";
-import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
 
 const ParticleXOffsets = [-2, -1, 0, 1, 2] as const
 const ParticleYOffsets = [-2, -1, 0, 1, 2] as const
@@ -31,52 +26,39 @@ const SmokeGenerator: ParticleGenerator<SmokeParticle> = () => ({
   startsFrom: ParticleStartsFrom.random()
 })
 
-const SmokeParticle: React.FC<ParticleProps<SmokeParticle>> = ({ particle, style }) => {
-  const [image, setImage] = useState(particle.startsFrom)
-
-  useEffect(() => {
-    const i = setInterval(() => {
-      setImage(prevState => prevState === 0 ? 0 : prevState - 1)
-    }, particle.duration / (particle.startsFrom + 1));
-    return () => clearInterval(i)
-  }, [particle.duration, particle.startsFrom])
-
-  return (
-    <SmokeParticleImage
-      style={{ ...style, animationDuration: `${particle.duration}ms`, animationFillMode: `forwards` }}
-      distance={particle.distance}
-      src={`/resources/textures/background/generic_${image}.png`}
-    />
-  )
-}
-
-const SmokeAnimations = ParticleDistances.distinct().associate(it => keyframes`
-  from { transform: translate(-50%, -50%); }
-  to { transform: translate(-50%, calc(-50% - ${it * 100}%)); }
-`)
-
-const DecreasedSmokeAnimations = ParticleDistances.distinct().associate(it => keyframes`
-  from { transform: translate(-50%, -50%) scale(${DecreasedParticleScale}); }
-  to { transform: translate(-50%, calc(-50% - ${it * 100 * DecreasedParticleScale}%)) scale(${DecreasedParticleScale}); }
-`)
-
-const SmokeParticleImage = styled(ParticleImg)<{ distance: number }>`
-  filter: brightness(0);
-  animation-name: ${({ distance }) => SmokeAnimations.get(distance)!};
-  transform-origin: center center;
-  
-  ${ParticleScaleBreakpoint} {
-    animation-name: ${({ distance }) => DecreasedSmokeAnimations.get(distance)!}
-  }
-`
-
 const SmokeParticles: React.FC<ParticlesWrapperProps> = (props) => {
+
+  const factory = useCallback((particle: SmokeParticle) => {
+    // 기본 셋업
+    const element = document.createElement("img")
+    element.style.filter = "brightness(0)"
+
+    // 시간 경과에 따른 파티클 이미지 변경
+    let iteration = particle.startsFrom
+    element.src = `/resources/textures/background/generic_${iteration}.png`
+    const interval: NodeJS.Timeout = setInterval(() => {
+      iteration--
+      if (iteration === 0) return clearInterval(interval)
+      element.src = `/resources/textures/background/generic_${iteration}.png`
+    }, particle.duration / (particle.startsFrom + 1))
+
+    // 애니메이션
+    const frames: Keyframe[] = [
+      { transform: "translate(-50%, -50%)" },
+      { transform: `translate(-50%, calc(-50% - ${particle.distance * 100}%))` }
+    ]
+    element.animate(frames, { easing: "linear", duration: particle.duration, fill: "forwards" })
+
+    // 리턴
+    return element
+  }, [])
+
   return (
     <Particles
       generator={SmokeGenerator}
-      intervals={{ emitter: 200, limiter: 100 }}
+      intervals={{ emitter: 200 }}
       possibilities={{ emitter: 0.075 }}
-      component={SmokeParticle}
+      factory={factory}
       {...props}
     />
   )

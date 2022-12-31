@@ -1,7 +1,8 @@
-import React, { useState, useCallback, useEffect, useRef, CSSProperties } from "react";
+import React, { useCallback, useEffect, useRef, CSSProperties } from "react";
 import styled from "@emotion/styled";
 import { useRatioPosition } from "../useRatioPosition";
 import { Random } from "../../../../utils/KTN";
+import { Times, TimesSkeleton } from "../../../../utils/Times";
 
 export interface Particle {
   created_at: number
@@ -27,71 +28,56 @@ export const DecreasedParticleScale = 0.35
 
 type ParticlesProps<T extends Particle> = {
   generator: () => T
-  intervals: {
-    emitter: number
-    limiter: number
-  }
-  possibilities: {
-    emitter: number
-  }
-  component: React.FC<ParticleProps<T>>
+  intervals: { emitter: number }
+  possibilities: { emitter: number }
   position: [number, number]
   dimension: [number, number]
+  factory: (particle: T) => HTMLElement
 }
 
 function Particles<T extends Particle>({
     generator: generator,
-    intervals: { emitter: emittingInterval, limiter: limitingInterval },
+    intervals: { emitter: emittingInterval },
     possibilities: { emitter: emitPossibility },
-    component: ParticleComponent,
     dimension: [width, height],
-    position: [ratioX, ratioY]
+    position: [ratioX, ratioY],
+    factory
 }: ParticlesProps<T>) {
-  const [particles, setParticles] = useState<T[]>([])
   const [x, y] = useRatioPosition({ width, height, x: ratioX, y: ratioY })
 
-  const generatorLoop = useRef<NodeJS.Timeout | null>(null)
-  const limiterLoop = useRef<NodeJS.Timeout | null>(null)
+  const root = useRef<HTMLDivElement>(null)
+  const { current: time } = useRef<TimesSkeleton>(Times())
 
-  const emitter = useCallback(() => {
+  const loop = useCallback(async () => {
+    if (!root.current) return;
     if (!Random.possible(emitPossibility)) return;
 
-    setParticles(prevState => {
-      if (prevState.length > 2) return prevState;
-      return [...prevState, generator()]
-    })
-  }, [generator, emitPossibility])
+    const particle = generator()
+    const element = factory(particle)
 
-  const limiter = useCallback(() => {
-    const now = new Date().valueOf();
-    setParticles(prevState => {
-      const inAliveState = prevState.filter(it => it.created_at + it.duration > now)
-      if (inAliveState.length === prevState.length) return prevState
-      return inAliveState
-    });
-  }, []);
+    element.style.outline = "none"
+
+    element.style.width = `${particle.size.width}px`
+    element.style.height = `${particle.size.height}px`
+    element.style.left = `${x + particle.offset.x}px`
+    element.style.top = `${y + particle.offset.y}px`
+
+    element.style.position = "absolute"
+    element.style.imageRendering = "pixelated"
+
+    root.current.appendChild(element)
+    element.style.opacity = "0"
+    time.sleep(100).then(() => element.style.opacity = "1")
+    await time.sleep(particle.duration)
+    element.remove()
+  }, [factory, emitPossibility, generator, time, x, y])
 
   useEffect(() => {
-    generatorLoop.current = setInterval(emitter, emittingInterval)
-    limiterLoop.current = setInterval(limiter, limitingInterval)
+    const interval = setInterval(loop, emittingInterval)
+    return () => clearInterval(interval)
+  }, [emittingInterval, loop])
 
-    return () => {
-      if (generatorLoop.current) clearInterval(generatorLoop.current)
-      if (limiterLoop.current) clearInterval(limiterLoop.current)
-    }
-  }, [emitter, limiter, emittingInterval, limitingInterval])
-
-  return (
-    <ParticlesRoot>
-      { particles.map(it =>
-        <ParticleComponent
-          key={`fp_${it.created_at}`}
-          particle={it}
-          style={{ width: it.size.width, height: it.size.height, left: x + it.offset.x, top: y + it.offset.y }}
-        />
-      ) }
-    </ParticlesRoot>
-  )
+  return <ParticlesRoot ref={root}/>
 }
 
 const ParticlesRoot = styled.div`
@@ -105,7 +91,6 @@ const ParticlesRoot = styled.div`
 export const ParticleImg = styled.img`
   position: absolute;
   image-rendering: pixelated;
-  animation-delay: 0.01s;
 `
 
 export default Particles;
