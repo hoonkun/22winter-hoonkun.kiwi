@@ -1,12 +1,7 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
+import React, { useCallback } from "react";
 import Particles, {
-  DecreasedParticleScale,
   Particle,
   ParticleGenerator,
-  ParticleImg,
-  ParticleProps, ParticleScaleBreakpoint,
   ParticlesWrapperProps
 } from "./Particles";
 
@@ -24,43 +19,29 @@ const FlameGenerator: ParticleGenerator<FlameParticleType> = () => ({
   size: ParticleSizes.random().let(it => ({ width: it, height: it })),
 })
 
-const FlameParticle: React.FC<ParticleProps<FlameParticleType>> = ({ particle, style }) => {
-  return (
-    <FlameParticleImg
-      style={{ ...style, animationDuration: `${particle.duration}ms`, animationTimingFunction: `cubic-bezier(0.55, 0, 1, 0.45)`, animationFillMode: `forwards` }}
-      src={"/resources/textures/background/flame.png"}
-    />
-  )
-}
-
-const FlameAnimation = keyframes`
-  0% { transform: translate(-50%, -50%) scale(1); }
-  15% { transform: translate(-50%, -50%) scale(0.925); }
-  100% { transform: translate(-50%, -50%) scale(0); }
-`
-
-const ScaledFlameAnimation = keyframes`
-  0% { transform: translate(-50%, -50%) scale(${DecreasedParticleScale}) }
-  15% { transform: translate(-50%, -50%) scale(${DecreasedParticleScale * 0.925}) }
-  100% { transform: translate(-50%, -50%) scale(0) }
-`
-
-const FlameParticleImg = styled(ParticleImg)`
-  transform-origin: center center;
-  animation-name: ${FlameAnimation};
-  
-  ${ParticleScaleBreakpoint} {
-    animation-name: ${ScaledFlameAnimation};
-  }
-`
-
 const FlameParticles: React.FC<ParticlesWrapperProps> = (props) => {
+
+  const factory = useCallback((particle: FlameParticleType) => {
+    const element = document.createElement("img")
+
+    element.src = "/resources/textures/background/flame.png"
+
+    const frames: Keyframe[] = [
+      { transform: "translate(-50%, -50%) scale(1)", offset: 0 },
+      { transform: "translate(-50%, -50%) scale(0.925)", offset: 0.15 },
+      { transform: "translate(-50%, -50%) scale(0)", offset: 1 }
+    ]
+    element.animate(frames, { easing: "cubic-bezier(0.55, 0, 1, 0.45)", duration: particle.duration, fill: "forwards" })
+
+    return element
+  }, [])
+
   return (
     <Particles
       generator={FlameGenerator}
-      intervals={{ emitter: 600, limiter: 100 }}
+      intervals={{ emitter: 600 }}
       possibilities={{ emitter: 0.125 }}
-      component={FlameParticle}
+      factory={factory}
       {...props}
     />
   )

@@ -63,7 +63,7 @@ const Container = styled.div`
   perspective: 5000px;
   
   ${ParticleScaleBreakpoint} {
-    transform: translate3d(-50%, -50%, 0) scale(2);
+    transform: translate3d(-50%, -50%, 0) scale(1.5);
   }
 `
 
@@ -74,6 +74,7 @@ const Hack = styled.div`
   transform: translate3d(0, 0, 0);
   top: 0;
   left: 0;
+  z-index: 0;
 `
 
 export default Background
