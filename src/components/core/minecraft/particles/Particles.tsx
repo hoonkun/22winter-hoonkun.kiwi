@@ -55,15 +55,21 @@ function Particles<T extends Particle>({
     const particle = generator()
     const element = factory(particle)
 
+    let offsetScale = 1
+    if (typeof window !== "undefined" && window.innerWidth < 840) offsetScale = 0.3
+
     element.style.outline = "none"
 
     element.style.width = `${particle.size.width}px`
     element.style.height = `${particle.size.height}px`
-    element.style.left = `${x + particle.offset.x}px`
-    element.style.top = `${y + particle.offset.y}px`
+    element.style.left = `${x + particle.offset.x * offsetScale}px`
+    element.style.top = `${y + particle.offset.y * offsetScale}px`
 
     element.style.position = "absolute"
     element.style.imageRendering = "pixelated"
+
+    element.classList.add("particle-scale")
+    element.classList.add("particle-position")
 
     root.current.appendChild(element)
     element.style.opacity = "0"

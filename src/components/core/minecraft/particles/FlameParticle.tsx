@@ -8,7 +8,7 @@ import Particles, {
 const ParticleDurations = [1000, 2000, 2000, 2000, 4000, 5000] as const
 const ParticleYOffsets = [-2, -1, 0, 1, 2] as const
 const ParticleXOffsets = [-1, 0, 1] as const
-const ParticleSizes = [10, 15, 15] as const
+const ParticleSizes = [7, 10, 10] as const
 
 interface FlameParticleType extends Particle { }
 

@@ -29,11 +29,9 @@ const SmokeGenerator: ParticleGenerator<SmokeParticle> = () => ({
 const SmokeParticles: React.FC<ParticlesWrapperProps> = (props) => {
 
   const factory = useCallback((particle: SmokeParticle) => {
-    // 기본 셋업
     const element = document.createElement("img")
     element.style.filter = "brightness(0)"
 
-    // 시간 경과에 따른 파티클 이미지 변경
     let iteration = particle.startsFrom
     element.src = `/resources/textures/background/generic_${iteration}.png`
     const interval: NodeJS.Timeout = setInterval(() => {
@@ -42,14 +40,12 @@ const SmokeParticles: React.FC<ParticlesWrapperProps> = (props) => {
       element.src = `/resources/textures/background/generic_${iteration}.png`
     }, particle.duration / (particle.startsFrom + 1))
 
-    // 애니메이션
     const frames: Keyframe[] = [
       { transform: "translate(-50%, -50%)" },
       { transform: `translate(-50%, calc(-50% - ${particle.distance * 100}%))` }
     ]
     element.animate(frames, { easing: "linear", duration: particle.duration, fill: "forwards" })
 
-    // 리턴
     return element
   }, [])
 

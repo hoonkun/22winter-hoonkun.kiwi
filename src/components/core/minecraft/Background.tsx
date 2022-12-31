@@ -8,6 +8,7 @@ import SmokeParticles from "./particles/SmokeParticle";
 import DrippingLavaParticles from "./particles/DrippingLavaParticle";
 import DrippingWaterParticle from "./particles/DrippingWaterParticle";
 import { ParticleScaleBreakpoint } from "./particles/Particles";
+import { css, Global } from "@emotion/react";
 
 const BgWidth = 2560
 const BgHeight = 1600
@@ -30,6 +31,7 @@ const Background: React.FC = () => {
 
   return (
     <BackgroundRoot ref={root}>
+      <Global styles={css`${ParticleScaleBreakpoint} { .particle-scale { scale: 30%; } .particle-position { translate: -20% -3.5%; } }`}/>
       <Container>
         <TerrainImage src={"/resources/textures/background/bg_outer.png"} alt={""}/>
         <Hack><ForceField/></Hack>
@@ -63,7 +65,7 @@ const Container = styled.div`
   perspective: 5000px;
   
   ${ParticleScaleBreakpoint} {
-    transform: translate3d(-50%, -50%, 0) scale(1.5);
+    transform: translate3d(-50%, -50%, 0) scale(2);
   }
 `
 
