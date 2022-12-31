@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Breakpoint, ScaleBreakpoint } from "../../../styles/globals";
+import { Breakpoint, not, ScaleBreakpoint } from "../../../styles/globals";
 
 import ProfilePhotoResource from "./../../resources/images/profile_photo.jpg"
-import HighlightedLink from "../HighlightedLink";
+// import HighlightedLink from "../HighlightedLink";
 import Background from "../core/minecraft/Background";
 
 export const AsideView: React.FC = () => {
@@ -14,7 +14,6 @@ export const AsideView: React.FC = () => {
         <AsidePhoto src={ProfilePhotoResource.src}/>
         <AsideTitle>키위새의 아무말 집합소</AsideTitle>
         <AsideList>{["코딩", "생명과학II", "마인크래프트", "일상"].map(it => <li key={it}>{it}</li>)}</AsideList>
-        <RootPageLink href={"/"} color={"#689f38"}>hoonkun.kiwi</RootPageLink>
       </Overlay>
     </Root>
   )
@@ -69,6 +68,14 @@ const Overlay = styled.div`
   align-items: center;
 
   color: var(--text-color-primary);
+  
+  ${not(Breakpoint)} {
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    align-items: flex-end;
+    
+    min-height: 300px;
+  }
 `
 
 const AsidePhoto = styled.img`
@@ -77,6 +84,10 @@ const AsidePhoto = styled.img`
   border-radius: 50%;
   margin-bottom: 20px;
   border: 4px solid var(--text-color-primary);
+  
+  ${not(Breakpoint)} {
+    display: none;
+  }
 `
 
 const AsideTitle = styled.div`
@@ -85,6 +96,10 @@ const AsideTitle = styled.div`
   text-align: center;
   line-height: 125%;
   word-break: keep-all;
+  
+  ${not(Breakpoint)} {
+    font-size: 28px;
+  }
 `
 
 const AsideList = styled.ul`
@@ -97,6 +112,10 @@ const AsideList = styled.ul`
 
   ${Breakpoint} {
     font-size: 15px;
+  }
+  
+  ${not(Breakpoint)} {
+    margin-bottom: 5px;
   }
   
   & > li {
@@ -113,9 +132,11 @@ const AsideList = styled.ul`
   }
 `
 
+/*
 const RootPageLink = styled(HighlightedLink)`
   margin-top: 15px;
   font-size: 17px;
 `
+*/
 
 export default AsideView
