@@ -2,19 +2,18 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Breakpoint, not, ScaleBreakpoint } from "../../../styles/globals";
 
-import ProfilePhotoResource from "./../../resources/images/profile_photo.jpg"
-// import HighlightedLink from "../HighlightedLink";
 import Background from "../core/minecraft/Background";
+import { BackButton } from "../Buttons";
 
 export const AsideView: React.FC = () => {
   return (
     <Root>
       <Background/>
       <Overlay>
-        <AsidePhoto src={ProfilePhotoResource.src}/>
         <AsideTitle>키위새의 아무말 집합소</AsideTitle>
         <AsideList>{["코딩", "생명과학II", "마인크래프트", "일상"].map(it => <li key={it}>{it}</li>)}</AsideList>
       </Overlay>
+      <ExitButton i={"arrow_back"}/>
     </Root>
   )
 }
@@ -26,6 +25,8 @@ const Root = styled.div`
   height: 35%;
   
   min-height: 300px;
+
+  color: white;
   
   ${Breakpoint} {
     position: fixed;
@@ -41,52 +42,58 @@ const Root = styled.div`
     min-width: 225px;
   }
 `
-/*
-const Background = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-`
-*/
 
 const Overlay = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
+  position: absolute;
   z-index: 5;
   
   padding: 20px;
   
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  color: var(--text-color-primary);
   
-  ${not(Breakpoint)} {
-    flex-direction: column-reverse;
-    justify-content: flex-start;
-    align-items: flex-end;
-    
-    min-height: 300px;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  
+  min-height: 300px;
+  right: 0;
+  bottom: 0;
+  
+  ${Breakpoint} {
+    min-height: unset;
+    right: unset;
+    bottom: unset;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    align-items: center;
   }
 `
 
-const AsidePhoto = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-  border: 4px solid var(--text-color-primary);
-  
-  ${not(Breakpoint)} {
-    display: none;
+const AsideList = styled.ul`
+  list-style-type: none;
+  display: flex;
+  margin: 0 0 5px 0;
+  opacity: 0.75;
+  padding-inline-start: 0;
+  align-items: center;
+
+  ${Breakpoint} {
+    font-size: 15px;
+  }
+
+  & > li {
+    display: flex;
+    align-items: center;
+  }
+
+  & > li:nth-of-type(n+2):before {
+    content: "/";
+    margin: 0 5px;
+    opacity: 0.5;
+    font-size: 10px;
+    display: block;
   }
 `
 
@@ -102,41 +109,10 @@ const AsideTitle = styled.div`
   }
 `
 
-const AsideList = styled.ul`
-  list-style-type: none;
-  display: flex;
-  margin: 0 0 -3px 0;
-  opacity: 0.75;
-  padding-inline-start: 0;
-  align-items: center;
-
-  ${Breakpoint} {
-    font-size: 15px;
-  }
-  
-  ${not(Breakpoint)} {
-    margin-bottom: 5px;
-  }
-  
-  & > li {
-    display: flex;
-    align-items: center;
-  }
-  
-  & > li:nth-of-type(n+2):before {
-    content: "/";
-    margin: 0 5px;
-    opacity: 0.5;
-    font-size: 10px;
-    display: block;
-  }
+const ExitButton = styled(BackButton)`
+  position: absolute;
+  left: 20px;
+  top: 20px;
 `
-
-/*
-const RootPageLink = styled(HighlightedLink)`
-  margin-top: 15px;
-  font-size: 17px;
-`
-*/
 
 export default AsideView
