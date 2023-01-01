@@ -18,6 +18,8 @@ const Background: React.FC = () => {
   const root = useRef<HTMLDivElement>(null)
   const [dimension, setDimension] = useState<[number, number]>([0, 0])
 
+  const [enabled, setEnabled] = useState(false)
+
   useEffect(() => {
     const CurrentRoot = root.current
     if (!CurrentRoot) return;
@@ -29,17 +31,28 @@ const Background: React.FC = () => {
     return () => window.removeEventListener("resize", handler)
   }, [])
 
+  useEffect(() => {
+    const webkit = navigator.userAgent.includes("AppleWebKit")
+    const chrome = navigator.userAgent.includes("CriOS")
+
+    if (!webkit || !chrome) setEnabled(true)
+  }, [])
+
   return (
     <BackgroundRoot ref={root}>
       <Global styles={css`${ParticleScaleBreakpoint} { .particle-scale { scale: 30%; } .particle-position { translate: -35% -35%; } }`}/>
       <Container>
         <TerrainImage src={"/resources/textures/background/bg_outer.png"} alt={""}/>
-        <Hack><ForceField/></Hack>
+        {enabled && <Hack><ForceField/></Hack>}
         <TerrainImage src={"/resources/textures/background/bg_inner.png"} alt={""}/>
-        <DrippingWaterParticle position={[1130 / BgWidth, 488 / BgHeight]} dimension={dimension}/>
-        <FlameParticles position={[1125 / BgWidth, 880 / BgHeight]} dimension={dimension}/>
-        <SmokeParticles position={[1125 / BgWidth, 880 / BgHeight]} dimension={dimension}/>
-        <DrippingLavaParticles position={[1510 / BgWidth, 1037 / BgHeight]} type={"big"} intervalOffset={25} dimension={dimension}/>
+        {enabled &&
+          <>
+            <DrippingWaterParticle position={[1130 / BgWidth, 488 / BgHeight]} dimension={dimension}/>
+            <FlameParticles position={[1125 / BgWidth, 880 / BgHeight]} dimension={dimension}/>
+            <SmokeParticles position={[1125 / BgWidth, 880 / BgHeight]} dimension={dimension}/>
+            <DrippingLavaParticles position={[1510 / BgWidth, 1037 / BgHeight]} type={"big"} intervalOffset={25} dimension={dimension}/>
+          </>
+        }
       </Container>
     </BackgroundRoot>
   )
