@@ -9,7 +9,8 @@ export default function Document() {
               integrity="sha384-KiWOvVjnN8qwAZbuQyWDIbfCLFhLXNETzBQjA/92pIowpC0d2O3nppDGQVgwd2nB"
               crossOrigin="anonymous"/>
 
-        <link rel="icon" href="favicon.png"/>
+        <link rel="icon" href="/favicon.png"/>
+        <meta name="theme-color" content="#000000" />
       </Head>
       <body>
       <Main />

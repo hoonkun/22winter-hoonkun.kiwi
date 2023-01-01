@@ -19,8 +19,8 @@ import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import Highlighter from "react-syntax-highlighter"
 import Head from "next/head";
 import { Breakpoint, ScaleBreakpoint } from "../../../styles/globals";
-import MaterialIcon from "../../components/MaterialIcon";
 import { css, Global } from "@emotion/react";
+import { BackButton } from "../../components/Buttons";
 
 type PostPageProps = {
   post: Post
@@ -161,17 +161,6 @@ const PostHead: React.FC<{ post: Post }> = ({ post }) => {
 }
 
 const Comments = styled.div``
-
-const BackButton = styled(MaterialIcon)`
-  margin-bottom: 20px;
-  margin-top: -5px;
-  margin-left: -5px;
-  padding: 5px;
-  border-radius: 4px;
-  &:hover {
-    background-color: #ffffff30;
-  }
-`
 
 const ExternalLinks = styled.div`
   display: flex;
