@@ -49,7 +49,7 @@ const DrippingLavaParticles: React.FC<ParticlesWrapperProps & { type: "big" | "s
     <Particles
       generator={() => DrippingLavaGenerator(type)}
       intervals={{ emitter: 400 + intervalOffset }}
-      possibilities={{ emitter: 0.035 }}
+      possibilities={{ emitter: 0.03 }}
       factory={factory}
       position={position}
       dimension={dimension}
