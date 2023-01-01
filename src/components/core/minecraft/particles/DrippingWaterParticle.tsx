@@ -27,11 +27,11 @@ const DrippingWaterParticle: React.FC<{ dimension: [width: number, height: numbe
       { transform: "translateY(0) scale(1)", offset: 0.6666, easing: "cubic-bezier(0.12, 0, 0.39, 0)" },
       { transform: "translateY(100vh) scale(1)", offset: 1, easing: "cubic-bezier(0.12, 0, 0.39, 0)" },
     ], { duration: DrippingWaterAnimationDuration, fill: "forwards" })
-    await time.current.sleep(100)
+    if (!await time.current.sleep(100)) return
     particleRef.current.style.opacity = "1"
-    await time.current.sleep(DrippingWaterAnimationDuration)
+    if (!await time.current.sleep(DrippingWaterAnimationDuration)) return
     particleRef.current.style.opacity = "0"
-    await time.current.sleep(Random.range(4000, 6000))
+    if (!await time.current.sleep(Random.range(4000, 10000))) return
 
     animating.current = false
   }, [])
@@ -40,6 +40,8 @@ const DrippingWaterParticle: React.FC<{ dimension: [width: number, height: numbe
     const looper = setInterval(loop, 300);
     return () => clearInterval(looper)
   }, [loop])
+
+  useEffect(() => () => time.current.interrupt())
 
   return (
     <>

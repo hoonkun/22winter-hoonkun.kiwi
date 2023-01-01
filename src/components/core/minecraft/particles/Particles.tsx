@@ -73,8 +73,8 @@ function Particles<T extends Particle>({
 
     root.current.appendChild(element)
     element.style.opacity = "0"
-    time.sleep(100).then(() => element.style.opacity = "1")
-    await time.sleep(particle.duration)
+    time.sleep(100).then(wake => wake && (element.style.opacity = "1"))
+    if (!await time.sleep(particle.duration)) return
     element.remove()
   }, [factory, emitPossibility, generator, time, x, y])
 
