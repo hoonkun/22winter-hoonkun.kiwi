@@ -4,6 +4,7 @@ import { Breakpoint, not, ScaleBreakpoint } from "../../../styles/globals";
 
 import Background from "../core/minecraft/Background";
 import { BackButton } from "../Buttons";
+import Link from "next/link";
 
 export const AsideView: React.FC = () => {
   return (
@@ -13,7 +14,7 @@ export const AsideView: React.FC = () => {
         <AsideTitle>키위새의 아무말 집합소</AsideTitle>
         <AsideList>{["코딩", "생명과학II", "마인크래프트", "일상"].map(it => <li key={it}>{it}</li>)}</AsideList>
       </Overlay>
-      <ExitButton i={"arrow_back"}/>
+      <Link href={"/"}><ExitButton i={"arrow_back"}/></Link>
     </Root>
   )
 }
