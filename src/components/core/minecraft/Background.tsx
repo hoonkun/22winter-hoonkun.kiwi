@@ -9,6 +9,9 @@ import DrippingLavaParticles from "./particles/DrippingLavaParticle";
 import DrippingWaterParticle from "./particles/DrippingWaterParticle";
 import { ParticleScaleBreakpoint } from "./particles/Particles";
 import { css, Global } from "@emotion/react";
+import { SplashView } from "../../SplashView";
+import { Breakpoint, not } from "../../../../styles/globals";
+import { Times } from "../../../utils/Times";
 
 const BgWidth = 2560
 const BgHeight = 1600
@@ -20,6 +23,8 @@ const Background: React.FC = () => {
 
   const [enabled, setEnabled] = useState(false)
 
+  const [ready, setReady] = useState(false)
+
   useEffect(() => {
     const CurrentRoot = root.current
     if (!CurrentRoot) return;
@@ -29,6 +34,12 @@ const Background: React.FC = () => {
 
     window.addEventListener("resize", handler)
     return () => window.removeEventListener("resize", handler)
+  }, [])
+
+  useEffect(() => {
+    Times()
+      .until(new Image().also(it => it.src = "/resources/textures/background/bg_inner.png"), "load")
+      .then(() => setReady(true))
   }, [])
 
   useEffect(() => {
@@ -54,6 +65,7 @@ const Background: React.FC = () => {
           </>
         }
       </Container>
+      <BackgroundSplash active={!ready}/>
     </BackgroundRoot>
   )
 }
@@ -63,6 +75,10 @@ const BackgroundRoot = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
+  
+  ${not(Breakpoint)} {
+    z-index: 0;
+  }
 `
 
 const Container = styled.div`
@@ -89,6 +105,10 @@ const Hack = styled.div`
   top: 0;
   left: 0;
   z-index: 0;
+`
+
+const BackgroundSplash = styled(SplashView)`
+  position: absolute;
 `
 
 export default Background

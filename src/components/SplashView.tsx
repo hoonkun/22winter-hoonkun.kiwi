@@ -2,9 +2,9 @@ import React from "react";
 import styled from "@emotion/styled";
 import { css, keyframes } from "@emotion/react";
 
-export const SplashView: React.FC<{ active: boolean, translucent?: boolean }> = ({ active, translucent }) => {
+export const SplashView: React.FC<{ className?: string, active: boolean, translucent?: boolean }> = ({ className, active, translucent }) => {
   return (
-    <Splash active={active} translucent={translucent ?? false}>
+    <Splash active={active} translucent={translucent ?? false} className={className}>
       <LoadingParent><div/></LoadingParent>
     </Splash>
   )
@@ -59,7 +59,7 @@ const LoadingParent = styled.div`
   width: 2px;
   height: 100px;
   background-color: #ffffff40;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
