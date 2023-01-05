@@ -1,4 +1,4 @@
-import React, { createElement, Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { createElement, Fragment, useEffect, useRef, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Post, Posts, PostWithContent } from "../../utils/Posts";
 import styled from "@emotion/styled";
@@ -56,7 +56,7 @@ const PostPage: NextPage<PostPageProps> = pageProps => {
       .then(file => setPostContent(file.result))
   }, [content, key])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if ((comments.current?.childNodes.length ?? 0) > 0) return
 
     const script = document.createElement("script")
