@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, CSSProperties } from "react";
 import styled from "@emotion/styled";
 import { useRatioPosition } from "../useRatioPosition";
-import { Random } from "../../../../utils/KTN";
+import { Random } from "../../../../utils/ktn";
 import { Times, TimesSkeleton } from "../../../../utils/Times";
 
 export interface Particle {

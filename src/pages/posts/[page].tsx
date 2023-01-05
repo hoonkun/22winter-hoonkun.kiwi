@@ -1,6 +1,6 @@
 import { Post, Posts } from "../../utils/Posts";
 import config from "../../config";
-import { ArrayK } from "../../utils/KTN";
+import { ArrayK } from "../../utils/ktn";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import PostsView, { PostPaginator } from "../../components/blog/PostsView";
 import { useCallback, useEffect, useMemo, useState } from "react";

@@ -1,4 +1,4 @@
-import "../utils/KTN";
+import "../utils/ktn";
 import "../utils/String";
 
 import '../../styles/globals.css'
