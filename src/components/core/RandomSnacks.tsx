@@ -2,7 +2,7 @@ import React, { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo
 import { uuid4 } from "../../utils/UUID";
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { ArrayK } from "../../utils/KTN";
+import { ArrayK } from "../../utils/ktn";
 
 
 const EmptyLambda: (...args: any[]) => any = () => {}

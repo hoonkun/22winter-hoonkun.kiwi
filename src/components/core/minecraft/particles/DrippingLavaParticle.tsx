@@ -4,7 +4,7 @@ import Particles, {
   ParticleGenerator,
   ParticlesWrapperProps
 } from "./Particles";
-import { Random } from "../../../../utils/KTN";
+import { Random } from "../../../../utils/ktn";
 
 const DrippingLavaParticleSizes = {
   "big": 35,

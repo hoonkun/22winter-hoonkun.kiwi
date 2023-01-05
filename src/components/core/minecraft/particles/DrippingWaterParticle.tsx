@@ -4,7 +4,7 @@ import { useRatioPosition } from "../useRatioPosition";
 import styled from "@emotion/styled";
 import TerrainImage from "../TerrainImage";
 import { Times } from "../../../../utils/Times";
-import { Random } from "../../../../utils/KTN";
+import { Random } from "../../../../utils/ktn";
 
 const DrippingWaterAnimationDuration = 6000
 

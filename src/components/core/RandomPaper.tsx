@@ -1,7 +1,7 @@
 import React, { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Times } from "../../utils/Times";
 import styled from "@emotion/styled";
-import { EmptyFunction } from "../../utils/KTN";
+import { EmptyFunction } from "../../utils/ktn";
 import { paper } from "../../random";
 import { Breakpoint } from "../../../styles/globals";
 

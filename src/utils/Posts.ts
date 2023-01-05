@@ -2,7 +2,7 @@ import fs from "fs";
 import matter from 'gray-matter';
 
 import config from "../config";
-import { ArrayK } from "./KTN";
+import { ArrayK } from "./ktn";
 import { Categories, Category } from "./Categories";
 
 export type PostMetadata = {
