@@ -1,7 +1,7 @@
 ---
 author: GoHoon
 title: JS 주화입마
-date: 2022-01-05, 16:51
+date: 2023-01-05, 16:51
 categories: [dev, frontend]
 ---
 > 이 게시글에는 약팔이가 일부 포함되어있을 수 있습니다.

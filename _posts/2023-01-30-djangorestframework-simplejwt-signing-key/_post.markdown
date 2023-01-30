@@ -1,7 +1,7 @@
 ---
 author: GoHoon
 title: 장고 서버의 SimpleJWT SIGNING_KEY
-date: 2022-01-30, 09:15
+date: 2023-01-30, 09:15
 categories: [dev, backend]
 ---
 동일 소스를 기반으로 SimpleJWT를 사용하는 여러 장고 서버를 운용할 때 주의할 점에 대해 알아보자.  
