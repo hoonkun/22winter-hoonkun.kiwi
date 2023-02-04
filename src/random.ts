@@ -6,6 +6,13 @@ type Random = {
 
 const Randoms: Random[] = [
   // { text: "", image: "", duration: 0 },
+  { text: "이전에 힘 92짜리 계정 데이터를\n한 번 날린 적이 있었습니다.", image: "dungeons-data-loss.png", duration: 4500 },
+  { text: "도전과제는 귀찮은 것이에요.", image: "dungeons-achievements.png", duration: 3000 },
+  { text: "난 네가 싫어.", image: "dungeons-i-hate-you-1.png", duration: 3000 },
+  { text: "난 네가 싫어.", image: "dungeons-i-hate-you-2.png", duration: 3000 },
+  { text: "난 네가 싫어.", image: "dungeons-i-hate-you-3.png", duration: 3000 },
+  { text: "마인크래프트 던전스 복귀했습니다!", image: "dungeons-1.png", duration: 3000 },
+  { text: "마인크래프트 던전스 복귀했습니다!", image: "dungeons-2.png", duration: 3000 },
   { text: "수능 과탐은 생물 I과 생물 II를 봤습니다.\n그치만 생물이 재미있는걸요!", image: "sat-biology.jpg", duration: 4000 },
   { text: "실물 마인크래프트 블럭을 만드는 취미가 있습니다.", image: "real-block.jpg", duration: 3500 },
   { text: "카메라에 취미를 두었던 친구가 있었습니다.\n잘 지내고 있었으면 좋겠네요.", image: "friend.jpg", duration: 4000 },
