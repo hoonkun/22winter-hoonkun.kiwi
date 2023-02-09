@@ -511,7 +511,7 @@ const RandomButton = styled(MaterialIcon)<{ clickable?: boolean, disabled?: bool
   ${Breakpoint} {
     font-size: 48px;
     margin-right: ${({ margin }) => margin ? 16 : 0}px;
-    ${({ disabled }) => disabled ? "" : css`
+    ${({ disabled, clickable }) => !clickable || disabled ? "" : css`
       &:hover {
         background-color: #ffffff30;
         border-radius: 6px;
