@@ -1,4 +1,4 @@
-import { CSSProperties, UIEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NextPage } from "next";
 import styled from "@emotion/styled";
 import { css, Global } from "@emotion/react";
@@ -10,9 +10,8 @@ import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import CircularProgressBar from "../components/CircularProgressBar";
 import Actionbar from "../components/home/Actionbar";
-import { useRouter } from "next/router";
 
-import { Breakpoint, FullFixed, HideScrollbar } from "../../styles/globals";
+import { Breakpoint, FullFixed } from "../../styles/globals";
 
 import BackgroundResource from "../resources/images/background_original.jpg"
 import ProfilePhotoResource from "../resources/images/profile_photo.jpg"
@@ -26,9 +25,6 @@ const Home: NextPage = () => {
   const scrollable = useRef<HTMLDivElement>(null)
   const backdrop = useRef<HTMLDivElement>(null)
   const actionbar = useRef<HTMLDivElement>(null)
-
-  const { query: { paths } } = useRouter()
-  const page = useMemo(() => paths?.[1] ? parseInt(paths[1]) : null, [paths])
 
   const [[windowWidth, windowHeight], setWindowDimension]
     = useState<[number, number]>([-1, -1])
@@ -55,37 +51,6 @@ const Home: NextPage = () => {
     [dp]
   );
 
-  const applyBackdrop = useCallback((position: number) => {
-    if (!backdrop.current) return
-    const width = window.innerWidth
-    const ratio = (width - position).absolute / width
-
-    const style = backdrop.current.style as any
-    const filter = `blur(${ratio * 20}px) brightness(${(1 - ratio * 0.8)})`
-    style.backdropFilter = filter
-    style.webkitBackdropFilter = filter
-  }, [])
-
-  const applyActionbar = useCallback((position: number) => {
-    if (!actionbar.current) return
-
-    const width = window.innerWidth
-    const ratio = (((width - position).absolute / width).coerceIn(0.8, 1) - 0.8) / 0.2
-    const style = actionbar.current.style
-    style.transform = `translate(-50%, ${(ratio - 1) * 100}%)`
-  }, [])
-
-  const onScroll = useCallback<UIEventHandler<HTMLDivElement>>(event => {
-    const position = event.currentTarget.scrollLeft
-
-    applyBackdrop(position)
-    applyActionbar(position)
-  }, [applyBackdrop, applyActionbar])
-
-  const toAboutSection = useCallback(() => {
-    scrollable.current?.scrollTo({ left: 0, behavior: "smooth" })
-  }, [])
-
   const toMainSection = useCallback(() => {
     scrollable.current?.scrollTo({ left: window.innerWidth, behavior: "smooth" })
   }, [])
@@ -106,71 +71,66 @@ const Home: NextPage = () => {
   return (
     <>
       <Global styles={css`html, body { overflow: hidden; position: fixed; height: calc(100% - 1px); } #__next { height: 100%; }`}/>
-      <SnappedScroll ref={scrollable} scrollable={!page} onScroll={onScroll} style={{ overflow: "hidden" }}>
-        <About/>
-        <DummyOverlay>
-          <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
-            <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
-            <BackdropFilterer style={backgroundFilter} zIndex={5}/>
-            <Container>
-              <OverArea>
-                <OverLinks>
-                  <Link href={"/posts/1"}>아무말 집합소 &nbsp; <LinkArrow i={"arrow_forward"}/></Link>
-                  {/*<div onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</div>*/}
-                </OverLinks>
-                <OverText>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverText>
-              </OverArea>
-              <MiddleArea>
-                <MiddleContent>
-                  <Row>
-                    <ProfilePhotoContainer><ProfilePhoto src={ProfilePhotoResource.src}/></ProfilePhotoContainer>
-                    <ProfileInfo>
-                      <ProfileIdentifiers>
-                        <ProfileNickname>극지대 키위새</ProfileNickname>
-                        <ProfileName>한고훈</ProfileName>
-                        <Spacer grow/>
-                        <ProfileMail href="mailto:herokun.user@gmail.com">@</ProfileMail>
-                      </ProfileIdentifiers>
-                      <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
-                      <ProfileLinks>
-                        <HighlightedLink color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
-                        <HighlightedLink color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
-                        <HighlightedLink color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
-                        <HighlightedLink color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
-                      </ProfileLinks>
-                    </ProfileInfo>
-                  </Row>
-                </MiddleContent>
-              </MiddleArea>
-              <MiddleArea sub>
-                <MiddleContent narrow align2end>
-                  <Code>
-                    <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
-                    <Green>&quot;/api/random&quot;</Green>, Fetchers.<Purple>Get</Purple>) {"}"}
-                  </Code>
-                </MiddleContent>
-              </MiddleArea>
-              <BelowArea>
-                <BelowAreaContainer>
-                  <RandomButton i={"arrow_forward"} margin/>
-                  {!loading ?
-                    <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
-                    <CircularProgressBar/>
-                  }
-                </BelowAreaContainer>
-              </BelowArea>
-            </Container>
-            <RandomPaper
-              controller={paper}
-              backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
-              onLoading={setLoading}
-              loading={loading}
-              onPaperShow={setPaperShowing}
-            />
-          </Root>
-        </DummyOverlay>
-        <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
-      </SnappedScroll>
+      <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
+        <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
+        <BackdropFilterer style={backgroundFilter} zIndex={5}/>
+        <Container>
+          <OverArea>
+            <OverLinks>
+              <Link href={"/posts/1"}>아무말 집합소 &nbsp; <LinkArrow i={"arrow_forward"}/></Link>
+              {/*<div onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</div>*/}
+            </OverLinks>
+            <OverText>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverText>
+          </OverArea>
+          <MiddleArea>
+            <MiddleContent>
+              <Row>
+                <ProfilePhotoContainer><ProfilePhoto src={ProfilePhotoResource.src}/></ProfilePhotoContainer>
+                <ProfileInfo>
+                  <ProfileIdentifiers>
+                    <ProfileNickname>극지대 키위새</ProfileNickname>
+                    <ProfileName>한고훈</ProfileName>
+                    <Spacer grow/>
+                    <ProfileMail href="mailto:herokun.user@gmail.com">@</ProfileMail>
+                  </ProfileIdentifiers>
+                  <ProfileMessage>재미있어보이는 것들을 살펴보는 햇병아리 개발자</ProfileMessage>
+                  <ProfileLinks>
+                    <HighlightedLink color="#ffb300" href="https://unstabler.pl">Team Unstablers</HighlightedLink>
+                    <HighlightedLink color="#dedede" href="https://github.com/hoonkun">GitHub</HighlightedLink>
+                    <HighlightedLink color="#1d9bf0" href="https://twitter.com/arctic_apteryx">Twitter</HighlightedLink>
+                    <HighlightedLink color="#595aff" href="https://twingyeo.kr/@hoon_kiwicraft" rel="me">Mastodon</HighlightedLink>
+                  </ProfileLinks>
+                </ProfileInfo>
+              </Row>
+            </MiddleContent>
+          </MiddleArea>
+          <MiddleArea sub>
+            <MiddleContent narrow align2end>
+              <Code>
+                <Orange>val</Orange> random = KiwiRandom {"{"} <Gold><i>fetch</i></Gold>(
+                <Green>&quot;/api/random&quot;</Green>, Fetchers.<Purple>Get</Purple>) {"}"}
+              </Code>
+            </MiddleContent>
+          </MiddleArea>
+          <BelowArea>
+            <BelowAreaContainer>
+              <RandomButton i={"arrow_forward"} margin/>
+              {!loading ?
+                <RandomButton disabled={paperShowing} i={"casino"} clickable onClick={() => paper.current.make()}/> :
+                <CircularProgressBar/>
+              }
+            </BelowAreaContainer>
+          </BelowArea>
+        </Container>
+        <RandomPaper
+          controller={paper}
+          backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
+          onLoading={setLoading}
+          loading={loading}
+          onPaperShow={setPaperShowing}
+        />
+      </Root>
+      <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
       <Actionbar ref={actionbar} onNavigateBack={toMainSection}/>
       <SplashView active={windowWidth < 0 || windowHeight < 0}/>
     </>
@@ -182,9 +142,9 @@ const Root = styled.div`
   top: 0;
   left: 0;
   overflow: hidden;
-  pointer-events: none;
 `
 
+/*
 const SnappedScroll = styled.div<{ scrollable: boolean }>`
   font-family: "IBM Plex Sans KR", sans-serif;
   
@@ -222,8 +182,7 @@ const PostsContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `
-
-const About = PostsContainer;
+*/
 
 const Row = styled.div`
   display: flex;
