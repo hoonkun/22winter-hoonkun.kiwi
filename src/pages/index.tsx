@@ -9,7 +9,6 @@ import Spacer from "../components/Spacer";
 import MaterialIcon from "../components/MaterialIcon";
 import RandomPaper, { createPaperController } from "../components/core/RandomPaper";
 import CircularProgressBar from "../components/CircularProgressBar";
-import Actionbar from "../components/home/Actionbar";
 
 import { Breakpoint, FullFixed } from "../../styles/globals";
 
@@ -23,8 +22,6 @@ const BackgroundRatio = BackgroundResource.width / BackgroundResource.height
 const Home: NextPage = () => {
 
   const scrollable = useRef<HTMLDivElement>(null)
-  const backdrop = useRef<HTMLDivElement>(null)
-  const actionbar = useRef<HTMLDivElement>(null)
 
   const [[windowWidth, windowHeight], setWindowDimension]
     = useState<[number, number]>([-1, -1])
@@ -51,8 +48,12 @@ const Home: NextPage = () => {
     [dp]
   );
 
-  const toMainSection = useCallback(() => {
-    scrollable.current?.scrollTo({ left: window.innerWidth, behavior: "smooth" })
+  const paperShown = useCallback(() => {
+    setPaperShowing(true);
+  }, [])
+
+  const paperHidden = useCallback(() => {
+    setPaperShowing(false);
   }, [])
 
   useEffect(() => {
@@ -72,13 +73,12 @@ const Home: NextPage = () => {
     <>
       <Global styles={css`html, body { overflow: hidden; position: fixed; height: calc(100% - 1px); } #__next { height: 100%; }`}/>
       <Root style={{ display: windowWidth < 0 || windowHeight < 0 ? "none" : "block" }}>
-        <Background fillMode={backgroundFillMode} src={BackgroundResource.src}/>
+        <Background fillMode={backgroundFillMode} src={BackgroundResource.src} paperShowing={paperShowing}/>
         <BackdropFilterer style={backgroundFilter} zIndex={5}/>
-        <Container>
+        <Container paperShowing={paperShowing}>
           <OverArea>
             <OverLinks>
               <Link href={"/posts/1"}>아무말 집합소 &nbsp; <LinkArrow i={"arrow_forward"}/></Link>
-              {/*<div onClick={toAboutSection}>〈 &nbsp; 키위새에 대해 &nbsp;</div>*/}
             </OverLinks>
             <OverText>Photo by hoonkun in ≒ [37.523, 127.042] at {"'"}17.03.01</OverText>
           </OverArea>
@@ -122,16 +122,14 @@ const Home: NextPage = () => {
             </BelowAreaContainer>
           </BelowArea>
         </Container>
-        <RandomPaper
-          controller={paper}
-          backgroundRender={<Background fillMode={backgroundFillMode} src={BackgroundResource.src} fixed overlay/>}
-          onLoading={setLoading}
-          loading={loading}
-          onPaperShow={setPaperShowing}
-        />
       </Root>
-      <BackdropFilterer zIndex={10} ref={backdrop} fixed/>
-      <Actionbar ref={actionbar} onNavigateBack={toMainSection}/>
+      <RandomPaper
+        controller={paper}
+        loading={loading}
+        onLoading={setLoading}
+        onPaperShow={paperShown}
+        onPaperHide={paperHidden}
+      />
       <SplashView active={windowWidth < 0 || windowHeight < 0}/>
     </>
   )
@@ -139,50 +137,10 @@ const Home: NextPage = () => {
 
 const Root = styled.div`
   ${FullFixed};
+  height: 100%;
   top: 0;
   left: 0;
-  overflow: hidden;
 `
-
-/*
-const SnappedScroll = styled.div<{ scrollable: boolean }>`
-  font-family: "IBM Plex Sans KR", sans-serif;
-  
-  ${FullFixed};
-  ${HideScrollbar};
-  scroll-snap-type: x mandatory;
-  display: flex;
-  
-  & > div { flex-shrink: 0; }
-  
-  overflow: ${({ scrollable }) => scrollable ? "overlay" : "hidden"};
-  
-  ${Breakpoint} {
-    overflow: hidden;
-  }
-`
-
-const DummyOverlay = styled.div`
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  pointer-events: auto;
-  position: relative;
-  scroll-snap-align: center;
-  scroll-snap-stop: always;
-`
-
-const PostsContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 15;
-  scroll-snap-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-*/
 
 const Row = styled.div`
   display: flex;
@@ -203,24 +161,29 @@ const BackdropFilterer = styled.div<{ zIndex: number, fixed?: boolean }>`
   pointer-events: none;
 `
 
-const Background = styled.img<{ fillMode: "width" | "height", fixed?: boolean, overlay?: boolean }>`
-  position: ${({ fixed }) => fixed ? "fixed" : "absolute"};
-  z-index: ${({ overlay }) => overlay ? 1 : 0};
+const Background = styled.img<{ fillMode: "width" | "height", paperShowing: boolean }>`
+  position: absolute;
+  z-index: 0;
   ${({ fillMode }) => fillMode}: 100%;
-  ${({ overlay }) => overlay ? css`filter: blur(3px);` : ""}
   top: 50%;
   left: 50%;
   transform-origin: 50% 50%;
   transform: translate(-50%, -50%) scale(1.3) translateX(-80px);
+
+  transition: filter ${({ paperShowing }) => paperShowing ? 0.25 : 0.5}s linear;
+  ${({ paperShowing }) => paperShowing ? css`filter: brightness(0.5);` : css`filter: none;`}
 `
 
-const Container = styled(Column)`
+const Container = styled(Column)<{ paperShowing: boolean }>`
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
   position: relative;
   z-index: 10;
+
+  transition: filter ${({ paperShowing }) => paperShowing ? 0.25 : 0.5}s linear;
+  ${({ paperShowing }) => paperShowing ? css`filter: blur(16px) brightness(0.5);` : css`filter: none;`}
 `
 
 const SurroundingArea = styled(Column)`
