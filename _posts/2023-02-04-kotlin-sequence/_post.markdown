@@ -42,10 +42,10 @@ val lengths = words
   
 print(lengths)
 ```
-Collection(Iterable 확장)을 확장하는 List로 `filter`, `map` 을 진행하고 앞의 4개를 가져오는 문장이다.  
+Collection(Iterable 확장)을 확장하는 List로 `filter`, `map` 을 진행하고 앞의 2개를 가져오는 문장이다.  
 위의 코드는 아래의 순서로 진행된다:
 1. 모든 요소에 대해 길이가 4가 넘는지 확인하여, 4가 넘는 것들만 포함된 중간 결과(`[solving, BiologyII, problems, korean, school, curriculum]`)를 만든다.
-2. 모든 요소에 대해 length를 구하여 변환된 중간 결과(`[7, 9, 8, 6, 6, 10]`)를 만든다.
+2. 1에서 나온 중간 결과의 모든 요소에 대해 length를 구하여 변환된 중간 결과(`[7, 9, 8, 6, 6, 10]`)를 만든다.
 3. 2개로 자른 최종 결과(`[7, 9]`)를 만든다.
 
 그러므로 `.take(2)`까지 진행되고 나면 이미 `lengths` 에는 완성된 List가 저장되어있다.
