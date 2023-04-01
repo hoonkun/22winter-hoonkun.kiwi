@@ -1,7 +1,7 @@
 ---
 author: GoHoon
 title: Arctic-Midi2McFunction 개발 후기
-date: 2023-03-208, 18:34
+date: 2023-03-08, 18:34
 categories: [dev, dev-others]
 ---
 
