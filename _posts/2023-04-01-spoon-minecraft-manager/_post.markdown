@@ -6,7 +6,7 @@ categories: [dev, dev-others]
 ---
 > 마인크래프트 서버는 바닐라/Paper/Spigot 등의 여러 종류가 있는데, 이번 글에서는 Spigot을 사용해 구현했음을 알린다.   
 > 아래에 적혀있는 코드들은 글에 적기 쉽도록 수정하거나 의사코드를 Kotlin 코드로 수동으로 작성한 것이므로 컴파일 에러가 나거나, 일부가 빠져있을 수도 있다.   
-> 따라서 전체 코드를 구경하고싶다면 [여기(GitHub)](https://)에서 확인하시길 바란다...
+> 따라서 전체 코드를 구경하고싶다면 [여기(GitHub)](https://github.com/hoonkun/spoon.minecraft-nested-server)에서 확인하시길 바란다...
 
 웹 페이지에 현재 열려있는 마인크래프트 서버의 특정 위치 지도를 띄워보자!
 <!-- Excerpt -->
