@@ -363,6 +363,8 @@ const LatestPostPreviewContainer = styled.div`
   width: 100%;
   aspect-ratio: 4 / 2.5;
   position: relative;
+
+  overflow: hidden;
   
   cursor: pointer;
   
@@ -379,6 +381,8 @@ const NormalPostPreviewContainer = styled(LatestPostPreviewContainer)`
   width: unset;
   aspect-ratio: unset;
   height: 100%;
+
+  overflow: hidden;
   
   ${Breakpoint} {
     border: none;
@@ -390,7 +394,8 @@ const LatestPostPreview = styled.img`
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: brightness(0.3);
+  filter: brightness(0.3) blur(10px);
+  transform: scale(1.1);
 `
 
 const LatestPostPreviewOverlay = styled.div`

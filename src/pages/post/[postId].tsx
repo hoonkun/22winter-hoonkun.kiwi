@@ -374,6 +374,7 @@ const Root = styled.div`
 
   h1, h2, h3, h4, h5, h6 {
     color: #FFFFFF;
+    margin: 40px 0 10px 0;
   }
 
   .math-inline {
@@ -405,29 +406,36 @@ const Root = styled.div`
     font-size: 13px;
     line-height: 150%;
   }
+  
+  pre:has(+ blockquote) > pre {
+    margin: 0 !important;
+    border-radius: 5px 5px 0 0;
+    overflow-x: auto;
+    font-family: "JetBrains Mono", sans-serif;
+    background-color: rgb(43, 43, 43);
+  }
+  
+  pre:has( > pre) {
+    margin: 20px 0 0 0;
+  }
+  
+  pre:has(> pre):not(:has(+ blockquote)) > pre {
+    margin: 0 !important;
+    border-radius: 5px;
+    padding: 7px 15px;
+    font-size: 16px;
+    font-family: "JetBrains Mono", sans-serif;
+    background-color: rgb(43, 43, 43);
+  }
 
   pre + blockquote {
-    margin: -0.5em 0 0 0;
+    margin: 0 0 0 0;
     font-size: 13px;
     background-color: #00000040;
     padding: 8px 15px;
     font-family: "JetBrains Mono", sans-serif;
     border-radius: 0 0 5px 5px;
     border-left: none;
-  }
-
-  pre {
-    margin: 0;
-    border-radius: 5px 5px 0 0;
-    overflow-x: auto;
-  }
-  
-  pre:not(:has(> pre)) {
-    border-radius: 5px;
-    padding: 7px 15px;
-    font-size: 16px;
-    font-family: "JetBrains Mono", sans-serif;
-    background-color: rgb(43, 43, 43);
   }
 
   a {
